@@ -1,15 +1,15 @@
 require 'redmine'
 require 'json'
 
-require_dependency 'hooks/view_layouts_base_html_head_hook'
+require_dependency 'hooks/view_hooks'
 
 Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
-  description 'Wiki macro plugin for inserting drawio diagrams in Wiki pages and Issues'
-  version '0.1.0'
+  description 'Wiki macro plugin for inserting drawio diagrams into Wiki pages and Issues'
+  version '0.1.1'
   url 'https://github.com/mikitex70/redmine_drawio'
-  author_url 'https://github.com/mikitex70?tab=repositories'
+  author_url 'https://github.com/mikitex70'
   
   requires_redmine version: '2.6'..'3.2'
   
