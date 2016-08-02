@@ -13,7 +13,7 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 - install `redmine_drawio` plugin:
 
   ```
-  cd $REDMINE_HOME
+  cd $REDMINE_HOME/plugins
   git clone https://github.com/mikitex70/redmine_drawio.git
   ```
 
