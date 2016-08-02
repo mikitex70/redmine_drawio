@@ -1,6 +1,13 @@
 # Changelog
 
-## development (unreleased)
+## v0.1.1 (2016-08-02)
+
+### New
+
+* Added CHANGELOG.md. [Michele Tessaro]
+
+  Changelog automatically generated thanks to
+  [gitchangelog](https://github.com/vaab/gitchangelog) script.
 
 ### Fix
 
