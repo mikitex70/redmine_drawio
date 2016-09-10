@@ -6,7 +6,7 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 
 ## Requirements
 
-- Requires Redmine v2.6+. Tested with Redmine v3.1.4 and v3.2.3.
+- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.3 and v3.3.0.
 
 ## Installation
 

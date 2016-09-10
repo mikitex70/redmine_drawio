@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.1.2 (2016-09-10)
+
+### New
+
+* Tested with Redmine v3.3.0 (closes #1) [Michele Tessaro]
+
+
 ## v0.1.1 (2016-08-02)
 
 ### New

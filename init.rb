@@ -11,7 +11,7 @@ Redmine::Plugin.register :redmine_drawio do
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
   
-  requires_redmine version: '2.6'..'3.2'
+  requires_redmine version: '2.6'..'3.3'
   
   # Add to_bool method to String class; this makes source more readable
   class String
