@@ -7,7 +7,7 @@ Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
   description 'Wiki macro plugin for inserting drawio diagrams into Wiki pages and Issues'
-  version '0.1.2'
+  version '0.1.3'
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
   
@@ -40,7 +40,7 @@ Redmine::Plugin.register :redmine_drawio do
         hilight=#0000ff : color to hilight hyperlinks
         
 EOF
-    
+
     macro :drawio do |obj, args|
       args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
       filename = args.first
