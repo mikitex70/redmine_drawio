@@ -21,6 +21,11 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 
 ## Usage
 
+There are three macros that can be used to embed diagrams in wiki pages/issues; use what best fits your needs.
+
+### `drawio` macro
+This macro draws diagrams save in attachments. This is for compatibility with `0.1.x` versions of the plugin. To use it:
+
 - save your [draw.io](https://www.draw.io) diagram locally and upload it as attachment to wiki or issue page.
 
 - in Wiki pages use the `drawio` macro to load the widget, specifying the name of the attachment. For example:
@@ -36,6 +41,22 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
   - ``zoom=100`` : initial zoom of diagram (percentage of original diagram)
   - ``fit=true`` : fit page width (only if ``resize=false``)
   - ``hilight=#0000ff`` : color to hilight hyperlinks
+
+### `drawio_dmsf` macro
+This macro handle diagrams saved in the [DMSF](https://github.com/danmunn/redmine_dmsf) repository. Usage is very simple:
+
+- in Wiki or issue pages use the `drawio_dmsf` macro to specify the path of the diagram. For example:
+
+  ``{{drawio_dmsf(diagrams/myDiagram)}}``
+
+  The path is optional. If the diagram doesn't exists, a predefined diagram will be used as a placeholder:
+
+  ![Diagram placeholder](diagramPlaceholder.png)
+
+  Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved in the specified DMSF documents path for the current project, and the diagram will be automatically updated.
+
+## Some note on the drawio editor
+Someone can be concerned about security in sending own diagrams to the [drawio](https://www.draw.io) site
 
 ## Known issues
 

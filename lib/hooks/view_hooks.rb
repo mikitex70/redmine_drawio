@@ -9,6 +9,11 @@ module RedmineDrawio
         return ''
       end
     end
+    
+    def view_layouts_base_html_head(context={})
+        return stylesheet_link_tag("drawioEditor.css", :plugin => "redmine_drawio", :media => "screen") +
+               javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
+    end
   end
 end
 
