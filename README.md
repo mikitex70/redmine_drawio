@@ -24,14 +24,14 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 There are three macros that can be used to embed diagrams in wiki pages/issues; use what best fits your needs.
 
 ### `drawio` macro
-This macro draws diagrams save in attachments. This is for compatibility with `0.1.x` versions of the plugin. To use it:
+This macro draws diagrams saved in attachments. This is for compatibility with `0.1.x` versions of the plugin. To use it:
 
-- save your [draw.io](https://www.draw.io) diagram locally and upload it as attachment to wiki or issue page.
+- save your [draw.io](https://www.draw.io) diagram locally and upload it as attachment to a Wiki or issue page.
 
-- in Wiki pages use the `drawio` macro to load the widget, specifying the name of the attachment. For example:
+- in Wiki (or issue) pages use the `drawio` macro to load the widget, specifying the name of the attachment. For example:
 
   ```
-  {{drawio(activity.xml)}}
+  {{drawio(activity.xml, options)}}
   ```
 
 - the following macro options are available (default values are shown):
@@ -41,32 +41,64 @@ This macro draws diagrams save in attachments. This is for compatibility with `0
   - ``zoom=100`` : initial zoom of diagram (percentage of original diagram)
   - ``fit=true`` : fit page width (only if ``resize=false``)
   - ``hilight=#0000ff`` : color to hilight hyperlinks
+  
+With this macro diagrams are drawn using SVG (or maybe Canvas) so they are interactive: they are navigable,
+they respond to ``over`` and ``click`` actions. Hyperlinks can be used to navigate to other items.
+
+### `drawio_attach` macro
+This macro handles diagrams saved as attachments of issues or wiki pages. 
+
+With this macro the attachments are in PNG+XML format, a special format consisting in an PNG image of the diagram plus the XML diagram source embeded as a field of the image.
+
+Usage is very simple:
+
+- in Wiki or issue pages use the `drawio_attach` macro to specify the name of attachment containing the diagram. For example:
+
+  ``{{drawio_attach(myDiagram)}}``
+
+  If the diagram doesn't exists, a predefined diagram will be used as a placeholder:
+
+  ![Diagram placeholder][diagramPlaceholder]
+
+  Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved in a new attachment and the reference in the wiki/issue page is updated.
+
+  The diagram attachments are versioned by suffixing the name with a counter. This is necessary because is not possible to update an existing attachment. Moreover, is not possible to delete attachments throught rest API (seems to be possible from Redmine 3.3.0, but I need to experiment), so the old versions of an attachment must be explicitly deleted from the Redmine web interface.
 
 ### `drawio_dmsf` macro
-This macro handle diagrams saved in the [DMSF](https://github.com/danmunn/redmine_dmsf) repository. Usage is very simple:
+This macro handles diagrams saved in the [DMSF](https://github.com/danmunn/redmine_dmsf) repository as PNG+XML images. Usage is very simple:
 
-- in Wiki or issue pages use the `drawio_dmsf` macro to specify the path of the diagram. For example:
+- enable the WebDAV functionality of the [DMSF](https://github.com/danmunn/redmine_dmsf) plugin; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
+- in Wiki or issue pages use the `drawio_dmsf` macro to specify the path of the diagram, relative to the DMSF documents of the current project. For example:
 
   ``{{drawio_dmsf(diagrams/myDiagram)}}``
 
   The path is optional. If the diagram doesn't exists, a predefined diagram will be used as a placeholder:
 
-  ![Diagram placeholder](diagramPlaceholder.png)
+  ![Diagram placeholder][diagramPlaceholder]
 
-  Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved in the specified DMSF documents path for the current project, and the diagram will be automatically updated.
+  Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved (versioned) in the specified DMSF documents path for the current project, and the diagram will be automatically updated.
 
 ## Some note on the drawio editor
-Someone can be concerned about security in sending own diagrams to the [drawio](https://www.draw.io) site
+Someone can be concerned about security in sending own diagrams to the [drawio](https://www.draw.io) site.
+
+The diagrams aren't sent to [drawio](https://www.draw.io) for editing/rendering, but all the operations are done by the browser using only Javascript and HTML5. The only thing loaded externally are the scripts and the editor page, when the diagram editor is opened. The diagram source remains local to browser/redmine sizte.
 
 ## Known issues
 
 - Diagrams are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.
 
+- There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters.
+
+- The embedded diagrams probably aren't working on Internet Explorer (_Data URIs_ not allowewd in HTML).
+
 ## TODO
 
 - Allow specify diagrams from other other sources:
 
-  - use a file managed by the [DMSF](https://github.com/danmunn/redmine_dmsf) plugin
+  - ~~use a file managed by the [DMSF](https://github.com/danmunn/redmine_dmsf) plugin~~
   - embed diagram as macro body
   - use GoogleDrive, Dropbox and OneDrive as possible diagram sources.
   - implement tests
+  - make diagram images exportable in PDF
+
+[diagramPlaceholder]: spec/defaultImage.png "Placeholder for missing diagrams"

@@ -1,5 +1,6 @@
 require 'redmine'
 require 'json'
+require 'base64'
 
 require_dependency 'hooks/view_hooks'
 
@@ -26,20 +27,19 @@ Redmine::Plugin.register :redmine_drawio do
   
   Redmine::WikiFormatting::Macros.register do
     desc <<EOF
-      Draw.io widget plugin to embed diagrams. Example usage:
-      
-      {{drawio(diagram_attachment.xml[, ...options...])}}
-      
-      Use http://draw.io to draw diagrams, save them locally and attach to wiki or issue pages.
-      On page view, the diagrams are sent to draw.io site for rendering.
-      
-      options:
-        lightbox=false  : enable lightbox usage
-        resize=false    : enable zoom control toolbar
-        zoom=100        : initial zoom of diagram (percentage of original diagram)
-        fit=true        : fit page width (only if resize=false)
-        hilight=#0000ff : color to hilight hyperlinks
-        
+Draw.io widget plugin to embed diagrams. Example usage:
+
+{{drawio(diagram_attachment.xml[, ...options...])}}
+
+Use http://draw.io to draw diagrams, save them locally and attach to wiki or issue pages.
+On page view, the diagrams are sent to draw.io site for rendering.
+
+options:
+    lightbox=false  : enable lightbox usage
+    resize=false    : enable zoom control toolbar
+    zoom=100        : initial zoom of diagram (percentage of original diagram)
+    fit=true        : fit page width (only if resize=false)
+    hilight=#0000ff : color to hilight hyperlinks
 EOF
 
     macro :drawio do |obj, args|
@@ -96,86 +96,161 @@ EOF
         "xml"       => contents
       })
 
-      return "<div class=\"mxgraph\" #{style} data-mxgraph=\"#{CGI::escapeHTML(graphOpts)}\"></div>".html_safe
+      return "<div class=\"mxgraph\" #{style} data-mxgraph=\"#{CGI::escapeHTML(graphOpts)}\"></div>".html_safe+
+             javascript_tag(nil, src: "https://www.draw.io/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
     end
   end
   
   Redmine::WikiFormatting::Macros.register do
     desc <<EOF
-TODO diagrammi editabili da attachment
+Draw.io widget plugin to embed diagrams stored as attachments. Example usage:
+
+{{drawio_attach(myDiagram)}}
+
+The diagram is draw from the attachment myDiagram.png. If the attachment doesn't exists
+a default diagram wil be drawn. Double click it to start editing.
+
+Every time a diagram is saved, a new attachment will be created; for now you must 
+manually delete old attachments (missing Redmine API; version 3.3.0 seems to have included
+an API to delete attachments).
 EOF
+
     macro :drawio_attach do |obj, args|
-        args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
-        filename = args.first
+        # in app/models/project.rb
+        #return "" unless @Project.module_enabled?("MODULE NAME")
+        args, options = extract_macro_options(args)
+        diagramName = args.first
         
-        return "Please set a diagram name".html_safe unless filename
+        return "Please set a diagram name".html_safe unless diagramName
         
-        filename = File.expand_path(File.dirname(__FILE__) + '/spec/defaultImage.pngxml')
+        if obj.is_a?(WikiContent)
+            container = obj.page
+            canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
+        else
+            container = obj
+            canEdit   = container.editable?(User.current)
+        end
+        
+        # Add an extension, if missing
+        diagramName += ".png" if File.extname(diagramName.strip) == ""
+        
+        if diagramName =~ /_\d+\./
+            saveName = diagramName.sub(/_(\d+)/) {|v| v.next } # increment version
+        else
+            saveName = diagramName.sub(/(\.\w+)$/, '_1\1') # set versione to _1
+        end
+        
+        # Search attachment position
+        attach = container.attachments.find_by_filename(diagramName)
+        
+        if attach
+            if attach.is_text?
+                return "Diagram as XML not supported: start a new diagram and import the old"
+            else
+                filename = attach.diskfile
+            end
+        else
+            filename = File.expand_path(File.dirname(__FILE__) + '/spec/defaultImage.png')
+        end
         
         pngxml = File.read(filename)
+        pngxml = Base64.encode64(pngxml)
         
-        return "<image style=\"max-width:100%;cursor:pointer;\" onclick=\"editDiagram(this);\" src=\"data:image/png;base64,#{pngxml}\"/>".html_safe;
+        if canEdit
+        #if canEdit && User.current.allowed_to?(:edit_wiki_pages, page.wiki.project)
+            # Diagram and document are editable
+            return image_tag("data:image/png;base64,#{pngxml}", 
+                                :alt   => "Diagram #{diagramName}", 
+                                :title => "Double click to edit diagram",
+                                :class => "drawioDiagram",
+                                :style => "max-width:100%;cursor:pointer;",
+                                :ondblclick => "editDiagram(this,'#{saveName}',false);")
+        else
+            # Not editable
+            return image_tag("data:image/png;base64,#{pngxml}", 
+                                :alt   => "Diagram #{diagramName}", 
+                                :class => "drawioDiagram",
+                                :style => "max-width:100%")
+        end
     end
   end
 
   Redmine::WikiFormatting::Macros.register do
       desc <<EOF
-      Draw.io widget plugin to embed diagrams stored as DMSF documents. Example usage:
-      
-      {{drawio_dmsf(myDiagram)}}
-      
-      The diagram is drawn from document myDiagram.pngxml. If the document doesn't exists
-      a default diagram is drawn. Double click the diagram to start editing.
-      
-      The diagram name can contain a path. For example:
-      
-      {{drawio_dmsf(path/to/folder/myDiagram)}}
-      
-      will create/edit the file myDiagram.pngxml in the DMSF folder path/to/folder of
-      the current project.
+Draw.io widget plugin to embed diagrams stored as DMSF documents. Example usage:
+
+{{drawio_dmsf(myDiagram)}}
+
+The diagram is drawn from the DMSF document myDiagram.png. If the document doesn't 
+exists a default diagram will be drawn. Double click it to start editing.
+
+The diagram name can contain a path. For example:
+
+{{drawio_dmsf(path/to/folder/myDiagram)}}
+
+will create/edit the document myDiagram.png in the DMSF folder path/to/folder of
+the current project.
 EOF
+
       macro :drawio_dmsf do |obj, args|
-          args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
-          page          = obj.page
+          #return "" unless @Project.module_enabled?("redmine_dmsf")
+          
+          #Rails.logger("redmine_dmsf? #{@Project.module_enabled?("redmine_dmsf")}")
+          #Rails.logger("dmsf? #{@Project.module_enabled?("dmsf")}")
+          
+          args, options = extract_macro_options(args)
           diagramName   = args.first
           
           return "Please set a diagram name".html_safe unless diagramName
 
+          if obj.is_a?(WikiContent)
+              container = obj.page
+              canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
+          else
+              container = obj
+              canEdit   = container.editable?(User.current)
+          end
+
           # Add an extension, if missing
-          diagramName += ".pngxml" if File.extname(diagramName.strip) == ""
+          diagramName += ".png" if File.extname(diagramName.strip) == ""
           
           # Search the DMSF folder containing the diagram
           folderName = File.dirname(diagramName)
-          folder     = DMSF_helper.deep_folder_search(page.wiki.project, folderName)
+          folder     = DMSF_helper.deep_folder_search(container.wiki.project, folderName)
 
           # Search the document in DMSF
-          file = DmsfFile.find_file_by_name page.wiki.project, folder, File.basename(diagramName)
+          file = DmsfFile.find_file_by_name container.wiki.project, folder, File.basename(diagramName)
           
           if file
-            # Document exists, get the file path
-            filename = file.last_revision.disk_file page.wiki.project
-            canEdit  = User.current && User.current.allowed_to?(:file_manipulation, file.project)
+              # Document exists, get the file path
+              filename = file.last_revision.disk_file container.wiki.project
+              canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
           else
-            # Document does not exists: use a predefined diagram to start editing
-            filename = File.expand_path(File.dirname(__FILE__) + '/spec/defaultImage.pngxml')
-            canEdit  = User.current && User.current.allowed_to?(:file_manipulation, page.wiki.project)
+              # Document does not exists: use a predefined diagram to start editing
+              filename = File.expand_path(File.dirname(__FILE__) + '/spec/defaultImage.png')
+              canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, container.wiki.project)
           end
-          Rails.logger.info("====> #{filename}")          
+          
           # Load the body of document to embed into page
           pngxml = File.read(filename)
+          pngxml = Base64.encode64(pngxml)
           
-          if canEdit && User.current.allowed_to?(:edit_wiki_pages, page.wiki.project)
-              # Diagram and document are editable, prepare image tag attributes
-              editHandler = "ondblclick=\"editDiagram(this,'#{page.wiki.project.id}/#{diagramName}');\""
-              cursor      = "cursor:pointer;"
+          if canEdit 
+          #if canEdit && User.current.allowed_to?(:edit_wiki_pages, page.wiki.project)
+              # Diagram and document are editable
+              return image_tag("data:image/png;base64,#{pngxml}", 
+                                    :alt   => "Diagram #{diagramName}", 
+                                    :title => "Double click to edit diagram",
+                                    :class => "drawioDiagram",
+                                    :style => "max-width:100%;cursor:pointer;",
+                                    :ondblclick => "editDiagram(this,'#{container.wiki.project.id}/#{diagramName}',true);")
           else
               # Not editable
-              editHandler = ""
-              cursor      = ""
+              image_tag("data:image/png;base64,#{pngxml}", 
+                            :alt   => "Diagram #{diagramName}", 
+                            :class => "drawioDiagram",
+                            :style => "max-width:100%;")
           end
-          
-          # Return an image tag for the diagram
-          return "<image title=\"Double click to edit diagram\" style=\"max-width:100%;#{cursor}\" #{editHandler} src=\"#{pngxml}\"/>".html_safe;
       end
   end
 end
