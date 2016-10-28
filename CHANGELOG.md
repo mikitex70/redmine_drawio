@@ -1,5 +1,41 @@
 # Changelog
 
+## v0.3.0 (2016-11-01)
+
+### New
+
+* Added dialogs for inserting macros. [Michele Tessaro]
+
+
+## v0.2.0 (2016-10-23)
+
+### New
+
+* Added drawio_attach macro. [Michele Tessaro]
+
+* Added drawio_dmsf macro. [Michele Tessaro]
+
+  This macro can draw diagrams from DMSF documents.
+  The diagram editor is launched embedded, by a double click on the
+  diagram.
+
+### Fix
+
+* Fixed rendering of some graphs (fixes #2) [Michele Tessaro]
+
+  Corrected javascript inclusion from http://www.draw.io so the diagrams
+  can be correctly drawn.
+
+* Fixed rendering of some graphs (like flowcharts) [Michele Tessaro]
+
+* Fixed missing end of module. [Michele Tessaro]
+
+* Fixed resource include from draw.io (refs #2) [Michele Tessaro]
+
+  Corrected javascript inclusion from http://www.draw.io so the diagrams
+  can be correctly drawn.
+
+
 ## v0.1.3 (2016-10-13)
 
 ### Fix

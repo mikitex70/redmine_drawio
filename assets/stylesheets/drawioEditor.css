@@ -1,17 +1,3 @@
-/*html, body, #wrapper {
-    height:100%;
-    width:100%;
-    margin:0;
-    padding:0;
-    border:0;
-}
-table#wrapper {
-    height:75%;
-}
-#wrapper td {
-vertical-align:middle;
-text-align:center;
-}*/
 iframe.drawioEditor {
     border:0;
     position:fixed;
@@ -24,3 +10,14 @@ iframe.drawioEditor {
     z-index:100;
 }
                    
+.jstb_drawio_attach {
+    background-image: url(../images/jstb_drawio_attach.png);
+}
+
+.jstb_drawio_dmsf {
+    background-image: url(../images/jstb_drawio_dmsf.png);
+}
+
+#drawio_diagName {
+    border-color: #d05050;
+}
