@@ -25,6 +25,7 @@ function editDiagram(image, resource, isDmsf) {
                 case 'export':
                     close();
                     image.setAttribute('src', msg.data);
+                    image.setAttribute('data-diagram', msg.data);
                     
                     if(isDmsf) {
                         saveDmsf("/dmsf/webdav/"+resource, msg.data);
@@ -230,4 +231,54 @@ var Base64Binary = {
         
         return uarray;	
     }
-}
+};
+
+$(function () {
+    if(typeof jsToolBar === 'undefined') return false;
+ 
+    dlg = $("#dlg_redmine_drawio").dialog({
+        autoOpen: false,
+        width   : "auto",
+        height  : "auto",
+        modal   : true,
+        buttons : {
+            "Insert macro": function() { 
+                var editor    = dlg.data("editor");
+                var macroName = dlg.data("macro");
+                var diagName  = $("#drawio_diagName").val();
+                
+                if(diagName != "") {
+                    editor.encloseSelection('{{'+macroName+'('+diagName+')}}');
+                    dlg.dialog("close");
+                }
+            },
+            Cancel: function() {
+                dlg.dialog("close");
+            }
+        }
+    });
+ 
+    jsToolBar.prototype.elements.drawio_attach = {
+        type : 'button',
+        after: 'img',
+        title: 'Drawio attached diagram',
+        fn   : {
+            wiki: function(event) {
+                dlg.data("editor", this).data("macro", "drawio_dmsf").dialog("open");
+            }
+        }
+    };
+    
+    jsToolBar.prototype.elements.drawio_dmsf = {
+        type : 'button',
+        after: 'drawio_attach',
+        title: 'Drawio DMSF diagram',
+        fn   : {
+            wiki: function(event) {
+                dlg.data("editor", this).data("macro", "drawio_attach").dialog("open");
+            }
+        }
+    };
+    
+    wikiToolbar.draw();
+});
