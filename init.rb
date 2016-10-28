@@ -3,12 +3,13 @@ require 'json'
 require 'base64'
 
 require_dependency 'hooks/view_hooks'
+require_dependency 'hooks/macro_dialog'
 
 Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
   description 'Wiki macro plugin for inserting drawio diagrams into Wiki pages and Issues'
-  version '0.2.0'
+  version '0.3.0'
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
   
@@ -193,11 +194,6 @@ the current project.
 EOF
 
       macro :drawio_dmsf do |obj, args|
-          #return "" unless @Project.module_enabled?("redmine_dmsf")
-          
-          #Rails.logger("redmine_dmsf? #{@Project.module_enabled?("redmine_dmsf")}")
-          #Rails.logger("dmsf? #{@Project.module_enabled?("dmsf")}")
-          
           args, options = extract_macro_options(args)
           diagramName   = args.first
           
@@ -236,7 +232,6 @@ EOF
           pngxml = Base64.encode64(pngxml)
           
           if canEdit 
-          #if canEdit && User.current.allowed_to?(:edit_wiki_pages, page.wiki.project)
               # Diagram and document are editable
               return image_tag("data:image/png;base64,#{pngxml}", 
                                     :alt   => "Diagram #{diagramName}", 
@@ -244,6 +239,16 @@ EOF
                                     :class => "drawioDiagram",
                                     :style => "max-width:100%;cursor:pointer;",
                                     :ondblclick => "editDiagram(this,'#{container.wiki.project.id}/#{diagramName}',true);")
+
+#               # Trying to make diagrams exportable to PDF
+#               url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)
+#               return image_tag(url, 
+#                                :alt   => "Diagram #{diagramName}", 
+#                                :title => "Double click to edit diagram",
+#                                :class => "drawioDiagram",
+#                                :style => "max-width:100%;cursor:pointer;",
+#                                'data-diagram' => "data:image/png;base64,#{pngxml}",
+#                                :ondblclick => "editDiagram(this,'#{container.wiki.project.id}/#{diagramName}',true);")
           else
               # Not editable
               image_tag("data:image/png;base64,#{pngxml}", 
