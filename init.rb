@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
   description 'Wiki macro plugin for inserting drawio diagrams into Wiki pages and Issues'
-  version '0.3.0'
+  version '0.3.1'
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
   
@@ -121,7 +121,7 @@ EOF
         #return "" unless @Project.module_enabled?("MODULE NAME")
         args, options = extract_macro_options(args)
         diagramName = args.first
-        
+
         return "Please set a diagram name".html_safe unless diagramName
         
         if obj.is_a?(WikiContent)
