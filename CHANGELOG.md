@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.3.1 (2016-11-03)
+
+### Fix
+
+* Fixed saving if Redmine in subpath (closes #5) [Michele Tessaro]
+
+  * fixed saving diagrams if Redmine is running in a sub path URL
+  * fixed toolbar buttons switched
+
+
 ## v0.3.0 (2016-11-01)
 
 ### New

@@ -18,6 +18,8 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
   ```
 
 - restart Redmine to load the new plugin
+- for macro ``drawio_attach`` make sure to enable Rest API of Redmine
+- for macro ``drawio_dmsf`` make sure to install plugin [DMSF] and to enable module in project
 
 ## Usage
 
@@ -95,6 +97,8 @@ The diagrams aren't sent to [draw.io] for editing/rendering, but all the operati
 - There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters.
 
 - The embedded diagrams probably aren't working on Internet Explorer (_Data URIs_ not allowewd in HTML).
+
+- The ``drawio_attach`` macro does not save diagram in the main wiki page if the page is not explicitly referenced. For example if the main wiki page is named ``Wiki`` (default name), editing an attached diagram in the page ``.../myProject/wiki`` does not work, but it works for ``.../myProject/wiki/Wiki``.
 
 ## TODO
 

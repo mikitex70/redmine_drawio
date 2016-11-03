@@ -28,7 +28,7 @@ function editDiagram(image, resource, isDmsf) {
                     image.setAttribute('data-diagram', msg.data);
                     
                     if(isDmsf) {
-                        saveDmsf("/dmsf/webdav/"+resource, msg.data);
+                        saveDmsf(REDMINE_URL+"dmsf/webdav/"+resource, msg.data);
                     }
                     else {
                         saveAttachment(resource , msg.data);
@@ -160,7 +160,7 @@ function saveAttachment(resource, data) {
         var base64Data = data.substring("data:image/png;base64,".length);
         
         $.ajax({
-            url        : "/uploads.json",
+            url        : REDMINE_URL+"uploads.json",
             type       : 'POST',
             contentType: 'application/octet-stream',
             processData: false,
@@ -264,7 +264,7 @@ $(function () {
         title: 'Drawio attached diagram',
         fn   : {
             wiki: function(event) {
-                dlg.data("editor", this).data("macro", "drawio_dmsf").dialog("open");
+                dlg.data("editor", this).data("macro", "drawio_attach").dialog("open");
             }
         }
     };
@@ -275,7 +275,7 @@ $(function () {
         title: 'Drawio DMSF diagram',
         fn   : {
             wiki: function(event) {
-                dlg.data("editor", this).data("macro", "drawio_attach").dialog("open");
+                dlg.data("editor", this).data("macro", "drawio_dmsf").dialog("open");
             }
         }
     };
