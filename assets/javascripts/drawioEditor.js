@@ -53,7 +53,7 @@ function editDiagram(image, resource, isDmsf) {
  * Show an alert if case of error saving the diagram.
  */
 function showError(jqXHR, textStatus, errorThrown) {
-    alert("Error saving diagram: "+textStatus+"\n"+errorThrown);
+    alert("Error saving diagram:\n"+errorThrown);
 }
 
 /**
@@ -76,7 +76,19 @@ function saveDmsf(url, data) {
             processData: false,
             contentType: "image/png",
             data       : Base64Binary.decodeArrayBuffer(base64Data),
-            error      : showError
+            error      : function(jqXHR, textStatus, errorThrown) {
+                switch(jqXHR.status) {
+                    case 404:
+                    case 409:
+                    case 502: break;
+                    default : showError(jqXHR, textStatus, errorThrown);
+                }
+            },
+            statusCode : {
+                404: function() { showError(null, null, "Make sure WebDAV capabilities of DMSF module is enabled"); },
+                409: function() { showError(null, null, "Make sure the DMSF folder exists and is accessible"); },
+                502: function() { showError(null, null, "Make sure WebDAV capabilities of DMSF module is enabled in Read/Write mode"); }
+            }
         });
     }
 }
