@@ -20,6 +20,7 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 - restart Redmine to load the new plugin
 - for macro ``drawio_attach`` make sure to enable Rest API of Redmine
 - for macro ``drawio_dmsf`` make sure to install plugin [DMSF] and to enable module in project
+- if you have troubles with the embedded editor using Internet Explorer, try a more recent version (Internet Explorer 11 should work fine) or, better, use another browser, such as Firefox or Chrome.
 
 ## Usage
 
@@ -54,6 +55,7 @@ With this macro the attachments are in PNG+XML format, a special format consisti
 
 Usage is very simple:
 
+- make sure ``REST`` API are enabled in Redmine global settings; this is need to be able to save attached diagrams
 - in Wiki or issue pages use the `drawio_attach` macro to specify the name of attachment containing the diagram. For example:
 
   ``{{drawio_attach(myDiagram)}}``
@@ -72,7 +74,7 @@ In the toolbar editor there is a button with icon ![drawio_attach icon](assets/i
 This macro handles diagrams saved in the [DMSF] repository as PNG+XML images. The DMSF module must be enabled for the project to be able to use this macro.
 Usage is very simple:
 
-- enable the WebDAV functionality of the [DMSF] plugin; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
+- enable the WebDAV functionality of the [DMSF] plugin in ``Read/Write`` mode; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
 - in Wiki or issue pages use the `drawio_dmsf` macro to specify the path of the diagram, relative to the DMSF documents of the current project. For example:
 
   ``{{drawio_dmsf(diagrams/myDiagram)}}``
@@ -95,10 +97,6 @@ The diagrams aren't sent to [draw.io] for editing/rendering, but all the operati
 - Diagrams are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.
 
 - There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters.
-
-- The embedded diagrams probably aren't working on Internet Explorer (_Data URIs_ not allowewd in HTML).
-
-- The ``drawio_attach`` macro does not save diagram in the main wiki page if the page is not explicitly referenced. For example if the main wiki page is named ``Wiki`` (default name), editing an attached diagram in the page ``.../myProject/wiki`` does not work, but it works for ``.../myProject/wiki/Wiki``.
 
 ## TODO
 

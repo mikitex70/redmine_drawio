@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
   description 'Wiki macro plugin for inserting drawio diagrams into Wiki pages and Issues'
-  version '0.3.1'
+  version '0.3.2'
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
   
@@ -151,11 +151,11 @@ EOF
                 filename = attach.diskfile
             end
         else
-            filename = File.expand_path(File.dirname(__FILE__) + '/spec/defaultImage.png')
+            filename = File.expand_path(File.join(File.dirname(__FILE__), 'spec', 'defaultImage.png'))
         end
         
-        pngxml = File.read(filename)
-        pngxml = Base64.encode64(pngxml)
+        pngxml = File.read(filename, mode: 'rb')
+        pngxml = Base64.encode64(pngxml).gsub("\n", '') # remove newlines, required by Internet Explorer
         
         if canEdit
         #if canEdit && User.current.allowed_to?(:edit_wiki_pages, page.wiki.project)
@@ -165,7 +165,7 @@ EOF
                                 :title => "Double click to edit diagram",
                                 :class => "drawioDiagram",
                                 :style => "max-width:100%;cursor:pointer;",
-                                :ondblclick => "editDiagram(this,'#{saveName}',false);")
+                                :ondblclick => "editDiagram(this,'#{saveName}',false, '#{container.title}');")
         else
             # Not editable
             return image_tag("data:image/png;base64,#{pngxml}", 
@@ -223,13 +223,13 @@ EOF
               canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
           else
               # Document does not exists: use a predefined diagram to start editing
-              filename = File.expand_path(File.dirname(__FILE__) + '/spec/defaultImage.png')
+              filename = File.expand_path(File.join(File.dirname(__FILE__), 'spec', 'defaultImage.png'))
               canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, container.wiki.project)
           end
           
           # Load the body of document to embed into page
-          pngxml = File.read(filename)
-          pngxml = Base64.encode64(pngxml)
+          pngxml = File.read(filename, mode: 'rb')
+          pngxml = Base64.encode64(pngxml).gsub("\n", '') # remove newlines, required by Internet Explorer
           
           if canEdit 
               # Diagram and document are editable

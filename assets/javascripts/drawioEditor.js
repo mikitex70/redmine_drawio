@@ -1,4 +1,4 @@
-function editDiagram(image, resource, isDmsf) {
+function editDiagram(image, resource, isDmsf, pageName) {
     var initial = image.getAttribute('src');
     
     image.setAttribute('src', 'http://www.draw.io/images/ajax-loader.gif');
@@ -31,7 +31,7 @@ function editDiagram(image, resource, isDmsf) {
                         saveDmsf(REDMINE_URL+"dmsf/webdav/"+resource, msg.data);
                     }
                     else {
-                        saveAttachment(resource , msg.data);
+                        saveAttachment(resource , msg.data, pageName);
                     }
                     break;
                 case 'save':
@@ -100,7 +100,12 @@ function saveDmsf(url, data) {
  * @param data Data (base64 encoded) of the attachment; will be decoded and
  *             sent as image/png.
  */             
-function saveAttachment(resource, data) {
+function saveAttachment(resource, data, pageName) {
+    var pageUrl = window.location.pathname;
+    
+    if(!pageUrl.match(pageName+"$"))
+        pageUrl += "/"+pageName;
+    
     function readWikiPage(uploadResponse) {
         // This is the token to reference the uploaded attachment
         var token = uploadResponse.upload.token;
@@ -146,7 +151,7 @@ function saveAttachment(resource, data) {
             
             // Update the wiki/issue source page
             $.ajax({
-                url     : window.location.pathname+".json",
+                url     : pageUrl+".json",
                 type    : "PUT",
                 dataType: "text",
                 data    : data,
@@ -159,7 +164,7 @@ function saveAttachment(resource, data) {
         // So first we read the page definition, then we send the update request using
         // the original page text.
         $.ajax({
-            url     : window.location.pathname+".json",
+            url     : pageUrl+".json",
             type    : "GET",
             dataType: "json",
             success : savePage,
