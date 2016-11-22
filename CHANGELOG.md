@@ -1,8 +1,33 @@
 # Changelog
 
-## v0.3.1 (2016-11-03)
+## v0.3.2 (2016-11-22)
+
+### Changes
+
+* Human decoded DMSF HTTP error codes. [Michele Tessaro]
+
+  Added decoding of HTTP error codes returned by the WebDAV interface of
+  the DMSF plugin; now the message is more explanatory of the cause.
 
 ### Fix
+
+* Various fixes (refs #5) [Michele Tessaro]
+
+  * fixed opening images from Redmine running on Windows (such as with
+  Bitnami)
+  * fixed editing with Internet Explorer (tested with 11, needed 9+)
+  * fixed editing of diagrams in main Wiki page
+  * decode DMSF error codes in something more understable
+
+
+## v0.3.1 (2016-11-03)
+
+### New
+
+* Added dialogs for inserting macros. [Michele Tessaro]
+
+
+### Other
 
 * Fixed saving if Redmine in subpath (closes #5) [Michele Tessaro]
 
@@ -10,14 +35,14 @@
   * fixed toolbar buttons switched
 
 
-## v0.3.0 (2016-11-01)
+## v0.3.0 (2016-10-28)
 
 ### New
 
 * Added dialogs for inserting macros. [Michele Tessaro]
 
 
-## v0.2.0 (2016-10-23)
+## v0.2.0 (2016-11-01)
 
 ### New
 
