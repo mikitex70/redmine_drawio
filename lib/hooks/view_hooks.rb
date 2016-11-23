@@ -24,9 +24,12 @@ module RedmineDrawio
     private
     
     # Returns the context path of Redmine installation (usually '/' or '/redmine/').
-    # Borrowed from plugin favorite_locations
     def redmine_url(context)
-        url_for controller: 'welcome'
+        rootUrl = ActionController::Base.relative_url_root
+
+        return rootUrl if rootUrl != nil
+
+        return '/'
     end
   end
 
