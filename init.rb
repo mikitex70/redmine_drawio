@@ -106,7 +106,7 @@ EOF
     desc <<EOF
 Draw.io widget plugin to embed diagrams stored as attachments. Example usage:
 
-{{drawio_attach(myDiagram)}}
+{{drawio_attach(myDiagram[, ...options...])}}
 
 The diagram is draw from the attachment myDiagram.png. If the attachment doesn't exists
 a default diagram wil be drawn. Double click it to start editing.
@@ -114,16 +114,23 @@ a default diagram wil be drawn. Double click it to start editing.
 Every time a diagram is saved, a new attachment will be created; for now you must 
 manually delete old attachments (missing Redmine API; version 3.3.0 seems to have included
 an API to delete attachments).
+
+options:
+    size=number : forced width of the diagram image, in pixels
 EOF
 
     macro :drawio_attach do |obj, args|
-        # in app/models/project.rb
-        #return "" unless @Project.module_enabled?("MODULE NAME")
-        args, options = extract_macro_options(args)
+        args, options = extract_macro_options(args, :size)
         diagramName = args.first
 
         return "Please set a diagram name".html_safe unless diagramName
         
+        size = nil
+        size = options[:size].to_i   unless options[:size].blank? or not options[:size][/^\d+$/]
+        
+        inlineStyle = ""
+        inlineStyle = "width:#{size}px;" if size
+
         if obj.is_a?(WikiContent)
             container = obj.page
             canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
@@ -164,14 +171,14 @@ EOF
                                 :alt   => "Diagram #{diagramName}", 
                                 :title => "Double click to edit diagram",
                                 :class => "drawioDiagram",
-                                :style => "max-width:100%;cursor:pointer;",
+                                :style => "#{inlineStyle}cursor:pointer;",
                                 :ondblclick => "editDiagram(this,'#{saveName}',false, '#{container.title}');")
         else
             # Not editable
             return image_tag("data:image/png;base64,#{pngxml}", 
                                 :alt   => "Diagram #{diagramName}", 
                                 :class => "drawioDiagram",
-                                :style => "max-width:100%")
+                                :style => "#{inlineStyle}")
         end
     end
   end
@@ -180,7 +187,7 @@ EOF
       desc <<EOF
 Draw.io widget plugin to embed diagrams stored as DMSF documents. Example usage:
 
-{{drawio_dmsf(myDiagram)}}
+{{drawio_dmsf(myDiagram[, ...options...])}}
 
 The diagram is drawn from the DMSF document myDiagram.png. If the document doesn't 
 exists a default diagram will be drawn. Double click it to start editing.
@@ -191,14 +198,23 @@ The diagram name can contain a path. For example:
 
 will create/edit the document myDiagram.png in the DMSF folder path/to/folder of
 the current project.
+
+options:
+    size=number : forced width of the diagram image, in pixels
 EOF
 
       macro :drawio_dmsf do |obj, args|
-          args, options = extract_macro_options(args)
+          args, options = extract_macro_options(args, :size)
           diagramName   = args.first
           
           return "Please set a diagram name".html_safe unless diagramName
 
+          size = nil
+          size = options[:size].to_i   unless options[:size].blank? or not options[:size][/^\d+$/]
+          
+          inlineStyle = ""
+          inlineStyle = "width:#{size}px;" if size
+          
           if obj.is_a?(WikiContent)
               container = obj.page
               canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)

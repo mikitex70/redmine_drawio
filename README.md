@@ -66,6 +66,9 @@ Usage is very simple:
 
   The diagram attachments are versioned by suffixing the name with a counter. This is necessary because is not possible to update an existing attachment. Moreover, is not possible to delete attachments throught rest API (seems to be possible from Redmine 3.3.0, but I need to experiment), so the old versions of an attachment must be explicitly (manually) deleted from the Redmine web interface.
 
+- the following macro options are available (default values are shown):
+  - ``size=number`` : force image width, in pixels (default, show in original size)
+
 In the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_attach.png) that can be used to insert a macro for a new diagram to be saved as attachment (for lazy people).
 
 ### `drawio_dmsf` macro
@@ -82,6 +85,9 @@ Usage is very simple:
   ![Diagram placeholder][diagramPlaceholder]
 
   Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved (versioned) in the specified DMSF documents path for the current project, and the diagram will be automatically updated.
+
+- the following macro options are available (default values are shown):
+  - ``size=number`` : force image width, in pixels (default, show in original size)
 
 Like for the ``drawio_attach`` macro, in the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_dmsf.png) that can be used to insert a macro for a new diagram to be saved as [DMSF] document.
 
