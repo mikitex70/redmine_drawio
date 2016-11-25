@@ -44,67 +44,70 @@ options:
 EOF
 
     macro :drawio do |obj, args|
-      args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
-      filename = args.first
-
-      hilight  = "#0000ff"
-      lightbox = true
-      fit      = true
-      resize   = false
-      zoom     = nil
-      nav      = false
-
-      hilight  = options[:hilight]          unless options[:hilight].blank?
-      lightbox = options[:lightbox].to_bool unless options[:lightbox].blank?
-      fit      = options[:fit].to_bool      unless options[:fit].blank?
-      nav      = options[:nav].to_bool      unless options[:nav].blank?
-      resize   = options[:resize].to_bool   unless options[:resize].blank?
-      zoom     = options[:zoom].to_i/100.0  unless options[:zoom].blank? or not options[:zoom][/^\d+$/]
-          
-      if resize
-        toolbar = "zoom"+(if lightbox then " lightbox" else "" end)
-      else
-        toolbar = nil
-      end
+        return "«Please save content first»" unless obj
+        return "«drawio unsupported item»"   unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
       
-      if fit
-          style = 'style="max-width:100%;"'
-      else
-        style = ""
-      end
+        args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
+        filename = args.first
 
-      if obj.is_a?(WikiContent)
-        container = obj.page
-      else
-        container = obj
-      end
+        hilight  = "#0000ff"
+        lightbox = true
+        fit      = true
+        resize   = false
+        zoom     = nil
+        nav      = false
 
-      attach = container.attachments.find_by_filename(filename)
-      return "Diagram attachment missing or not is a text file".html_safe unless attach && attach.is_text?
+        hilight  = options[:hilight]          unless options[:hilight].blank?
+        lightbox = options[:lightbox].to_bool unless options[:lightbox].blank?
+        fit      = options[:fit].to_bool      unless options[:fit].blank?
+        nav      = options[:nav].to_bool      unless options[:nav].blank?
+        resize   = options[:resize].to_bool   unless options[:resize].blank?
+        zoom     = options[:zoom].to_i/100.0  unless options[:zoom].blank? or not options[:zoom][/^\d+$/]
+          
+        if resize
+          toolbar = "zoom"+(if lightbox then " lightbox" else "" end)
+        else
+          toolbar = nil
+        end
+      
+        if fit
+            style = 'style="max-width:100%;"'
+        else
+          style = ""
+        end
 
-      file = File.open(attach.diskfile)
-      contents = file.read
-      file.close
+        if obj.is_a?(WikiContent)
+          container = obj.page
+        else
+          container = obj
+        end
 
-      graphOpts = JSON.generate({
-        "highlight" => hilight,
-        "nav"       => nav,
-        "edit"      => "_blank",
-        "lightbox"  => lightbox,
-        "resize"    => resize,
-        "zoom"      => zoom,
-        "toolbar"   => toolbar,
-        "xml"       => contents
-      })
+        attach = container.attachments.find_by_filename(filename)
+        return "Diagram attachment missing or not is a text file".html_safe unless attach && attach.is_text?
 
-      return "<div class=\"mxgraph\" #{style} data-mxgraph=\"#{CGI::escapeHTML(graphOpts)}\"></div>".html_safe+
-             javascript_tag(nil, src: "https://www.draw.io/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
+        file = File.open(attach.diskfile)
+        contents = file.read
+        file.close
+
+        graphOpts = JSON.generate({
+            "highlight" => hilight,
+            "nav"       => nav,
+            "edit"      => "_blank",
+            "lightbox"  => lightbox,
+            "resize"    => resize,
+            "zoom"      => zoom,
+            "toolbar"   => toolbar,
+            "xml"       => contents
+        })
+
+        return "<div class=\"mxgraph\" #{style} data-mxgraph=\"#{CGI::escapeHTML(graphOpts)}\"></div>".html_safe+
+               javascript_tag(nil, src: "https://www.draw.io/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
     end
   end
   
   Redmine::WikiFormatting::Macros.register do
     desc <<EOF
-Draw.io widget plugin to embed diagrams stored as attachments. Example usage:
+Macro for embedding www.draw.io diagrams stored as attachments. Example usage:
 
 {{drawio_attach(myDiagram[, ...options...])}}
 
@@ -120,22 +123,27 @@ options:
 EOF
 
     macro :drawio_attach do |obj, args|
+        return "«Please save content first»" unless obj
+        return "«drawio unsupported item»"   unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+        
         args, options = extract_macro_options(args, :size)
         diagramName = args.first
 
-        return "Please set a diagram name".html_safe unless diagramName
+        return "«Please set a diagram name»".html_safe unless diagramName
         
         size = nil
-        size = options[:size].to_i   unless options[:size].blank? or not options[:size][/^\d+$/]
+        size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
         
         inlineStyle = ""
         inlineStyle = "width:#{size}px;" if size
 
         if obj.is_a?(WikiContent)
             container = obj.page
+            title     = container.title
             canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
         else
             container = obj
+            title     = nil  # not necessary
             canEdit   = container.editable?(User.current)
         end
         
@@ -168,11 +176,11 @@ EOF
         #if canEdit && User.current.allowed_to?(:edit_wiki_pages, page.wiki.project)
             # Diagram and document are editable
             return image_tag("data:image/png;base64,#{pngxml}", 
-                                :alt   => "Diagram #{diagramName}", 
-                                :title => "Double click to edit diagram",
-                                :class => "drawioDiagram",
-                                :style => "#{inlineStyle}cursor:pointer;",
-                                :ondblclick => "editDiagram(this,'#{saveName}',false, '#{container.title}');")
+                                :alt        => "Diagram #{diagramName}", 
+                                :title      => "Double click to edit diagram",
+                                :class      => "drawioDiagram",
+                                :style      => "#{inlineStyle}cursor:pointer;",
+                                :ondblclick => "editDiagram(this,'#{saveName}',false, '#{title}');")
         else
             # Not editable
             return image_tag("data:image/png;base64,#{pngxml}", 
@@ -185,7 +193,7 @@ EOF
 
   Redmine::WikiFormatting::Macros.register do
       desc <<EOF
-Draw.io widget plugin to embed diagrams stored as DMSF documents. Example usage:
+Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage:
 
 {{drawio_dmsf(myDiagram[, ...options...])}}
 
@@ -197,50 +205,58 @@ The diagram name can contain a path. For example:
 {{drawio_dmsf(path/to/folder/myDiagram)}}
 
 will create/edit the document myDiagram.png in the DMSF folder path/to/folder of
-the current project.
+the current project (the folder must exists).
 
 options:
     size=number : forced width of the diagram image, in pixels
 EOF
 
       macro :drawio_dmsf do |obj, args|
+          return "«Please save content first»" unless obj
+          return "«drawio unsupported item»"   unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+
           args, options = extract_macro_options(args, :size)
           diagramName   = args.first
           
-          return "Please set a diagram name".html_safe unless diagramName
-
+          return "«Please set a diagram name»".html_safe unless diagramName
+          
+          # Add an extension, if missing
+          diagramName += ".png" if File.extname(diagramName.strip) == ""
+          
           size = nil
-          size = options[:size].to_i   unless options[:size].blank? or not options[:size][/^\d+$/]
+          size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
           
           inlineStyle = ""
           inlineStyle = "width:#{size}px;" if size
           
           if obj.is_a?(WikiContent)
               container = obj.page
+              title     = container.title
+              project   = container.wiki.project
               canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
           else
               container = obj
+              title     = nil # not necessary
+              project   = container.project
               canEdit   = container.editable?(User.current)
           end
 
-          # Add an extension, if missing
-          diagramName += ".png" if File.extname(diagramName.strip) == ""
-          
+          saveName  = "#{project.id}/#{diagramName}"
           # Search the DMSF folder containing the diagram
           folderName = File.dirname(diagramName)
-          folder     = DMSF_helper.deep_folder_search(container.wiki.project, folderName)
+          folder     = DMSF_helper.deep_folder_search(project, folderName)
 
           # Search the document in DMSF
-          file = DmsfFile.find_file_by_name container.wiki.project, folder, File.basename(diagramName)
+          file = DmsfFile.find_file_by_name project, folder, File.basename(diagramName)
           
           if file
               # Document exists, get the file path
-              filename = file.last_revision.disk_file container.wiki.project
+              filename = file.last_revision.disk_file project
               canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
           else
               # Document does not exists: use a predefined diagram to start editing
               filename = File.expand_path(File.join(File.dirname(__FILE__), 'spec', 'defaultImage.png'))
-              canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, container.wiki.project)
+              canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, project)
           end
           
           # Load the body of document to embed into page
@@ -250,11 +266,11 @@ EOF
           if canEdit 
               # Diagram and document are editable
               return image_tag("data:image/png;base64,#{pngxml}", 
-                                    :alt   => "Diagram #{diagramName}", 
-                                    :title => "Double click to edit diagram",
-                                    :class => "drawioDiagram",
-                                    :style => "max-width:100%;cursor:pointer;",
-                                    :ondblclick => "editDiagram(this,'#{container.wiki.project.id}/#{diagramName}',true);")
+                                    :alt        => "Diagram #{diagramName}", 
+                                    :title      => "Double click to edit diagram",
+                                    :class      => "drawioDiagram",
+                                    :style      => "#{inlineStyle}cursor:pointer;",
+                                    :ondblclick => "editDiagram(this,'#{saveName}', true, '#{title}');")
 
 #               # Trying to make diagrams exportable to PDF
 #               url = url_for(:controller => :dmsf_files, :action => 'view', :id => file)
@@ -270,7 +286,7 @@ EOF
               image_tag("data:image/png;base64,#{pngxml}", 
                             :alt   => "Diagram #{diagramName}", 
                             :class => "drawioDiagram",
-                            :style => "max-width:100%;")
+                            :style => "#{inlineStyle}")
           end
       end
   end
