@@ -92,6 +92,7 @@ section_regexps = [
     ('Fix', [
         r'^[fF]ix\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?([^\n]*)$',
         r'^[cC]orrett[aeio]\s+([^\n]*)$',
+        r'^Load\s\'loading',
      ]),
 
     ('Other', None ## Match all lines
