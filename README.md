@@ -112,6 +112,15 @@ The diagrams aren't sent to [draw.io] for editing/rendering, but all the operati
   - implement tests
   - make diagram images exportable in PDF
 
+## Contributing
+
+Any code contribution is well accepted. There are only a few rules that I would like to be respected to easy merging:
+
+- work on ``develop`` branch and leave the ``master`` branch untouched. This is importat to keep the released versions stable.
+- I would prefer comments in the style used by [gitchangelog](https://github.com/vaab/gitchangelog); this will simplify  generation of the ``CHANGELOG.md``.
+  It isn't fondamental, I can edit comments and insert prefixes, or edit manually the ``CHANGELOG.md``, but it would be nice if you can help me.
+
+
 [draw.io]: https://www.draw.io
 [diagramPlaceholder]: spec/defaultImage.png "Placeholder for missing diagrams"
 [DMSF]: https://github.com/danmunn/redmine_dmsf
