@@ -1,7 +1,7 @@
 function editDiagram(image, resource, isDmsf, pageName) {
     var initial = image.getAttribute('src');
     
-    image.setAttribute('src', 'http://www.draw.io/images/ajax-loader.gif');
+    image.setAttribute('src', '//www.draw.io/images/ajax-loader.gif');
     
     var iframe = document.createElement('iframe');
     
