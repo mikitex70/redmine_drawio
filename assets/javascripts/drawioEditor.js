@@ -123,9 +123,9 @@ function saveAttachment(resource, data, pageName) {
                 // Build a pattern like attachName(_\d+)?\.*
                 var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, "(_\\d+)?($2)?")
                 // Build pattern to match the drawio_attach macro with resource pattern
-                var macroRegExp = escapeRegExp("{{drawio_attach(")+resourcePattern+escapeRegExp(")}}");
+                var macroRegExp = escapeRegExp("{{drawio_attach(")+resourcePattern+"(\\s*,.*)?"+escapeRegExp(")}}");
                 // Replace old attachment name with the new name
-                return pageBody.replace(new RegExp(macroRegExp), "{{drawio_attach("+resource+")}}");
+                return pageBody.replace(new RegExp(macroRegExp), "{{drawio_attach("+resource+"$3)}}");
             }
             
             var data = {
@@ -160,7 +160,7 @@ function saveAttachment(resource, data, pageName) {
         }
         
         // To attach a file we need to make a PUT request to update the wiki page.
-        // But to update the page we must sente the text of the page, even if not changed.
+        // But to update the page we must send the text of the page, even if not changed.
         // So first we read the page definition, then we send the update request using
         // the original page text.
         $.ajax({
@@ -263,15 +263,35 @@ $(function () {
                 var editor    = dlg.data("editor");
                 var macroName = dlg.data("macro");
                 var diagName  = $("#drawio_diagName").val();
+                var size      = $("#drawio_diagSize").val();
                 
                 if(diagName != "") {
-                    editor.encloseSelection('{{'+macroName+'('+diagName+')}}');
+                    var sizeOpt = "";
+                    
+                    if(/^\d+$/.test(size)) {
+                        sizeOpt = ", size="+size;
+                    }
+                    
+                    editor.encloseSelection('{{'+macroName+'('+diagName+sizeOpt+')}}');
                     dlg.dialog("close");
                 }
             },
             Cancel: function() {
                 dlg.dialog("close");
             }
+        }
+    });
+    
+    $("#drawio_diagSize").keypress(function(evt) {
+        if(evt.altKey || evt.ctrlKey || evt.metaKey || evt.which === 0)
+            return true;
+        
+        var keyCode = evt.keyCode || evt.charCode;
+        
+        switch(keyCode) {
+            case 8: // backspace
+                return true;
+            default: return new RegExp($(this).attr("pattern")).test(this.value+evt.key); // Check if the character is allowed
         }
     });
  

@@ -66,6 +66,9 @@ Usage is very simple:
 
   The diagram attachments are versioned by suffixing the name with a counter. This is necessary because is not possible to update an existing attachment. Moreover, is not possible to delete attachments throught rest API (seems to be possible from Redmine 3.3.0, but I need to experiment), so the old versions of an attachment must be explicitly (manually) deleted from the Redmine web interface.
 
+- the following macro options are available (default values are shown):
+  - ``size=number`` : force image width, in pixels (default, show in original size)
+
 In the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_attach.png) that can be used to insert a macro for a new diagram to be saved as attachment (for lazy people).
 
 ### `drawio_dmsf` macro
@@ -82,6 +85,9 @@ Usage is very simple:
   ![Diagram placeholder][diagramPlaceholder]
 
   Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved (versioned) in the specified DMSF documents path for the current project, and the diagram will be automatically updated.
+
+- the following macro options are available (default values are shown):
+  - ``size=number`` : force image width, in pixels (default, show in original size)
 
 Like for the ``drawio_attach`` macro, in the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_dmsf.png) that can be used to insert a macro for a new diagram to be saved as [DMSF] document.
 
@@ -105,6 +111,15 @@ The diagrams aren't sent to [draw.io] for editing/rendering, but all the operati
   - use GoogleDrive, Dropbox and OneDrive as possible diagram sources.
   - implement tests
   - make diagram images exportable in PDF
+
+## Contributing
+
+Any code contribution is well accepted. There are only a few rules that I would like to be respected to easy merging:
+
+- work on ``develop`` branch and leave the ``master`` branch untouched. This is importat to keep the released versions stable.
+- I would prefer comments in the style used by [gitchangelog](https://github.com/vaab/gitchangelog); this will simplify  generation of the ``CHANGELOG.md``.
+  It isn't fondamental, I can edit comments and insert prefixes, or edit manually the ``CHANGELOG.md``, but it would be nice if you can help me.
+
 
 [draw.io]: https://www.draw.io
 [diagramPlaceholder]: spec/defaultImage.png "Placeholder for missing diagrams"

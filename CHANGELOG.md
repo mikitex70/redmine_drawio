@@ -1,8 +1,42 @@
 # Changelog
 
+## v0.4.0 (2016-12-10)
+
+### New
+
+* Added option to set diagram size (refs #8) [Michele Tessaro]
+
+  Added option ``size`` to macros ``drawio_attach`` and ``drawio_dmsf`` to
+  allow resize diagram image.
+  The size option sets the image width, in pixels; default is original
+  image width.
+
+### Changes
+
+* Added notes on code contributions. [Michele Tessaro]
+
+### Fix
+
+* Fixed errors when used outside wiki pages (refs #9) [Michele Tessaro]
+
+* Fixed redmine path with custom route (fixes #7) [Michele Tessaro]
+
+  Fixed calculation of Redmine web path when using custom routes, such
+  when using a single project as Redmine home page (see
+  http://www.redmine.org/boards/2/topics/32811)
+
+* Load 'loading' image using protocol-relative paths. [Javango]
+
+  When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
+
+  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
+
+
 ## v0.3.2 (2016-11-22)
 
 ### Changes
+
+* Updated documentation. [Michele Tessaro]
 
 * Human decoded DMSF HTTP error codes. [Michele Tessaro]
 
@@ -26,6 +60,7 @@
 
 * Added dialogs for inserting macros. [Michele Tessaro]
 
+* Added dialogs for inserting macros. [Michele Tessaro]
 
 ### Other
 
