@@ -45,7 +45,7 @@ EOF
 
     macro :drawio do |obj, args|
         return "«Please save content first»" unless obj
-        return "«drawio unsupported item»"   unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
       
         args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
         filename = args.first
@@ -124,7 +124,7 @@ EOF
 
     macro :drawio_attach do |obj, args|
         return "«Please save content first»" unless obj
-        return "«drawio unsupported item»"   unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
         
         args, options = extract_macro_options(args, :size)
         diagramName = args.first
@@ -213,7 +213,7 @@ EOF
 
       macro :drawio_dmsf do |obj, args|
           return "«Please save content first»" unless obj
-          return "«drawio unsupported item»"   unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+          return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
 
           args, options = extract_macro_options(args, :size)
           diagramName   = args.first
