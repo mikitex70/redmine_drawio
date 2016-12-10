@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
   description 'Wiki macro plugin for inserting drawio diagrams into Wiki pages and Issues'
-  version '0.3.2'
+  version '0.4.0'
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
   
