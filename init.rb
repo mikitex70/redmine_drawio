@@ -45,8 +45,8 @@ EOF
 
     macro :drawio do |obj, args|
         return "«Please save content first»" unless obj
-        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
-      
+        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
+        
         args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
         filename = args.first
 
@@ -83,7 +83,7 @@ EOF
         end
 
         attach = container.attachments.find_by_filename(filename)
-        return "Diagram attachment missing or not is a text file".html_safe unless attach && attach.is_text?
+        return "Diagram attachment missing or isn't a text file".html_safe unless attach && attach.is_text?
 
         file = File.open(attach.diskfile)
         contents = file.read
@@ -124,7 +124,7 @@ EOF
 
     macro :drawio_attach do |obj, args|
         return "«Please save content first»" unless obj
-        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
         
         args, options = extract_macro_options(args, :size)
         diagramName = args.first
@@ -141,6 +141,10 @@ EOF
             container = obj.page
             title     = container.title
             canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
+        elsif obj.is_a?(Journal)
+            container = obj
+            title     = nil  # not necessary
+            canEdit   = container.editable_by?(User.current)
         else
             container = obj
             title     = nil  # not necessary
@@ -213,7 +217,7 @@ EOF
 
       macro :drawio_dmsf do |obj, args|
           return "«Please save content first»" unless obj
-          return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+          return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
 
           args, options = extract_macro_options(args, :size)
           diagramName   = args.first
@@ -234,6 +238,11 @@ EOF
               title     = container.title
               project   = container.wiki.project
               canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
+          elsif obj.is_a?(Journal)
+              container = obj
+              title     = nil # not necessary
+              project   = container.project
+              canEdit   = container.editable_by?(User.current)
           else
               container = obj
               title     = nil # not necessary

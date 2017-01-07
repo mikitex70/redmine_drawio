@@ -1,5 +1,19 @@
 # Changelog
 
+## development (unreleased)
+
+### New
+
+* Added support for issue notes. [Michele Tessaro]
+
+### Fix
+
+* Fixed computation of Redmine URL (fixes #11) [Michele Tessaro]
+
+  Fixed a missing slash in the url while uploading attachments throught
+  drawio_attach macro, that caused &quot;Not found&quot; errors.
+
+
 ## v0.4.0 (2016-12-10)
 
 ### New
@@ -16,6 +30,12 @@
 * Added notes on code contributions. [Michele Tessaro]
 
 ### Fix
+
+* Load 'loading' image using protocol-relative paths. [Javango]
+
+  When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
+
+  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
 
 * Fixed errors when used outside wiki pages (refs #9) [Michele Tessaro]
 
