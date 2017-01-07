@@ -27,7 +27,7 @@ module RedmineDrawio
     def redmine_url(context)
         rootUrl = ActionController::Base.relative_url_root
 
-        return rootUrl if rootUrl != nil
+        return rootUrl+'/' if rootUrl != nil
 
         return '/'
     end
