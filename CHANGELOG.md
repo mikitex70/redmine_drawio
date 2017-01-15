@@ -4,6 +4,13 @@
 
 ### New
 
+* Added configuration of draw.io server (implements #12) [Michele Tessaro]
+
+  Added a configuration dialog which can be used to change the default URL
+  of the draw.io server.
+  Added also notes on how to build a fully functionally war file of the
+  draw.io site (the default is missing of a servlet).
+
 * Added support for issue notes. [Michele Tessaro]
 
 ### Fix

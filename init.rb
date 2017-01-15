@@ -16,6 +16,9 @@ Redmine::Plugin.register :redmine_drawio do
   requires_redmine version: '2.6'..'3.3'
   require_dependency "drawio_dmsf_helper"
   
+  settings(partial: 'settings/drawio_settings',
+           default: {'drawio_service_url' => '//www.draw.io'})
+  
   # Add to_bool method to String class; this makes source more readable
   class String
     def to_bool
@@ -101,7 +104,7 @@ EOF
         })
 
         return "<div class=\"mxgraph\" #{style} data-mxgraph=\"#{CGI::escapeHTML(graphOpts)}\"></div>".html_safe+
-               javascript_tag(nil, src: "https://www.draw.io/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
+               javascript_tag(nil, src: "#{Setting.plugin_redmine_drawio['drawio_service_url']}/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
     end
   end
   
