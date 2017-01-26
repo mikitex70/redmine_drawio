@@ -119,7 +119,7 @@ The build steps are:
 
 If the build ends without errors, in the ``build`` directory you should find a working version of the war file that you can deploy in your favourite servlet container (like *Tomcat*); be sure to enable the ``HTTPS`` protocol because is is required.
 
-Then enter you *Redmine* installation, go to ``Administration`` -> ``Plugins`` -> ``Redmine Drawio plugin``, click on the ``Configure`` link and then specify your address for the ``draw.io`` site.
+Then enter your *Redmine* installation, go to ``Administration`` -> ``Plugins`` -> ``Redmine Drawio plugin``, click on the ``Configure`` link and then specify your address for the ``draw.io`` site.
 
 ## Known issues
 
