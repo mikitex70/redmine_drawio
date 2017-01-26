@@ -1,6 +1,6 @@
 # Changelog
 
-## development (unreleased)
+## v0.5.0 (2017-01-26)
 
 ### New
 
@@ -14,6 +14,8 @@
 * Added support for issue notes. [Michele Tessaro]
 
 ### Fix
+
+* Fixed UTF-8 encoding in init.rb (fixes #14) [Michele Tessaro]
 
 * Fixed computation of Redmine URL (fixes #11) [Michele Tessaro]
 
