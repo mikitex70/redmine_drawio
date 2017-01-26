@@ -2,11 +2,11 @@
 
 [draw.io] is free online diagramming tool.
 
-This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.redmine.org/) wiki pages and issues.
+This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.redmine.org/) wiki pages, issues descriptions and issue notes.
 
 ## Requirements
 
-- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.3 and v3.3.0.
+- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4 and v3.3.1.
 
 ## Installation
 
@@ -44,7 +44,7 @@ This macro draws diagrams saved in attachments. This is for compatibility with `
 With this macro diagrams are drawn using SVG (or maybe Canvas) so they are interactive: they are navigable,
 they respond to ``over`` and ``click`` actions. Hyperlinks can be used to navigate to other items.
 
-This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages). The following two macros instead render images as PNG, so we loose the interactivity but we gain in rendering speed.
+This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages). The following two macros instead render images as PNG, so we loose the interactivity but we gain in page rendering speed.
 
 ### `drawio_attach` macro
 This macro handles diagrams saved as attachments of issues or wiki pages. 
@@ -94,13 +94,40 @@ Like for the ``drawio_attach`` macro, in the toolbar editor there is a button wi
 ## Some note on the drawio editor
 Someone can be concerned about security in sending own diagrams to the [draw.io] site.
 
-The diagrams aren't sent to [draw.io] for editing/rendering, but all the operations are done by the browser using only Javascript and HTML5. The only thing loaded externally are the scripts and the editor page, when the diagram editor is opened. The diagram source remains local to browser/redmine site.
+The diagrams aren't sent to [draw.io] for editing/rendering, but all the operations are done by the browser using only Javascript and HTML5. The only things loaded externally are the scripts and the editor page, when the diagram editor is opened. The diagram source remains local to browser/redmine site.
+
+## Using a personal installation of draw.io
+
+If you like, you can configure this plugin to use your own installation of the [draw.io] site. 
+
+The build of the ``war`` file is a bit problematic because the ``drawio`` macro needs a script dinamically produced by the ``EmbedServlet2`` servlet, which is deployed in the [draw.io] site but not built from the default sources.
+
+This servlet is excluded from build because of a missing library from Google, maybe because of copyright issues.
+
+If you are planning to use only the ``drawio_attach`` and ``drawio_dmsf`` macros you can use the source as is without troubles, but if you want/need the ``drawio`` macro it is necessary to apply the ``embed2js.patch`` patch (included in this plugin sources).
+
+The build steps are:
+
+```
+  git clone https://github.com/jgraph/draw.io.git
+  cd draw.io
+  patch -p1 < PATH_TO_DRAWIO_PLUGIN/embed2js.patch
+  cd etc/build
+  ant war
+  cd ../../build
+```
+
+If the build ends without errors, in the ``build`` directory you should find a working version of the war file that you can deploy in your favourite servlet container (like *Tomcat*); be sure to enable the ``HTTPS`` protocol because is is required.
+
+Then enter your *Redmine* installation, go to ``Administration`` -> ``Plugins`` -> ``Redmine Drawio plugin``, click on the ``Configure`` link and then specify your address for the ``draw.io`` site.
 
 ## Known issues
 
 - Diagrams are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.
 
 - There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters. If the diagram is too big, use the ``draio`` macro to render the diagram from an XML source.
+
+- The ``drawio_attach`` macro doesn't completly work with issue notes: Redmine APIs allow to create new issue notes, but not to change them, so the issue note must be changed manually. As alternative use the ``drawio`` and ``drawio_dmsf`` macros, which work fine.
 
 ## TODO
 

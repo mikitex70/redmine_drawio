@@ -1,7 +1,7 @@
 function editDiagram(image, resource, isDmsf, pageName) {
     var initial = image.getAttribute('src');
     
-    image.setAttribute('src', '//www.draw.io/images/ajax-loader.gif');
+    image.setAttribute('src', DRAWIO_URL+'/images/ajax-loader.gif');
     
     var iframe = document.createElement('iframe');
     
@@ -45,7 +45,8 @@ function editDiagram(image, resource, isDmsf, pageName) {
     };
     
     window.addEventListener('message', receive);
-    iframe.setAttribute('src', 'https://www.draw.io/?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json');
+    iframe.setAttribute('src', DRAWIO_URL+'?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json');
+//     iframe.setAttribute('src', 'https://www.draw.io/?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json');
     document.body.appendChild(iframe);
 };
 

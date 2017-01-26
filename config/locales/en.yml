@@ -1,3 +1,4 @@
 # English strings go here for Rails i18n
 en:
-  # my_label: "My label"
+  drawio_url: "Draw.io service URL"
+  drawio_service_url_hint: "URL of your local service installation; set to '//www.draw.io' to use the online service"

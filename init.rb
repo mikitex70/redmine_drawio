@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'redmine'
 require 'json'
 require 'base64'
@@ -9,12 +10,15 @@ Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
   description 'Wiki macro plugin for inserting drawio diagrams into Wiki pages and Issues'
-  version '0.4.0'
+  version '0.5.0'
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
   
   requires_redmine version: '2.6'..'3.3'
   require_dependency "drawio_dmsf_helper"
+  
+  settings(partial: 'settings/drawio_settings',
+           default: {'drawio_service_url' => '//www.draw.io'})
   
   # Add to_bool method to String class; this makes source more readable
   class String
@@ -45,8 +49,8 @@ EOF
 
     macro :drawio do |obj, args|
         return "«Please save content first»" unless obj
-        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
-      
+        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
+        
         args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
         filename = args.first
 
@@ -83,7 +87,7 @@ EOF
         end
 
         attach = container.attachments.find_by_filename(filename)
-        return "Diagram attachment missing or not is a text file".html_safe unless attach && attach.is_text?
+        return "Diagram attachment missing or isn't a text file".html_safe unless attach && attach.is_text?
 
         file = File.open(attach.diskfile)
         contents = file.read
@@ -101,7 +105,7 @@ EOF
         })
 
         return "<div class=\"mxgraph\" #{style} data-mxgraph=\"#{CGI::escapeHTML(graphOpts)}\"></div>".html_safe+
-               javascript_tag(nil, src: "https://www.draw.io/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
+               javascript_tag(nil, src: "#{Setting.plugin_redmine_drawio['drawio_service_url']}/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
     end
   end
   
@@ -124,7 +128,7 @@ EOF
 
     macro :drawio_attach do |obj, args|
         return "«Please save content first»" unless obj
-        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
         
         args, options = extract_macro_options(args, :size)
         diagramName = args.first
@@ -141,6 +145,10 @@ EOF
             container = obj.page
             title     = container.title
             canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
+        elsif obj.is_a?(Journal)
+            container = obj
+            title     = nil  # not necessary
+            canEdit   = container.editable_by?(User.current)
         else
             container = obj
             title     = nil  # not necessary
@@ -213,7 +221,7 @@ EOF
 
       macro :drawio_dmsf do |obj, args|
           return "«Please save content first»" unless obj
-          return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue)
+          return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
 
           args, options = extract_macro_options(args, :size)
           diagramName   = args.first
@@ -234,6 +242,11 @@ EOF
               title     = container.title
               project   = container.wiki.project
               canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
+          elsif obj.is_a?(Journal)
+              container = obj
+              title     = nil # not necessary
+              project   = container.project
+              canEdit   = container.editable_by?(User.current)
           else
               container = obj
               title     = nil # not necessary
