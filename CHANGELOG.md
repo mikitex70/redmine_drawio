@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.6.0 (2017-04-11)
+
+### New
+
+* Added embedded editor support for SVG images (closes #17) [Michele Tessaro]
+
+
 ## v0.5.0 (2017-01-26)
 
 ### New
@@ -40,11 +47,11 @@
 
 ### Fix
 
-* Load 'loading' image using protocol-relative paths. [Javango]
+* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
+  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
 
 * Fixed errors when used outside wiki pages (refs #9) [Michele Tessaro]
 
@@ -54,11 +61,11 @@
   when using a single project as Redmine home page (see
   http://www.redmine.org/boards/2/topics/32811)
 
-* Load 'loading' image using protocol-relative paths. [Javango]
+* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
+  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
 
 
 ## v0.3.2 (2016-11-22)
