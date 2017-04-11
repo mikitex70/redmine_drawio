@@ -6,7 +6,7 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 
 ## Requirements
 
-- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4 and v3.3.1.
+- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4 and v3.3.2.
 
 ## Installation
 
@@ -26,7 +26,7 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 There are three macros that can be used to embed diagrams in wiki pages/issues; use what best fits your needs.
 
 ### `drawio` macro
-This macro draws diagrams saved in attachments. This is for compatibility with `0.1.x` versions of the plugin. To use it:
+This macro draws diagrams saved in attachments. This is for compatibility with `0.1.x` versions of the plugin and is now a bit obsolete. To use it:
 
 - save your [draw.io] diagram locally and upload it as attachment to a Wiki or issue page.
 - in Wiki (or issue) pages use the `drawio` macro to load the widget, specifying the name of the attachment. For example:
@@ -44,12 +44,19 @@ This macro draws diagrams saved in attachments. This is for compatibility with `
 With this macro diagrams are drawn using SVG (or maybe Canvas) so they are interactive: they are navigable,
 they respond to ``over`` and ``click`` actions. Hyperlinks can be used to navigate to other items.
 
-This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages). The following two macros instead render images as PNG, so we loose the interactivity but we gain in page rendering speed.
+This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages).
+
+This macro is now obsolete: you can now use SVG diagrams with the other two macros (``draio_attach`` and ``drawio_dmsf``)
+but you must import the the diagram in the *draw.io editor* and then export as SVG with an included copy of the diagram
+(see the *Export as SVG* function of the *draw.io editor*).
 
 ### `drawio_attach` macro
 This macro handles diagrams saved as attachments of issues or wiki pages. 
 
-With this macro the attachments are in PNG+XML format, a special format consisting in an PNG image of the diagram plus the XML diagram source embeded as a field of the image.
+With this macro the attachments are in PNG+XML, a special format consisting in an PNG image of the diagram plus the XML diagram source embeded as a field of the image.
+
+With an``.svg`` attachment name extension the image format is handled as SVG+XML; like the PNG+XML, this is an SVG image
+with an embedded XML source of the diagram (the diagram must be created with the *draw.io editor*, normal SVG are displayed but cannot be edited).
 
 Usage is very simple:
 
@@ -72,7 +79,7 @@ Usage is very simple:
 In the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_attach.png) that can be used to insert a macro for a new diagram to be saved as attachment (for lazy people).
 
 ### `drawio_dmsf` macro
-This macro handles diagrams saved in the [DMSF] repository as PNG+XML images. The DMSF module must be enabled for the project to be able to use this macro.
+This macro handles diagrams saved in the [DMSF] repository as PNG+XML or SVG+XML images. The DMSF module must be enabled for the project to be able to use this macro.
 Usage is very simple:
 
 - enable the WebDAV functionality of the [DMSF] plugin in ``Read/Write`` mode; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
