@@ -7,6 +7,11 @@
           <input type="text" name="drawio_diagName" id="drawio_diagName" size="32"/>
         </p>
         <p>
+          <label for="drawio_diagType">Diagram format</label>
+          <input type="radio" name="drawio_diagType" value="png" checked="checked"/>PNG
+          <input type="radio" name="drawio_diagType" value="svg" style="margin-left:1em"/>SVG
+        </p>
+        <p>
           <label for="drawio_diagSize">Width</label>
           <input type="text" name="drawio_diagSize" id="drawio_diagSize" size="4" maxlength="4" pattern="^\d+$"/> pixel
         </p>

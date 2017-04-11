@@ -1,41 +1,112 @@
+/**
+ * Handles editing of a diagram.
+ * @param image 
+ * @param resource
+ * @param isDmsf
+ * @param pageName
+ */
 function editDiagram(image, resource, isDmsf, pageName) {
-    var initial = image.getAttribute('src');
+    /**
+     * Convert a DOM element to a String.<br/>
+     * This method is necessary because of the {@code content} attribute of the SVG tag, which is an XML.
+     * Converting the xmlDom directly to string will produce a representation which is not well formed.
+     * @param xmlDom DOM element to convert.
+     * @return xmlDom serialized as String.
+     */
+    function getXmlAsString(xmlDom){
+        return (typeof XMLSerializer !== 'undefined')? 
+            (new window.XMLSerializer()).serializeToString(xmlDom) : 
+            xmlDom.xml;
+    }
     
-    image.setAttribute('src', DRAWIO_URL+'/images/ajax-loader.gif');
+    function extractData(data, type) {
+        return Base64Binary.decodeArrayBuffer(data.substring(('data:'+type+';base64,').length));
+    }
     
+    function makeResizable(svg) {
+        return svg.replace(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px/, 
+                           '<svg preserve_aspect_ratio="xMaxYMax meet" style="max-width:100%" width="$2px" height="$3px" viewBox="0 0 $2 $3" $1');
+    }
+    
+    var imageType = (resource.match(/\.svg$/)? 'image/svg+xml': 'image/png');
+    var isSvg     = imageType === 'image/svg+xml';
+    var imgDescriptor;
     var iframe = document.createElement('iframe');
     
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('class', 'drawioEditor');
     
+    if(isSvg)
+        imgDescriptor = {
+            fmt: "xmlsvg",
+            initial: getXmlAsString(image),
+            showLoader: function() {
+                $(image).hide();
+                $(image.parentElement).prepend('<img id="drawioLoader" src="'+DRAWIO_URL+'/images/ajax-loader.gif"/>');
+            },
+            hideLoader: function(initial) {
+                $("#drawioLoader").remove();
+                $(image).show();
+            },
+            updateImage: function(rawImage) {
+                var svgImage = extractData(rawImage, 'image/svg+xml').slice(0,-1);
+                $(image.parentNode).html(makeResizable(Base64Binary.arrayBufferToString(svgImage)));
+            },
+            launchEditor: function(initial) {
+                iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xml: initial}), '*');
+            }
+        };
+    else
+        imgDescriptor = {
+            fmt: "xmlpng",
+            initial: image.getAttribute('src'),
+            showLoader: function() {
+                image.setAttribute('src', DRAWIO_URL+'/images/ajax-loader.gif');
+            },
+            hideLoader: function(initial) {
+                image.setAttribute('src', initial);
+            },
+            updateImage: function(rawImage) {
+                image.setAttribute('src', rawImage);
+            },
+            launchEditor: function(initial) {
+                iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xmlpng: initial}), '*');
+            }
+        };
+    
+    imgDescriptor.showLoader();
+    
     var close = function() {
-        image.setAttribute('src', initial);
+        imgDescriptor.hideLoader(imgDescriptor.initial);
         document.body.removeChild(iframe);
         window.removeEventListener('message', receive);
     };
     
     var receive = function(evt) {
         if (evt.data.length > 0) {
+            // https://desk.draw.io/support/solutions/articles/16000042544-how-does-embed-mode-work-
+            // https://desk.draw.io/support/solutions/articles/16000042546-what-url-parameters-are-supported-
             var msg = JSON.parse(evt.data);
             
             switch(msg.event) {
                 case 'init':
-                    iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xmlpng: initial}), '*');
+                    imgDescriptor.launchEditor(imgDescriptor.initial);
                     break;
                 case 'export':
+                    var svgImage = extractData(msg.data, imageType).slice(0,-1);
+                    
                     close();
-                    image.setAttribute('src', msg.data);
-                    image.setAttribute('data-diagram', msg.data);
+                    imgDescriptor.updateImage(msg.data);
                     
                     if(isDmsf) {
-                        saveDmsf(REDMINE_URL+"dmsf/webdav/"+resource, msg.data);
+                        saveDmsf(REDMINE_URL+'dmsf/webdav/'+resource, svgImage, imageType);
                     }
                     else {
-                        saveAttachment(resource , msg.data, pageName);
+                        saveAttachment(resource , svgImage, imageType, pageName);
                     }
                     break;
                 case 'save':
-                    iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: 'xmlpng', spin: 'Updating page'}), '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: imgDescriptor.fmt, spin: 'Updating page'}), '*');
                     break;
                 case 'exit':
                     close();
@@ -46,7 +117,6 @@ function editDiagram(image, resource, isDmsf, pageName) {
     
     window.addEventListener('message', receive);
     iframe.setAttribute('src', DRAWIO_URL+'?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json');
-//     iframe.setAttribute('src', 'https://www.draw.io/?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json');
     document.body.appendChild(iframe);
 };
 
@@ -54,7 +124,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
  * Show an alert if case of error saving the diagram.
  */
 function showError(jqXHR, textStatus, errorThrown) {
-    alert("Error saving diagram:\n"+errorThrown);
+    alert('Error saving diagram:\n'+errorThrown);
 }
 
 /**
@@ -62,21 +132,19 @@ function showError(jqXHR, textStatus, errorThrown) {
  * If the document is missing, it will be created; if exists, a new
  * version will be created.
  * @param url URL of the DMSF document.
- * @param data Data (base64 encoded) of the attachment; will be decoded and
- *             sent as image/png.
+ * @param imageData Data of the attachment.
+ * @param type Type of the image ({@code png} or {@code svg+xml})
  */
-function saveDmsf(url, data) {
+function saveDmsf(url, imageData, type) {
     if(url) {
-        var base64Data = data.substring("data:image/png;base64,".length);
-
         $.ajax({
             url        : url,
-            type       : "PUT",
-            dataType   : "text",
-            mimeType   : "text/plain", // Fixes a "non well-formed" message in the Firefox console
+            type       : 'PUT',
+            dataType   : 'text',
+            mimeType   : 'text/plain', // Fixes a "non well-formed" message in the Firefox console
             processData: false,
-            contentType: "image/png",
-            data       : Base64Binary.decodeArrayBuffer(base64Data),
+            contentType: type,
+            data       : imageData,
             error      : function(jqXHR, textStatus, errorThrown) {
                 switch(jqXHR.status) {
                     case 404:
@@ -86,9 +154,9 @@ function saveDmsf(url, data) {
                 }
             },
             statusCode : {
-                404: function() { showError(null, null, "Make sure WebDAV capabilities of DMSF module is enabled"); },
-                409: function() { showError(null, null, "Make sure the DMSF folder exists and is accessible"); },
-                502: function() { showError(null, null, "Make sure WebDAV capabilities of DMSF module is enabled in Read/Write mode"); }
+                404: function() { showError(null, null, 'Make sure WebDAV capabilities of DMSF module is enabled'); },
+                409: function() { showError(null, null, 'Make sure the DMSF folder exists and is accessible'); },
+                502: function() { showError(null, null, 'Make sure WebDAV capabilities of DMSF module is enabled in Read/Write mode'); }
             }
         });
     }
@@ -98,14 +166,14 @@ function saveDmsf(url, data) {
 /**
  * Saves the data as an attachment of the wiki page.
  * @param resource Address of the wiki page.
- * @param data Data (base64 encoded) of the attachment; will be decoded and
- *             sent as image/png.
+ * @param imageData Data of the attachment.
+ * @param type Type of the image ({@code png} or {@svg+xml}).
  */             
-function saveAttachment(resource, data, pageName) {
+function saveAttachment(resource, imageData, type, pageName) {
     var pageUrl = window.location.pathname;
     
-    if(!pageUrl.match(pageName+"$"))
-        pageUrl += "/"+pageName;
+    if(!pageUrl.match(pageName+'$'))
+        pageUrl += '/'+pageName;
     
     function readWikiPage(uploadResponse) {
         // This is the token to reference the uploaded attachment
@@ -122,18 +190,18 @@ function saveAttachment(resource, data, pageName) {
             
             function updateDiagramReference(pageBody) {
                 // Build a pattern like attachName(_\d+)?\.*
-                var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, "(_\\d+)?($2)?")
+                var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, '(_\\d+)?($2)?')
                 // Build pattern to match the drawio_attach macro with resource pattern
-                var macroRegExp = escapeRegExp("{{drawio_attach(")+resourcePattern+"(\\s*,.*)?"+escapeRegExp(")}}");
+                var macroRegExp = escapeRegExp('{{drawio_attach(')+resourcePattern+'(\\s*,.*)?'+escapeRegExp(')}}');
                 // Replace old attachment name with the new name
-                return pageBody.replace(new RegExp(macroRegExp), "{{drawio_attach("+resource+"$3)}}");
+                return pageBody.replace(new RegExp(macroRegExp), '{{drawio_attach('+resource+'$3)}}');
             }
             
             var data = {
                 attachments: [{ 
                     token         : token, 
                     filename      : resource,
-                    "content-type": "image/png" 
+                    'content-type': type
                 }]
             };
             
@@ -152,9 +220,9 @@ function saveAttachment(resource, data, pageName) {
             
             // Update the wiki/issue source page
             $.ajax({
-                url     : pageUrl+".json",
-                type    : "PUT",
-                dataType: "text",
+                url     : pageUrl+'.json',
+                type    : 'PUT',
+                dataType: 'text',
                 data    : data,
                 error   : showError
             });
@@ -165,9 +233,9 @@ function saveAttachment(resource, data, pageName) {
         // So first we read the page definition, then we send the update request using
         // the original page text.
         $.ajax({
-            url     : pageUrl+".json",
-            type    : "GET",
-            dataType: "json",
+            url     : pageUrl+'.json',
+            type    : 'GET',
+            dataType: 'json',
             success : savePage,
             error   : showError
         });
@@ -175,15 +243,13 @@ function saveAttachment(resource, data, pageName) {
     
     if(resource) {
         // Upload the attachment
-        var base64Data = data.substring("data:image/png;base64,".length);
-        
         $.ajax({
-            url        : REDMINE_URL+"uploads.json",
+            url        : REDMINE_URL+'uploads.json',
             type       : 'POST',
             contentType: 'application/octet-stream',
             processData: false,
-            data       : Base64Binary.decodeArrayBuffer(base64Data),
-            dataType   : "json",
+            data       : imageData,
+            dataType   : 'json',
             success    : readWikiPage,
             error      : showError
         });
@@ -248,6 +314,22 @@ var Base64Binary = {
         }
         
         return uarray;	
+    },
+    
+    // From http://stackoverflow.com/questions/843680/how-to-replace-dom-element-in-place-using-javascript
+    /**
+     * Convert an ArrayBuffer to String.
+     * @param buffer ArrayBuffer to convert
+     * @return String extracted from the ArrayBuffer argument.
+     */
+    arrayBufferToString: function(buffer) {
+        var arr = new Uint8Array(buffer);
+        var str = String.fromCharCode.apply(String, arr);
+        
+        if (/[\u0080-\uffff]/.test(str))
+            throw new Error("this string seems to contain (still encoded) multibytes");
+
+        return str;
     }
 };
 
@@ -264,6 +346,7 @@ $(function () {
                 var editor    = dlg.data("editor");
                 var macroName = dlg.data("macro");
                 var diagName  = $("#drawio_diagName").val();
+                var diagType  = $("input[name=drawio_diagType]:checked").val();
                 var size      = $("#drawio_diagSize").val();
                 
                 if(diagName != "") {
@@ -272,6 +355,9 @@ $(function () {
                     if(/^\d+$/.test(size)) {
                         sizeOpt = ", size="+size;
                     }
+                    
+                    // Add/replace file extension
+                    diagName = diagName.replace(/^(.*?)(?:\.\w{3})?$/, "$1."+diagType);
                     
                     editor.encloseSelection('{{'+macroName+'('+diagName+sizeOpt+')}}');
                     dlg.dialog("close");
