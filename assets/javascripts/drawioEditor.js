@@ -28,7 +28,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                            '<svg preserve_aspect_ratio="xMaxYMax meet" style="max-width:100%" width="$2px" height="$3px" viewBox="0 0 $2 $3" $1');
     }
     
-    var imageType = (resource.match(/\.svg$/)? 'image/svg+xml': 'image/png');
+    var imageType = (resource.match(/\.svg$/i)? 'image/svg+xml': 'image/png');
     var isSvg     = imageType === 'image/svg+xml';
     var imgDescriptor;
     var iframe = document.createElement('iframe');

@@ -335,5 +335,5 @@ def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
 end
 
 def svg?(diagramName)
-    diagramName =~ /\.svg$/
+    diagramName =~ /\.svg$/i
 end
