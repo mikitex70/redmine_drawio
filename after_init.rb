@@ -1,1 +1,1 @@
-require_dependency 'drawio'
+require_dependency 'redmine_drawio'
