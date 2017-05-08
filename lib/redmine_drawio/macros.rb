@@ -105,9 +105,10 @@ EOF
         return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
         
         args, options = extract_macro_options(args, :size)
-        diagramName   = args.first
+        diagramName   = args.first.gsub(/[^-0-9A-Za-z_.]/, '')
         
         return "«Please set a diagram name»".html_safe unless diagramName
+        return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*\.(png|svg)$/i
         
         size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
         
@@ -136,10 +137,15 @@ EOF
         
         if canEdit
             # Diagram and document are editable
-            if diagramName =~ /_\d+\./
-                saveName = diagramName.sub(/_(\d+)/) {|v| v.next } # increment version
+            if Redmine::Plugin.installed?(:easy_redmine)
+                # EasyRedmine can update the attachment without duplications
+                saveName = diagramName
             else
-                saveName = diagramName.sub(/(\.\w+)$/, '_1\1') # set version to _1
+                if diagramName =~ /_\d+\./
+                    saveName = diagramName.sub(/_(\d+)/) {|v| v.next } # increment version
+                else
+                    saveName = diagramName.sub(/(\.\w+)$/, '_1\1') # set version to _1
+                end
             end
         else
             # Diagram cannot be saved, it wil become not editable
@@ -190,9 +196,10 @@ EOF
         return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
         
         args, options = extract_macro_options(args, :size)
-        diagramName   = args.first
+        diagramName   = args.first.gsub(/[^-0-9A-Za-z_.]/, '')
         
         return "«Please set a diagram name»".html_safe unless diagramName
+        return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*\.(png|svg)$/i
         
         # Add an extension, if missing
         diagramName += ".png" if File.extname(diagramName.strip) == ""
