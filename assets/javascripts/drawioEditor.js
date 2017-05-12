@@ -397,16 +397,17 @@ $(function () {
         }
     };
     
-    jsToolBar.prototype.elements.drawio_dmsf = {
-        type : 'button',
-        after: 'drawio_attach',
-        title: 'Drawio DMSF diagram',
-        fn   : {
-            wiki: function(event) {
-                dlg.data("editor", this).data("macro", "drawio_dmsf").dialog("open");
+    if(DMSF)
+        jsToolBar.prototype.elements.drawio_dmsf = {
+            type : 'button',
+            after: 'drawio_attach',
+            title: 'Drawio DMSF diagram',
+            fn   : {
+                wiki: function(event) {
+                    dlg.data("editor", this).data("macro", "drawio_dmsf").dialog("open");
+                }
             }
-        }
-    };
+        };
     
     wikiToolbar.draw();
 });

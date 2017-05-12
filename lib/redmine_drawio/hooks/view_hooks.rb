@@ -16,8 +16,13 @@ module RedmineDrawio
         def view_layouts_base_body_bottom(context={})
             if context[:controller] && (context[:controller].is_a?(IssuesController) ||
                                         context[:controller].is_a?(WikiController))
-                return "<script type=\"text/javascript\">var REDMINE_URL = '#{redmine_url(context)}', DRAWIO_URL = '#{Setting.plugin_redmine_drawio['drawio_service_url']}';</script>" +
-                        javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
+                inlineScript = <<-EOF
+                    <script type=\"text/javascript\">
+                      var REDMINE_URL = '#{redmine_url(context)}',
+                      DRAWIO_URL = '#{Setting.plugin_redmine_drawio['drawio_service_url']}',
+                      DMSF = #{if Redmine::Plugin.installed?(:redmine_dmsf) then true else false end};</script>
+                EOF
+                return inlineScript+javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
             else
                 return ''
         end
