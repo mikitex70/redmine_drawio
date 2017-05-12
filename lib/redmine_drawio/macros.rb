@@ -170,95 +170,97 @@ EOF
     end
 end
 
-Redmine::WikiFormatting::Macros.register do
-    desc <<EOF
-Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage:
+if Redmine::Plugin.installed?(:redmine_dmsf)
+    Redmine::WikiFormatting::Macros.register do
+        desc <<-EOF
+        Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage:
 
-{{drawio_dmsf(myDiagram[, ...options...])}}
+        {{drawio_dmsf(myDiagram[, ...options...])}}
 
-The diagram is drawn from the DMSF document myDiagram.png; if you want to use the
-SVG image format, specify thw '.svg' document extension. If the document doesn't 
-exists a default diagram will be drawn. Double click it to start editing.
+        The diagram is drawn from the DMSF document myDiagram.png; if you want to use the
+        SVG image format, specify thw '.svg' document extension. If the document doesn't 
+        exists a default diagram will be drawn. Double click it to start editing.
 
-The diagram name can contain a path. For example:
+        The diagram name can contain a path. For example:
 
-{{drawio_dmsf(path/to/folder/myDiagram.svg)}}
+        {{drawio_dmsf(path/to/folder/myDiagram.svg)}}
 
-will create/edit the document myDiagram.svg in the DMSF folder path/to/folder of
-the current project (the folder must exists).
+        will create/edit the document myDiagram.svg in the DMSF folder path/to/folder of
+        the current project (the folder must exists).
 
-options:
-size=number : forced width of the diagram image, in pixels
-EOF
-    
-    macro :drawio_dmsf do |obj, args|
-        return "«Please save content first»" unless obj
-        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
+        options:
+        size=number : forced width of the diagram image, in pixels
+        EOF
         
-        args, options = extract_macro_options(args, :size)
-        diagramName   = args.first.gsub(/[^-0-9A-Za-z_.]/, '')
-        
-        return "«Please set a diagram name»".html_safe unless diagramName
-        return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*\.(png|svg)$/i
-        
-        # Add an extension, if missing
-        diagramName += ".png" if File.extname(diagramName.strip) == ""
-        
-        size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
-        
-        inlineStyle = ""
-        inlineStyle = "width:#{size}px;" if size
-        
-        if obj.is_a?(WikiContent)
-            container = obj.page
-            title     = container.title
-            project   = container.wiki.project
-            canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
-        elsif obj.is_a?(Journal)
-            container = obj
-            title     = nil # not necessary
-            project   = container.project
-            canEdit   = container.editable_by?(User.current)
-        else
-            container = obj
-            title     = nil # not necessary
-            project   = container.project
-            canEdit   = container.editable?(User.current)
-        end
-        
-        # Search the DMSF folder containing the diagram
-        folderName = File.dirname(diagramName)
-        folder     = DMSF_helper.deep_folder_search(project, folderName)
-        
-        # Search the document in DMSF
-        file = DmsfFile.find_file_by_name project, folder, File.basename(diagramName)
-        
-        if canEdit
-            # Diagram and document are editable
-            saveName  = "#{project.id}/#{diagramName}"
-        else
-            # Diagram cannot be saved, it wil become not editable
-            saveName = nil
-        end
-        
-        if file
-            # Document exists, get the file path
-            filename = file.last_revision.disk_file project
-            canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
-        else
-            # Document does not exists: use a predefined diagram to start editing
-            filename = imagePath(if svg? diagramName then 'defaultImage.svg' else 'defaultImage.png' end)
-            canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, project)
-        end
-        
-        diagram = File.read(filename, mode: 'rb')
-        # if png, encode image and remove newlines (required by Internet Explorer)
-        diagram = Base64.encode64(File.read(filename, mode: 'rb')).gsub("\n", '') unless svg? diagramName
-        
-        if svg? diagramName
-            return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, true)
-        else
-            return encapsulatePng(diagram, inlineStyle, diagramName, title, saveName, true)
+        macro :drawio_dmsf do |obj, args|
+            return "«Please save content first»" unless obj
+            return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
+            
+            args, options = extract_macro_options(args, :size)
+            diagramName   = args.first.gsub(/[^-0-9A-Za-z_.]/, '')
+            
+            return "«Please set a diagram name»".html_safe unless diagramName
+            return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*\.(png|svg)$/i
+            
+            # Add an extension, if missing
+            diagramName += ".png" if File.extname(diagramName.strip) == ""
+            
+            size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
+            
+            inlineStyle = ""
+            inlineStyle = "width:#{size}px;" if size
+            
+            if obj.is_a?(WikiContent)
+                container = obj.page
+                title     = container.title
+                project   = container.wiki.project
+                canEdit   = User.current.allowed_to?(:edit_wiki_pages, @project)
+            elsif obj.is_a?(Journal)
+                container = obj
+                title     = nil # not necessary
+                project   = container.project
+                canEdit   = container.editable_by?(User.current)
+            else
+                container = obj
+                title     = nil # not necessary
+                project   = container.project
+                canEdit   = container.editable?(User.current)
+            end
+            
+            # Search the DMSF folder containing the diagram
+            folderName = File.dirname(diagramName)
+            folder     = DMSF_helper.deep_folder_search(project, folderName)
+            
+            # Search the document in DMSF
+            file = DmsfFile.find_file_by_name project, folder, File.basename(diagramName)
+            
+            if canEdit
+                # Diagram and document are editable
+                saveName  = "#{project.id}/#{diagramName}"
+            else
+                # Diagram cannot be saved, it wil become not editable
+                saveName = nil
+            end
+            
+            if file
+                # Document exists, get the file path
+                filename = file.last_revision.disk_file project
+                canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
+            else
+                # Document does not exists: use a predefined diagram to start editing
+                filename = imagePath(if svg? diagramName then 'defaultImage.svg' else 'defaultImage.png' end)
+                canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, project)
+            end
+            
+            diagram = File.read(filename, mode: 'rb')
+            # if png, encode image and remove newlines (required by Internet Explorer)
+            diagram = Base64.encode64(File.read(filename, mode: 'rb')).gsub("\n", '') unless svg? diagramName
+            
+            if svg? diagramName
+                return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, true)
+            else
+                return encapsulatePng(diagram, inlineStyle, diagramName, title, saveName, true)
+            end
         end
     end
 end
