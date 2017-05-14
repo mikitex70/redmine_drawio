@@ -189,11 +189,15 @@ function saveAttachment(resource, imageData, type, pageName) {
             }
             
             function updateDiagramReference(pageBody) {
+                console.debug("pageBody=",pageBody);
                 // Build a pattern like attachName(_\d+)?\.*
                 var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, '(_\\d+)?($2)?')
+                console.debug("resourcePattern=",resourcePattern);
                 // Build pattern to match the drawio_attach macro with resource pattern
                 var macroRegExp = escapeRegExp('{{drawio_attach(')+resourcePattern+'(\\s*,.*)?'+escapeRegExp(')}}');
+                console.debug("macroRegExp=",macroRegExp);
                 // Replace old attachment name with the new name
+                console.debug("result=",pageBody.replace(new RegExp(macroRegExp), '{{drawio_attach('+resource+'$3)}}'));
                 return pageBody.replace(new RegExp(macroRegExp), '{{drawio_attach('+resource+'$3)}}');
             }
             

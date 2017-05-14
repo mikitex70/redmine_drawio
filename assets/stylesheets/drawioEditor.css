@@ -7,7 +7,7 @@ iframe.drawioEditor {
     bottom:0;
     width:100%;
     height:100%;
-    z-index:100;
+    z-index:999999; /* Big number, to cover the EasyRedmine toolbar */
 }
                    
 .jstb_drawio_attach {
