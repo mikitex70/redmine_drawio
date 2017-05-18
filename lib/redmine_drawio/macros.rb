@@ -172,25 +172,25 @@ end
 
 if Redmine::Plugin.installed?(:redmine_dmsf)
     Redmine::WikiFormatting::Macros.register do
-        desc <<-EOF
-        Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage:
+        desc <<EOF
+Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage:
 
-        {{drawio_dmsf(myDiagram[, ...options...])}}
+{{drawio_dmsf(myDiagram[, ...options...])}}
 
-        The diagram is drawn from the DMSF document myDiagram.png; if you want to use the
-        SVG image format, specify thw '.svg' document extension. If the document doesn't 
-        exists a default diagram will be drawn. Double click it to start editing.
+The diagram is drawn from the DMSF document myDiagram.png; if you want to use the
+SVG image format, specify thw '.svg' document extension. If the document doesn't 
+exists a default diagram will be drawn. Double click it to start editing.
 
-        The diagram name can contain a path. For example:
+The diagram name can contain a path. For example:
 
-        {{drawio_dmsf(path/to/folder/myDiagram.svg)}}
+{{drawio_dmsf(path/to/folder/myDiagram.svg)}}
 
-        will create/edit the document myDiagram.svg in the DMSF folder path/to/folder of
-        the current project (the folder must exists).
+will create/edit the document myDiagram.svg in the DMSF folder path/to/folder of
+the current project (the folder must exists).
 
-        options:
-        size=number : forced width of the diagram image, in pixels
-        EOF
+options:
+size=number : forced width of the diagram image, in pixels
+EOF
         
         macro :drawio_dmsf do |obj, args|
             return "«Please save content first»" unless obj
