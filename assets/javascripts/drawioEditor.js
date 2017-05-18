@@ -411,3 +411,12 @@ $(function () {
     
     wikiToolbar.draw();
 });
+
+$(function() {
+    if(typeof CKEDITOR === 'undefined') return false;
+  
+    var basePath = CKEDITOR.basePath;
+    
+    basePath = basePath.substr(0, basePath.indexOf("plugin_assets")+"plugin_assets".length);   
+    CKEDITOR.config.customConfig = basePath+'/redmine_drawio/javascripts/ckeditor_config.js';
+});
