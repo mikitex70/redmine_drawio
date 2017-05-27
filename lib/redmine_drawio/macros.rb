@@ -233,7 +233,7 @@ EOF
             
             # Search the document in DMSF
             file = DmsfFile.find_file_by_name project, folder, File.basename(diagramName)
-            
+
             if canEdit
                 # Diagram and document are editable
                 saveName  = "#{project.id}/#{diagramName}"
