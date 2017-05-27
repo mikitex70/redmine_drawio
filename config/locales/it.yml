@@ -2,3 +2,7 @@
 it:
   drawio_url: "URL del servizio Draw.io"
   drawio_service_url_hint: "URL dell'installazione locale del servizio; impostare a '//www.draw.io' per utilizzare il servizio online"
+  drawio_dlg_title: "Definisci diagramma"
+  drawio_dlg_diagName: "Nome diagramma"
+  drawio_dlg_diagType: "Formato"
+  drawio_dlg_size: "Larghezza"

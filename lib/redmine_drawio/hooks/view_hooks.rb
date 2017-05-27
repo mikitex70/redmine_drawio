@@ -20,11 +20,14 @@ module RedmineDrawio
                     <script type=\"text/javascript\">
                       var REDMINE_URL = '#{redmine_url(context)}',
                       DRAWIO_URL = '#{Setting.plugin_redmine_drawio['drawio_service_url']}',
-                      DMSF = #{if Redmine::Plugin.installed?(:redmine_dmsf) &&
-                               context[:project].module_enabled?('dmsf') then true else false end};</script>
+                      DMSF = #{dmsf_enabled? context};</script>
                 EOF
+                
                 inlineScript += javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
+                inlineScript += javascript_include_tag("lang/drawio_jstoolbar-en.js", :plugin => "redmine_drawio")
+                inlineScript += javascript_include_tag("lang/drawio_jstoolbar-#{current_language.to_s.downcase}.js", :plugin => "redmine_drawio")
                 inlineScript += javascript_include_tag("drawio_jstoolbar.js", :plugin => "redmine_drawio") unless ckeditor_enabled?
+                
                 return inlineScript
             else
                 return ''
@@ -40,6 +43,12 @@ module RedmineDrawio
         return rootUrl+'/' if rootUrl != nil
 
         return '/'
+    end
+    
+    def dmsf_enabled?(context)
+        return false unless Redmine::Plugin.installed? :redmine_dmsf
+        return false unless context[:project].module_enabled?('dmsf')
+        true
     end
     
     def ckeditor_enabled?

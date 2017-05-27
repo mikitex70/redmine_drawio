@@ -1,6 +1,47 @@
 $(function () {
     if(typeof jsToolBar === 'undefined') return false;
   
+    var dlgButtons = {};
+    
+    dlgButtons[jsToolBar.strings['drawio_btn_ok']] = function() { 
+        var editor    = dlg.data("editor");
+        var macroName = dlg.data("macro");
+        var diagName  = $("#drawio__P1").val();
+        var diagType  = $("input[name=drawio_diagType]:checked").val();
+        var size      = $("#drawio_size").val();
+        
+        if(diagName != "") {
+            // Add/replace file extension
+            diagName = diagName.replace(/^(.*?)(?:\.\w{3})?$/, "$1."+diagType);
+            
+            var options = [diagName];
+            
+            if(/^\d+$/.test(size))
+                options.push("size="+size);
+            
+            if(options.length)
+                options = '('+options.join(',')+')';
+            else
+                options = "";
+            
+            if(dlg.data("params")) {
+                // Edited macro: replace the old macro (with parameters) with the new text
+                editor.encloseSelection('{{'+macroName+options, '', function(sel){ 
+                return ''; 
+                });
+            }
+            else
+                // New macro
+                editor.encloseSelection('{{'+macroName+options+'\n','\n}}');
+            
+            dlg.dialog("close");
+        }
+    };
+    
+    dlgButtons[jsToolBar.strings['drawio_btn_cancel']] = function() {
+        dlg.dialog("close");
+    };
+  
     var dlg = $("#dlg_redmine_drawio").dialog({
         autoOpen: false,
         width   : "auto",
@@ -13,45 +54,7 @@ $(function () {
                 for(key in params)
                     $("#drawio_"+key).val(params[key]);
         },
-        buttons : {
-            "Insert macro": function() { 
-                var editor    = dlg.data("editor");
-                var macroName = dlg.data("macro");
-                var diagName  = $("#drawio__P1").val();
-                var diagType  = $("input[name=drawio_diagType]:checked").val();
-                var size      = $("#drawio_size").val();
-              
-                if(diagName != "") {
-                    // Add/replace file extension
-                    diagName = diagName.replace(/^(.*?)(?:\.\w{3})?$/, "$1."+diagType);
-                    
-                    var options = [diagName];
-                  
-                    if(/^\d+$/.test(size))
-                        options.push("size="+size);
-                  
-                    if(options.length)
-                        options = '('+options.join(',')+')';
-                    else
-                        options = "";
-
-                    if(dlg.data("params")) {
-                        // Edited macro: replace the old macro (with parameters) with the new text
-                        editor.encloseSelection('{{'+macroName+options, '', function(sel){ 
-                        return ''; 
-                        });
-                    }
-                    else
-                        // New macro
-                        editor.encloseSelection('{{'+macroName+options+'\n','\n}}');
-                    
-                    dlg.dialog("close");
-                }
-            },
-            Cancel: function() {
-                dlg.dialog("close");
-            }
-        }
+        buttons : dlgButtons
     });
   
     $("#drawio_diagSize").keypress(function(evt) {
@@ -144,12 +147,6 @@ $(function () {
                 
                 return params;
             }
-            else {
-                console.debug("Macro diversa");
-            }
-        }
-        else {
-            console.debug("Nessuna macro trovata")
         }
           
         return null;
@@ -158,7 +155,7 @@ $(function () {
     jsToolBar.prototype.elements.drawio_attach = {
         type : 'button',
         after: 'img',
-        title: 'Drawio attached diagram',
+        title: jsToolBar.strings['drawio_attach_title'],
         fn   : {
             wiki: function(event) {
                 var params = findMacro(this, "drawio_attach");
@@ -175,7 +172,7 @@ $(function () {
         jsToolBar.prototype.elements.drawio_dmsf = {
             type : 'button',
             after: 'drawio_attach',
-            title: 'Drawio DMSF diagram',
+            title: jsToolBar.strings['drawio_dmsf_title'],
             fn   : {
                 wiki : function(event) {
                     var params = findMacro(this, "drawio_dmsf");
@@ -189,7 +186,7 @@ $(function () {
         };
       
     // Add space
-    jsToolBar.prototype.elements.space_slide = {
+    jsToolBar.prototype.elements.space_drawio = {
         type: 'space'
     }
     

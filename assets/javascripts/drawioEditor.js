@@ -1,3 +1,8 @@
+// The container for localized strings
+Drawio = {
+    strings: {}
+}
+
 /**
  * Handles editing of a diagram.
  * @param image 
@@ -106,7 +111,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                     }
                     break;
                 case 'save':
-                    iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: imgDescriptor.fmt, spin: 'Updating page'}), '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: imgDescriptor.fmt, spin: Drawio.strings['drawio_updating_page']}), '*');
                     break;
                 case 'exit':
                     close();
@@ -124,7 +129,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
  * Show an alert if case of error saving the diagram.
  */
 function showError(jqXHR, textStatus, errorThrown) {
-    alert('Error saving diagram:\n'+errorThrown);
+    alert(Drawio.strings['drawio_error_saving' ]+errorThrown);
 }
 
 /**
@@ -154,9 +159,9 @@ function saveDmsf(url, imageData, type) {
                 }
             },
             statusCode : {
-                404: function() { showError(null, null, 'Make sure WebDAV capabilities of DMSF module is enabled'); },
-                409: function() { showError(null, null, 'Make sure the DMSF folder exists and is accessible'); },
-                502: function() { showError(null, null, 'Make sure WebDAV capabilities of DMSF module is enabled in Read/Write mode'); }
+                404: function() { showError(null, null, Drawio.strings['drawio_http_404']); },
+                409: function() { showError(null, null, Drawio.strings['drawio_http_409']); },
+                502: function() { showError(null, null, Drawio.strings['drawio_http_502']); }
             }
         });
     }

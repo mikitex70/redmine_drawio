@@ -12,7 +12,7 @@ CKEDITOR.plugins.add('drawio', {
                         elements: [
                             {   id: "drawio_diagName",
                                 type: "text",
-                                label: "Diagram name",
+                                label: Drawio.strings['drawio_cke_diagName' ],
                                 labelLayout: 'horizontal',
                                 size: 32,
                                 required: !0,
@@ -22,14 +22,14 @@ CKEDITOR.plugins.add('drawio', {
                             },
                             {   id: 'drawio_diagType',
                                 type: 'radio',
-                                label: 'Diagram format',
+                                label: Drawio.strings['drawio_cke_diagType' ],
                                 labelLayout: 'horizontal',
                                 items: [['png'], ['svg']],
                                 'default': 'png'
                             },
                             {   id: "drawio_diagSize",
                                 type: "text",
-                                label: "Width (pixels)",
+                                label: Drawio.strings['drawio_cke_size'     ],
                                 labelLayout: 'horizontal',
                                 size: 4,
                                 maxLength: 4,
@@ -63,16 +63,16 @@ CKEDITOR.plugins.add('drawio', {
         }
 
         defineDialog('drawio_attach', {
-            dialogTitle: 'Drawio attached diagram',
-            buttonLabel: 'Drawio attached diagram',
+            dialogTitle: Drawio.strings['drawio_cke_attach_dlgtitle'],
+            buttonLabel: Drawio.strings['drawio_cke_attach_btnlabel'],
             buttonIcon : this.path+'/../../images/jstb_drawio_attach.png'
             
         });
         
         if(DMSF)
             defineDialog('drawio_dmsf', {
-                dialogTitle: 'Drawio DMSF diagram',
-                buttonLabel: 'Drawio DMSF diagram',
+                dialogTitle: Drawio.strings['drawio_cke_dmsf_dlgtitle'],
+                buttonLabel: Drawio.strings['drawio_cke_dmsf_btnlabel'],
                 buttonIcon : this.path+'/../../images/jstb_drawio_dmsf.png'
             });
     }
