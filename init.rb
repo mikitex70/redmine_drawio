@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 Redmine::Plugin.register :redmine_drawio do
   name 'Redmine Drawio plugin'
   author 'Michele Tessaro'
