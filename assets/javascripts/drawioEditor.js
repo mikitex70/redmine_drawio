@@ -129,7 +129,20 @@ function editDiagram(image, resource, isDmsf, pageName) {
  * Show an alert if case of error saving the diagram.
  */
 function showError(jqXHR, textStatus, errorThrown) {
-    alert(Drawio.strings['drawio_error_saving' ]+errorThrown);
+    var msg;
+    
+    if(jqXHR.responseJSON && jqXHR.responseJSON.errors)
+        msg = jqXHR.responseJSON.errors.join(', ');
+    else
+        switch(jqXHR.status) {
+            case 404: msg = Drawio.strings['drawio_http_404']; break;
+            case 409: msg = Drawio.strings['drawio_http_409']; break;
+            case 422: msg = Drawio.strings['drawio_http_422']; break;
+            case 502: msg = Drawio.strings['drawio_http_502']; break;
+            default:  msg = errorThrown;
+        }
+    
+    alert(Drawio.strings['drawio_error_saving' ]+msg);
 }
 
 /**
@@ -150,19 +163,7 @@ function saveDmsf(url, imageData, type) {
             processData: false,
             contentType: type,
             data       : imageData,
-            error      : function(jqXHR, textStatus, errorThrown) {
-                switch(jqXHR.status) {
-                    case 404:
-                    case 409:
-                    case 502: break;
-                    default : showError(jqXHR, textStatus, errorThrown);
-                }
-            },
-            statusCode : {
-                404: function() { showError(null, null, Drawio.strings['drawio_http_404']); },
-                409: function() { showError(null, null, Drawio.strings['drawio_http_409']); },
-                502: function() { showError(null, null, Drawio.strings['drawio_http_502']); }
-            }
+            error      : showError
         });
     }
 }

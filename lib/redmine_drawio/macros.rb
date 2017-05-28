@@ -197,7 +197,7 @@ EOF
             return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
             
             args, options = extract_macro_options(args, :size)
-            diagramName   = args.first.gsub(/[^-0-9A-Za-z_.]/, '')
+            diagramName   = args.first.gsub(/[^-0-9A-Za-z_.\\\/]/, '')
             
             return "«Please set a diagram name»".html_safe unless diagramName
             return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*\.(png|svg)$/i
