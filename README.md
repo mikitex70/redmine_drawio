@@ -6,7 +6,7 @@ This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.re
 
 ## Requirements
 
-- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4 and v3.3.3.
+- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4 and v3.3.3 as well as Easy Redmine 2016.05.07.
 
 ## Installation
 
@@ -174,7 +174,7 @@ Any code contribution is well accepted. There are only a few rules that I would 
 
 - work on ``develop`` branch and leave the ``master`` branch untouched. This is importat to keep the released versions stable.
 - I would prefer comments in the style used by [gitchangelog](https://github.com/vaab/gitchangelog); this will simplify  generation of the ``CHANGELOG.md``.
-  It isn't fondamental, I can edit comments and insert prefixes, or edit manually the ``CHANGELOG.md``, but it would be nice if you can help me.
+  It isn't fundamental, I can edit comments and insert prefixes, or edit manually the ``CHANGELOG.md``, but it would be nice if you can help me.
 
 
 [draw.io]: https://www.draw.io
