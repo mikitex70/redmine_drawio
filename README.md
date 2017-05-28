@@ -46,7 +46,7 @@ they respond to ``over`` and ``click`` actions. Hyperlinks can be used to naviga
 
 This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages).
 
-This macro is now obsolete: you can now use SVG diagrams with the other two macros (``draio_attach`` and ``drawio_dmsf``)
+This macro is now obsolete: you can now use SVG diagrams with the other two macros (``drawio_attach`` and ``drawio_dmsf``)
 but you must import the the diagram in the *draw.io editor* and then export as SVG with an included copy of the diagram
 (see the *Export as SVG* function of the *draw.io editor*).
 
@@ -137,7 +137,7 @@ Then enter your *Redmine* installation, go to ``Administration`` -> ``Plugins`` 
 
 - Diagrams are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.
 
-- There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters. If the diagram is too big, use the ``draio`` macro to render the diagram from an XML source.
+- There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters. If the diagram is too big, use the ``drawio`` macro to render the diagram from an XML source.
 
 - The ``drawio_attach`` macro doesn't completly work with issue notes: Redmine APIs allow to create new issue notes, but not to change them, so the issue note must be changed manually. As alternative use the ``drawio`` and ``drawio_dmsf`` macros, which work fine.
 
