@@ -1,6 +1,7 @@
 // General messages
 Drawio.strings['drawio_updating_page'] = 'Aggiornamento pagina';
 Drawio.strings['drawio_error_saving' ] = 'Errore durante il salvataggio del diagramma:\n';
+Drawio.strings['drawio_http_401'     ] = 'Non autorizzato';
 Drawio.strings['drawio_http_404'     ] = 'Assicurarsi che le funzionalità WebDAV del modulo DMSF siano abilitate';
 Drawio.strings['drawio_http_409'     ] = 'Assicurarsi che la cartella nel gestore documentale esista e sia accessibile';
 Drawio.strings['drawio_http_422'     ] = 'Diagramma troppo grande: aumentare la dimensione degli allegati nelle impostazioni di Redmine';

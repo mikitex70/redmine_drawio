@@ -168,7 +168,7 @@ $(function () {
         }
     };
   
-    if(DMSF)
+    if(Drawio.settings.DMSF)
         jsToolBar.prototype.elements.drawio_dmsf = {
             type : 'button',
             after: 'drawio_attach',

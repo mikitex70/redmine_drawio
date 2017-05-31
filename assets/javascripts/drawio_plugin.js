@@ -69,7 +69,7 @@ CKEDITOR.plugins.add('drawio', {
             
         });
         
-        if(DMSF)
+        if(Drawio.settings.DMSF)
             defineDialog('drawio_dmsf', {
                 dialogTitle: Drawio.strings['drawio_cke_dmsf_dlgtitle'],
                 buttonLabel: Drawio.strings['drawio_cke_dmsf_btnlabel'],

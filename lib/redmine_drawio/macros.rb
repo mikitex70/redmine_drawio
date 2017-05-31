@@ -128,7 +128,7 @@ EOF
             title     = nil  # not necessary
             canEdit   = container.editable?(User.current)
         end
-        
+
         # Add an extension, if missing
         diagramName += ".png" if File.extname(diagramName.strip) == ""
         
@@ -136,15 +136,19 @@ EOF
         attach = container.attachments.find_by_filename(diagramName)
         
         if canEdit
+            Rails.logger.error("=====> diagname=#{diagramName}")
             # Diagram and document are editable
             if Redmine::Plugin.installed?(:easy_redmine)
                 # EasyRedmine can update the attachment without duplications
+                Rails.logger.error("=====> EASYREDMINE")
                 saveName = diagramName
             else
                 if diagramName =~ /_\d+\./
                     saveName = diagramName.sub(/_(\d+)/) {|v| v.next } # increment version
+                    Rails.logger.error("=====> SAVENAME=#{saveName}")
                 else
                     saveName = diagramName.sub(/(\.\w+)$/, '_1\1') # set version to _1
+                    Rails.logger.error("=====> saveNAME=#{saveName}")
                 end
             end
         else

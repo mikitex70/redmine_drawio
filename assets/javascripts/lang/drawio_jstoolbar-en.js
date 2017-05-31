@@ -1,6 +1,7 @@
 // General messages
 Drawio.strings['drawio_updating_page'] = 'Updating page';
 Drawio.strings['drawio_error_saving' ] = 'Error saving diagram:\n';
+Drawio.strings['drawio_http_401'     ] = 'Not authorized';
 Drawio.strings['drawio_http_404'     ] = 'Make sure WebDAV capabilities of DMSF module is enabled';
 Drawio.strings['drawio_http_409'     ] = 'Make sure the DMSF folder exists and is accessible';
 Drawio.strings['drawio_http_422'     ] = 'Diagram size to big: increase the attachment size in Redmine settings';
