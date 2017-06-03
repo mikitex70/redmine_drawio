@@ -15,10 +15,8 @@ Drawio.strings['drawio_cke_attach_btnlabel'] = 'Allega diagramma Drawio';
 Drawio.strings['drawio_cke_dmsf_dlgtitle'  ] = 'Diagramma da gestore documentale';
 Drawio.strings['drawio_cke_dmsf_btnlabel'  ] = 'Usa diagramma Drawio da gestore documentale';
 
-if(typeof jsToolBar !== 'undefined') {
-    // Standard editor messages
-    jsToolBar.strings['drawio_btn_ok'      ] = 'Inserisci macro';
-    jsToolBar.strings['drawio_btn_cancel'  ] = 'Annulla';
-    jsToolBar.strings['drawio_attach_title'] = 'Allega diagramma Drawio';
-    jsToolBar.strings['drawio_dmsf_title'  ] = 'Usa diagramma Drawio da gestore documentale';
-}
+// Standard jstoolbar editor messages
+Drawio.strings['drawio_btn_ok'      ] = 'Inserisci macro';
+Drawio.strings['drawio_btn_cancel'  ] = 'Annulla';
+Drawio.strings['drawio_attach_title'] = 'Allega diagramma Drawio';
+Drawio.strings['drawio_dmsf_title'  ] = 'Usa diagramma Drawio da gestore documentale';

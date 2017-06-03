@@ -1,5 +1,5 @@
 <div id="dlg_redmine_drawio" title="<%= l(:drawio_dlg_title) %>" style="display:none">
-  <form>
+  <form id="drawio_form">
     <fieldset>
       <div class="tabular">
         <p>
@@ -13,7 +13,7 @@
         </p>
         <p>
           <label for="drawio_size"><%= l(:drawio_dlg_size) %></label>
-          <input type="text" name="drawio_size" id="drawio_size" size="4" maxlength="4" pattern="^\d+$"/> pixel
+          <input type="text" name="drawio_size" id="drawio_size" class="digits" size="4" maxlength="4"/> pixel
         </p>
       </div>
     </fieldset>

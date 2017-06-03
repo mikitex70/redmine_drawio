@@ -1,7 +1,8 @@
-// The container for localized strings
+// The container for global settings
 if(!Drawio)
     Drawio = {};
 
+// Container for localized strings
 Drawio.strings = {};
 
 /**
@@ -46,6 +47,15 @@ function editDiagram(image, resource, isDmsf, pageName) {
         imgDescriptor = {
             fmt: "xmlsvg",
             initial: getXmlAsString(image).replace(/"=""/, ''), // Fix for corrupted SVG after save without reloading page
+            extractImageData: function(rawImage) {
+                var data = extractData(rawImage, 'image/svg+xml');
+                var stringData = Base64Binary.arrayBufferToString(data);
+                
+                if(stringData.charCodeAt(stringData.length-1) === 0)
+                    stringData = stringData.substring(0, stringData.length-1);
+                
+                return stringData;
+            },
             showLoader: function() {
                 $(image).hide();
                 $(image.parentElement).prepend('<img id="drawioLoader" src="'+Drawio.settings.drawioUrl+'/images/ajax-loader.gif"/>');
@@ -55,8 +65,8 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 $(image).show();
             },
             updateImage: function(rawImage) {
-                var svgImage = extractData(rawImage, 'image/svg+xml').slice(0,-1);
-                $(image.parentNode).html(makeResizable(Base64Binary.arrayBufferToString(svgImage)));
+                var svgImage = imgDescriptor.extractImageData(rawImage);
+                $(image.parentNode).html(makeResizable(svgImage));
             },
             launchEditor: function(initial) {
                 iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xml: initial}), '*');
@@ -66,6 +76,9 @@ function editDiagram(image, resource, isDmsf, pageName) {
         imgDescriptor = {
             fmt: "xmlpng",
             initial: image.getAttribute('src'),
+            extractImageData: function(rawImage) {
+                return extractData(rawImage, 'image/png')
+            },
             showLoader: function() {
                 image.setAttribute('src', Drawio.settings.drawioUrl+'/images/ajax-loader.gif');
             },
@@ -99,7 +112,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                     imgDescriptor.launchEditor(imgDescriptor.initial);
                     break;
                 case 'export':
-                    var svgImage = extractData(msg.data, imageType);
+                    var svgImage = imgDescriptor.extractImageData(msg.data);
                     
                     close();
                     imgDescriptor.updateImage(msg.data);

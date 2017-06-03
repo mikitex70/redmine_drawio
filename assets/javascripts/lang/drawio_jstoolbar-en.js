@@ -15,10 +15,8 @@ Drawio.strings['drawio_cke_attach_btnlabel'] = 'Drawio attached diagram';
 Drawio.strings['drawio_cke_dmsf_dlgtitle'  ] = 'Define DMSF diagram';
 Drawio.strings['drawio_cke_dmsf_btnlabel'  ] = 'Drawio DMSF diagram';
 
-if(typeof jsToolBar !== 'undefined') {
-    // Standard editor messages
-    jsToolBar.strings['drawio_btn_ok'      ] = 'Insert macro';
-    jsToolBar.strings['drawio_btn_cancel'  ] = 'Cancel';
-    jsToolBar.strings['drawio_attach_title'] = 'Attach a Drawio diagram';
-    jsToolBar.strings['drawio_dmsf_title'  ] = 'Use Drawio diagram stored in DMSF module';
-}
+// Standard jstoolbar editor messages
+Drawio.strings['drawio_btn_ok'      ] = 'Insert macro';
+Drawio.strings['drawio_btn_cancel'  ] = 'Cancel';
+Drawio.strings['drawio_attach_title'] = 'Attach a Drawio diagram';
+Drawio.strings['drawio_dmsf_title'  ] = 'Use Drawio diagram stored in DMSF module';

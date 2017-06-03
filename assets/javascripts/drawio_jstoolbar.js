@@ -1,74 +1,4 @@
-$(function () {
-    if(typeof jsToolBar === 'undefined') return false;
-  
-    var dlgButtons = {};
-    
-    dlgButtons[jsToolBar.strings['drawio_btn_ok']] = function() { 
-        var editor    = dlg.data("editor");
-        var macroName = dlg.data("macro");
-        var diagName  = $("#drawio__P1").val();
-        var diagType  = $("input[name=drawio_diagType]:checked").val();
-        var size      = $("#drawio_size").val();
-        
-        if(diagName != "") {
-            // Add/replace file extension
-            diagName = diagName.replace(/^(.*?)(?:\.\w{3})?$/, "$1."+diagType);
-            
-            var options = [diagName];
-            
-            if(/^\d+$/.test(size))
-                options.push("size="+size);
-            
-            if(options.length)
-                options = '('+options.join(',')+')';
-            else
-                options = "";
-            
-            if(dlg.data("params")) {
-                // Edited macro: replace the old macro (with parameters) with the new text
-                editor.encloseSelection('{{'+macroName+options, '', function(sel){ 
-                return ''; 
-                });
-            }
-            else
-                // New macro
-                editor.encloseSelection('{{'+macroName+options+'\n','\n}}');
-            
-            dlg.dialog("close");
-        }
-    };
-    
-    dlgButtons[jsToolBar.strings['drawio_btn_cancel']] = function() {
-        dlg.dialog("close");
-    };
-  
-    var dlg = $("#dlg_redmine_drawio").dialog({
-        autoOpen: false,
-        width   : "auto",
-        height  : "auto",
-        modal   : true,
-        open    : function(event, ui) {
-            var params = dlg.data("params");
-          
-            if(params)
-                for(key in params)
-                    $("#drawio_"+key).val(params[key]);
-        },
-        buttons : dlgButtons
-    });
-  
-    $("#drawio_diagSize").keypress(function(evt) {
-        if(evt.altKey || evt.ctrlKey || evt.metaKey || evt.which === 0)
-            return true;
-      
-        var keyCode = evt.keyCode || evt.charCode;
-      
-        switch(keyCode) {
-            case 8: // backspace
-                return true;
-            default: return new RegExp($(this).attr("pattern")).test(this.value+evt.key); // Check if the character is allowed
-        }
-    });
+(function(Drawio) {
   
     // Compatibility checks
     if(!String.prototype.startsWith) {
@@ -152,48 +82,119 @@ $(function () {
         return null;
     }
   
-    jsToolBar.prototype.elements.drawio_attach = {
-        type : 'button',
-        after: 'img',
-        title: jsToolBar.strings['drawio_attach_title'],
-        fn   : {
-            wiki: function(event) {
-                var params = findMacro(this, "drawio_attach");
-          
-                dlg.data("editor", this)
-                   .data("macro", "drawio_attach")
-                   .data("params", params)
-                   .dialog("open");
-            }
-        }
-    };
+    // The dialog must be defined only when the document is ready
+    var dlg;
   
-    if(Drawio.settings.DMSF)
-        jsToolBar.prototype.elements.drawio_dmsf = {
+    $(function() {
+        var dlgButtons = {};
+        
+        dlgButtons[Drawio.strings['drawio_btn_ok']] = function() {
+            var editor    = dlg.data("editor");
+            var macroName = dlg.data("macro");
+            var diagName  = $("#drawio__P1").val();
+            var diagType  = $("input[name=drawio_diagType]:checked").val();
+            var size      = $("#drawio_size").val();
+            
+            if(diagName != "" && size.match(/^\d*$/)) {
+                // Add/replace file extension
+                diagName = diagName.replace(/^(.*?)(?:\.\w{3})?$/, "$1."+diagType);
+                
+                var options = [diagName];
+                
+                if(/^\d+$/.test(size))
+                    options.push("size="+size);
+                
+                if(options.length)
+                    options = '('+options.join(',')+')';
+                else
+                    options = "";
+                
+                if(dlg.data("params")) {
+                    // Edited macro: replace the old macro (with parameters) with the new text
+                    editor.encloseSelection('{{'+macroName+options, '', function(sel){ 
+                        return ''; 
+                    });
+                }
+                else
+                    // New macro
+                    editor.encloseSelection('{{'+macroName+options+'}}\n');
+                
+                dlg.dialog("close");
+            }
+        };
+        
+        dlgButtons[Drawio.strings['drawio_btn_cancel']] = function() {
+            dlg.dialog("close");
+        };
+        
+        dlg = $("#dlg_redmine_drawio").dialog({
+            autoOpen: false,
+            width   : "auto",
+            height  : "auto",
+            modal   : true,
+            open    : function(event, ui) {
+                var params = dlg.data("params");
+              
+                if(params)
+                    for(key in params)
+                        $("#drawio_"+key).val(params[key]);
+            },
+            buttons : dlgButtons
+        });
+        
+        // Make digits input accepting only digits
+        $('#drawio_form input.digits').keyup(function(e) {
+            if(/\D/g.test(this.value)) {
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+        
+    });
+    
+    // Initialize the jsToolBar object; called explicitly after the jsToolBar has been created
+    Drawio.initToolbar = function() {
+
+        jsToolBar.prototype.elements.drawio_attach = {
             type : 'button',
-            after: 'drawio_attach',
-            title: jsToolBar.strings['drawio_dmsf_title'],
+            after: 'img',
+            title: Drawio.strings['drawio_attach_title'],
             fn   : {
-                wiki : function(event) {
-                    var params = findMacro(this, "drawio_dmsf");
+                wiki: function(event) {
+                    var params = findMacro(this, "drawio_attach");
             
                     dlg.data("editor", this)
-                        .data("macro", "drawio_dmsf")
-                        .data("params", params)
-                        .dialog("open");
+                       .data("macro", "drawio_attach")
+                       .data("params", params)
+                       .dialog("open");
                 }
             }
         };
-      
-    // Add space
-    jsToolBar.prototype.elements.space_drawio = {
-        type: 'space'
+  
+        if(Drawio.settings.DMSF)
+            jsToolBar.prototype.elements.drawio_dmsf = {
+                type : 'button',
+                after: 'drawio_attach',
+                title: Drawio.strings['drawio_dmsf_title'  ],
+                fn   : {
+                    wiki : function(event) {
+                        var params = findMacro(this, "drawio_dmsf");
+                
+                        dlg.data("editor", this)
+                           .data("macro", "drawio_dmsf")
+                           .data("params", params)
+                           .dialog("open");
+                    }
+                }
+            };
+    
+        // Add a space
+        jsToolBar.prototype.elements.space_drawio = {
+            type: 'space'
+        }
+    
+        // Move back the help at the end
+        var help = jsToolBar.prototype.elements.help;
+        delete(jsToolBar.prototype.elements.help);
+        jsToolBar.prototype.elements.help = help;
     }
-    
-    // Move back the help at the end
-    var help = jsToolBar.prototype.elements.help;
-    delete(jsToolBar.prototype.elements.help);
-    jsToolBar.prototype.elements.help = help;
-    
-    wikiToolbar.draw();
-});
+})(Drawio);
