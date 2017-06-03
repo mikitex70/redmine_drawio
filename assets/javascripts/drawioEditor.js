@@ -255,6 +255,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                         if(referencesDiagram(page.issue.journals[i].notes)) {
                             // Add a new issue note
                             data.issue.notes = updateDiagramReference(page.issue.journals[i].notes);
+                            data.issue.private_notes = page.issue.journals[i].private_notes;
                             break;
                         }
                     }
