@@ -222,6 +222,8 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 }
                 
                 function referencesDiagram(body) {
+                    if (typeof body == 'undefined') body = "";
+
                     // Build a pattern like attachName(_\d+)?\.*
                     var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, '(_\\d+)?($2)?')
                     // Build pattern to match the drawio_attach macro with resource pattern
