@@ -252,15 +252,17 @@ function editDiagram(image, resource, isDmsf, pageName) {
                         description: updateDiagramReference(page.issue.description)
                     }
                     
-                    // Find journal note referencing the image
-                    for(var i=page.issue.journals.length-1; i>=0; i--) {
-                        if(referencesDiagram(page.issue.journals[i].notes)) {
-                            // Add a new issue note
-                            data.issue.notes = updateDiagramReference(page.issue.journals[i].notes);
-                            data.issue.private_notes = page.issue.journals[i].private_notes;
-                            break;
+                    // EasyRedmine can update attachments, no need to add a new note
+                    if(!Drawio.isEasyRedmine)
+                        // Find journal note referencing the image
+                        for(var i=page.issue.journals.length-1; i>=0; i--) {
+                            if(referencesDiagram(page.issue.journals[i].notes)) {
+                                // Add a new issue note
+                                data.issue.notes = updateDiagramReference(page.issue.journals[i].notes);
+                                data.issue.private_notes = page.issue.journals[i].private_notes;
+                                break;
+                            }
                         }
-                    }
                 }
                 
                 // Update the wiki/issue source page

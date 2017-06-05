@@ -22,7 +22,8 @@ module RedmineDrawio
                         redmineUrl: '#{redmine_url}',
                         hashCode  : '#{Base64.encode64(User.current.api_key).reverse!.gsub(/\n/, '\\\\\n')}',
                         drawioUrl : '#{Setting.plugin_redmine_drawio['drawio_service_url']}',
-                        DMSF      : #{dmsf_enabled? context}
+                        DMSF      : #{dmsf_enabled? context},
+                        isEasyRedmine: #{easyredmine?}
                       }
                     };
                 //]]></script>
@@ -33,7 +34,7 @@ module RedmineDrawio
             header << javascript_include_tag("lang/drawio_jstoolbar-en.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("lang/drawio_jstoolbar-#{current_language.to_s.downcase}.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("drawio_jstoolbar.js", :plugin => "redmine_drawio") unless ckeditor_enabled?
-            
+
             header
         end
         
@@ -69,6 +70,10 @@ module RedmineDrawio
         
         def ckeditor_enabled?
             Setting.text_formatting == "CKEditor"
+        end
+        
+        def easyredmine?
+            Redmine::Plugin.installed?(:easy_redmine)
         end
 
     end
