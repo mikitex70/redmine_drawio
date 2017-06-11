@@ -180,5 +180,3 @@ Any code contribution is well accepted. There are only a few rules that I would 
 [draw.io]: https://www.draw.io
 [diagramPlaceholder]: spec/defaultImage.png "Placeholder for missing diagrams"
 [DMSF]: https://github.com/danmunn/redmine_dmsf
-[schema2script]: (https://github.com/mikitex70/schema2script)
-[sboot]: https://github.com/Simo/sboot
