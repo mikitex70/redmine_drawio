@@ -1,5 +1,107 @@
 # Changelog
 
+## v0.7.0 (2017-06-11)
+
+### New
+
+* Skipped authentication on attachment update (fixes #23) [Michele Tessaro]
+
+  The drawio_attach macro can upload a new version of diagram without
+  asking for authentication.
+  This can authentication problems with plugin provided providers.
+  The drawio_dmsf works as previous: no way to bypass secondary login.
+
+* Decoded HTTP error 422 (closes #22) [Michele Tessaro]
+
+  When saving diagrams as attachments, if the attachment is too big
+  Redmine return an HTTP 422 error (Enprocessable Entity).
+  Now a more clear message would be reported.
+
+* Added support for internationalization. [Michele Tessaro]
+
+* Editing support for textile button macros. [Michele Tessaro]
+
+  Placing che cursor in a body macro e clicking the macro button will open
+  the dialog pre-filled with the values extracted from the macro heading.
+  This can be useful to change values with a pre-validating dialog instead
+  of changing he macro directly, with the risk of syntax errors or wrong
+  parameter names.
+
+* CKEditor support (refs #21) [Michele Tessaro]
+
+  If the Redmine CKEditor plugin is in use, one button (or two, if the
+  DMSF plugin is installed) will be added to the toolbar.
+  Handling of diagrams inside of the editor is not easy because the
+  document body must be saved before the diagrams, so at this time the
+  dialogs are only shortcuts for inserting macros.
+  Maybe I can add embedded editing for already created diagrams.
+
+* Disabled dmsf editor button if no redmine_dmsf plugin. [Michele Tessaro]
+
+  The editor button for inserting the drawio_dmsf macro now will be drawn
+  only if the redmine_dmsf plugin is active.
+
+* Added EasyRedmine detection. [Michele Tessaro]
+
+* Refactor to let work with easyredmine. [Michele Tessaro]
+
+* Disabled dmsf editor button if no redmine_dmsf plugin. [Michele Tessaro]
+
+  The editor button for inserting the drawio_dmsf macro now will be draw
+  only if the redmine_dmsf plugin is active.
+
+* Added EasyRedmine detection. [Michele Tessaro]
+
+* Refactor to let work with easyredmine (fixes #13, #18, #19) [Michele Tessaro]
+
+* Ignored case when checking if SVG diagram requested. [Michele Tessaro]
+
+  Now the drawio_attach and drawio_dmsf macros will check the document
+  extension in a case-insensitive manner; extensions like svg, SVG, Svg
+  are all interpreted as a request to use an SVG diagram format.
+
+* Added embedded editor support for SVG images (closes #17) [Michele Tessaro]
+
+### Changes
+
+* Skipped issue note creation in EasyRedmine (refs #28) [Michele Tessaro]
+
+  EasyRedmine can update attachments so there is no need to add a new
+  issue note (a journal) when a diagram is updated.
+
+* Updated documentation. [Michele Tessaro]
+
+### Fix
+
+* Fixed updating diagrams on private notes (fixes #28) [Michele Tessaro]
+
+* Fixed saving of SVGs (fixes #26, #26) [Michele Tessaro]
+
+* Fixed SVG corrupted after save before reload (fixes #25) [Michele Tessaro]
+
+  After editing an SVG diagram and saving it, double clicking on the
+  diagram without reloading page causes an `Not a diagram` error in the
+  drawio diagram editor.
+  Seems that updating the SVG in the page causes the insertion of an
+  `&quot;=&quot;&quot;&#x27; text, that confuses the parser.
+  Removed with an regex, but not identified the source problem (maybe
+  related to the `XMLSerializer` Firefox browser object).
+
+* Fixed macros after refactor for easyredmine (refs #18) [Michele Tessaro]
+
+* Fixed macros after refactor for easyredmine (refs #18) [Michele Tessaro]
+
+### Other
+
+* Fix #27: Javascript error match on undefined. [Alexander Menk]
+
+  Prevented saving in EasyRedmine issue note
+
+* Fix #27: Javascript error match on undefined. [Alexander Menk]
+
+  Prevented saving in EasyRedmine issue note
+
+
 ## v0.6.0 (2017-04-11)
 
 ### New
@@ -47,11 +149,11 @@
 
 ### Fix
 
-* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
+* Load 'loading' image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
+  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
 
 * Fixed errors when used outside wiki pages (refs #9) [Michele Tessaro]
 
@@ -61,11 +163,11 @@
   when using a single project as Redmine home page (see
   http://www.redmine.org/boards/2/topics/32811)
 
-* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
+* Load 'loading' image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
+  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
 
 
 ## v0.3.2 (2016-11-22)
