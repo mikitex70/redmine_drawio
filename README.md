@@ -4,6 +4,10 @@
 
 This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.redmine.org/) wiki pages, issues descriptions and issue notes.
 
+## A note
+
+Before submit an issue please read carefully the `README.md` file (this page): many of those that seem defects are instead the expected behavior for the macros, so read it before you start using this plugin and whenever you find unusual behaviors.
+
 ## Requirements
 
 - Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4 and v3.3.3 as well as Easy Redmine 2016.05.07.
@@ -71,7 +75,7 @@ Usage is very simple:
 
   Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved in a new attachment and the reference in the wiki/issue page is updated.
 
-  The diagram attachments are versioned by suffixing the name with a counter. This is necessary because is not possible to update an existing attachment. Moreover, is not possible to delete attachments throught rest API (seems to be possible from Redmine 3.3.0, but I need to experiment), so the old versions of an attachment must be explicitly (manually) deleted from the Redmine web interface.
+  The **diagram attachments are versioned** by suffixing the name with a counter. This is necessary because is not possible to update an existing attachment. Moreover, is not possible to delete attachments throught rest API (seems to be possible from Redmine 3.3.0, but I need to experiment), so the old versions of an attachment must be explicitly (manually) deleted from the Redmine web interface.
 
 - the following macro options are available (default values are shown):
   - ``size=number`` : force image width, in pixels (default, show in original size)

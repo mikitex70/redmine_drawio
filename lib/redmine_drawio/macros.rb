@@ -108,7 +108,7 @@ EOF
         diagramName   = args.first.gsub(/[^-0-9A-Za-z_.]/, '')
         
         return "«Please set a diagram name»".html_safe unless diagramName
-        return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*\.(png|svg)$/i
+        return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
         
         size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
         
@@ -200,7 +200,7 @@ EOF
             diagramName   = args.first.gsub(/[^-0-9A-Za-z_.\\\/]/, '')
             
             return "«Please set a diagram name»".html_safe unless diagramName
-            return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*\.(png|svg)$/i
+            return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
             
             # Add an extension, if missing
             diagramName += ".png" if File.extname(diagramName.strip) == ""
