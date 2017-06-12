@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.7.1 (2017-06-12)
+
+### Changes
+
+* Disabled SSL if drawio service has HTTP protocol. [Michele Tessaro]
+
+  Disabling SSL can help use on using local drawio installations.
+  Now you can use a local installation without the need to create a
+  certificate.
+  Do not use HTTP protocol if your drawio is exposed to Internet.
+
+* Added a note to the documentation. [Michele Tessaro]
+
+### Fix
+
+* Fixed a check on diagram filename extension. [Michele Tessaro]
+
+
 ## v0.7.0 (2017-06-11)
 
 ### New
@@ -15,7 +33,7 @@
 
   When saving diagrams as attachments, if the attachment is too big
   Redmine return an HTTP 422 error (Enprocessable Entity).
-  Now a more clear message would be reported.
+  Now a more clear message would be reporte.
 
 * Added support for internationalization. [Michele Tessaro]
 
@@ -38,7 +56,7 @@
 
 * Disabled dmsf editor button if no redmine_dmsf plugin. [Michele Tessaro]
 
-  The editor button for inserting the drawio_dmsf macro now will be drawn
+  The editor button for inserting the drawio_dmsf macro now will be draw
   only if the redmine_dmsf plugin is active.
 
 * Added EasyRedmine detection. [Michele Tessaro]
@@ -63,6 +81,8 @@
 * Added embedded editor support for SVG images (closes #17) [Michele Tessaro]
 
 ### Changes
+
+* Udated changelog. [Michele Tessaro]
 
 * Skipped issue note creation in EasyRedmine (refs #28) [Michele Tessaro]
 
@@ -149,11 +169,11 @@
 
 ### Fix
 
-* Load 'loading' image using protocol-relative paths. [Javango]
+* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
+  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
 
 * Fixed errors when used outside wiki pages (refs #9) [Michele Tessaro]
 
@@ -163,11 +183,11 @@
   when using a single project as Redmine home page (see
   http://www.redmine.org/boards/2/topics/32811)
 
-* Load 'loading' image using protocol-relative paths. [Javango]
+* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
+  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
 
 
 ## v0.3.2 (2016-11-22)
