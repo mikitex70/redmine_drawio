@@ -236,7 +236,12 @@ EOF
 
             if canEdit
                 # Diagram and document are editable
-                saveName  = "#{project.id}/#{diagramName}"
+                if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+                    # DMSF 1.5.9+ can use project name as folder
+                    saveName = "#{project.name} -#{project.id}-/#{diagramName}"
+                else
+                    saveName = "#{project.id}/#{diagramName}"
+                end
             else
                 # Diagram cannot be saved, it wil become not editable
                 saveName = nil
