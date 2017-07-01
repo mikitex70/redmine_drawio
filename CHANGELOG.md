@@ -1,8 +1,32 @@
 # Changelog
 
+## development (unreleased)
+
+### New
+
+* Added mathemathics support in SVG (refs #17) [Michele Tessaro]
+
+  Added support for mathematical symbols in SVG diagrams.
+  The support must be enabled in the plugin configuration as it adds about
+  170k of Javascript.
+
+* Added Simplified Chinese translation file. [Steven.W@UTH]
+
+### Fix
+
+* Fixed saving on DMSF 1.5.9+ (fixes #32) [Michele Tessaro]
+
+  Fixed saving on DMSF 1.5.9+ when &quot;Use project name for project folder&quot;
+  is selected in the plugin settings.
+  Note that the version tagged 1.5.9 has a bug in the webdav path URI: at
+  this time the master branch must be used.
+
+
 ## v0.7.1 (2017-06-12)
 
 ### Changes
+
+* Updated changelog. [Michele Tessaro]
 
 * Disabled SSL if drawio service has HTTP protocol. [Michele Tessaro]
 
