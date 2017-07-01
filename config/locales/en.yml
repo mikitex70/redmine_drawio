@@ -2,6 +2,8 @@
 en:
   drawio_url: "Draw.io service URL"
   drawio_service_url_hint: "URL of your local service installation; set to '//www.draw.io' to use the online service"
+  drawio_mathjax: "SVG mathemathics support"
+  drawio_mathjax_hint: "Enable mathematical symbol support for SVG diagrams"
   drawio_dlg_title: "Define diagram"
   drawio_dlg_diagName: "Diagram name"
   drawio_dlg_diagType: "Diagram format"

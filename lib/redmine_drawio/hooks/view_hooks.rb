@@ -34,7 +34,7 @@ module RedmineDrawio
             header << javascript_include_tag("lang/drawio_jstoolbar-en.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("lang/drawio_jstoolbar-#{current_language.to_s.downcase}.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("drawio_jstoolbar.js", :plugin => "redmine_drawio") unless ckeditor_enabled?
-
+            header << javascript_include_tag("http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG")  if Setting.plugin_redmine_drawio['drawio_mathjax']
             header
         end
         

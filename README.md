@@ -25,6 +25,14 @@ Before submit an issue please read carefully the `README.md` file (this page): m
 - for macro ``drawio_dmsf`` make sure to install the [DMSF] plugin and to enable the module for the project
 - if you have troubles with the embedded editor using Internet Explorer, try a more recent version (Internet Explorer 11 should work fine) or, better, use another browser, such as Firefox or Chrome.
 
+## Configuration
+
+The plugin can be configured by the *Redmine* administrator via the Redmine interface, ``Administration`` -> ``Plugins`` -> ``Redmine Drawio Plugin`` -> ``Configure``.
+
+In the configuration form you can set the Drawio server url; the default is ``//www.draw.io``, to use the default internet installation regardless of the protocol. The value can be changed to use a private drawio editor installation (see more later).
+
+In this form you can also enable the mathematical symbol support for SVG diagrams. The default is disabled because enabling this adds about 170k of Javascript to download, so enable only if you really need it.
+
 ## Usage
 
 There are three macros that can be used to embed diagrams in wiki pages/issues; use what best fits your needs.
