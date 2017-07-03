@@ -1,0 +1,10 @@
+# Russian strings go here for Rails i18n
+ru:
+  drawio_url: "URL сервиса Draw.io"
+  drawio_service_url_hint: "URL для вашей локальной установки сервиса; задайте как '//www.draw.io' для использования онлайн-сервиса"
+  drawio_mathjax: "Поддержка математики для SVG"
+  drawio_mathjax_hint: "Включить поддержку математических символов для SVG-диаграмм"
+  drawio_dlg_title: "Определить диаграмму"
+  drawio_dlg_diagName: "Название диаграммы"
+  drawio_dlg_diagType: "Формат диаграммы"
+  drawio_dlg_size: "Ширина"
