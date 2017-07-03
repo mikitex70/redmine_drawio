@@ -16,7 +16,7 @@ Drawio.strings['drawio_cke_dmsf_dlgtitle'  ] = 'Определить DMSF-диа
 Drawio.strings['drawio_cke_dmsf_btnlabel'  ] = 'Drawio DMSF-диаграмма';
 
 // Standard jstoolbar editor messages
-Drawio.strings['drawio_btn_ok'      ] = 'Вставить макросInsert macro';
+Drawio.strings['drawio_btn_ok'      ] = 'Вставить макрос';
 Drawio.strings['drawio_btn_cancel'  ] = 'Отмена';
 Drawio.strings['drawio_attach_title'] = 'Прикрепить к Drawio-диаграмме';
 Drawio.strings['drawio_dmsf_title'  ] = 'Использовать Drawio-диаграмму, сохраненную в DMSF-модуле';
