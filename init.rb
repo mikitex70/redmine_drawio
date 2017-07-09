@@ -8,7 +8,7 @@ Redmine::Plugin.register :redmine_drawio do
   url 'https://github.com/mikitex70/redmine_drawio'
   author_url 'https://github.com/mikitex70'
 
-  requires_redmine version: '2.6'..'3.3'
+  requires_redmine version: '2.6'..'3.4'
 
   settings(partial: 'settings/drawio_settings',
            default: {'drawio_service_url' => '//www.draw.io',
