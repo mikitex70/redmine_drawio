@@ -163,7 +163,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     }
     
     function getHash() {
-        return Base64Binary.arrayBufferToString(Base64Binary.decodeArrayBuffer(Drawio.settings.hashCode.replace(/\\n/, '').split('').reverse().join('')).slice(0,-2));
+        return Base64Binary.arrayBufferToString(Base64Binary.decodeArrayBuffer(Drawio.settings.hashCode.replace(/\\n/, '').split('').reverse().join('')));
     }
     
     /**
@@ -372,7 +372,6 @@ var Base64Binary = {
         return uarray;	
     },
     
-    // From http://stackoverflow.com/questions/843680/how-to-replace-dom-element-in-place-using-javascript
     /**
      * Convert an ArrayBuffer to String.
      * @param buffer ArrayBuffer to convert
@@ -380,12 +379,10 @@ var Base64Binary = {
      */
     arrayBufferToString: function(buffer) {
         var arr = new Uint8Array(buffer);
-        var str = String.fromCharCode.apply(String, arr);
+        // See https://github.com/inexorabletash/text-encoding
+        var str = new TextDecoder('utf-8').decode(arr);
         
-        if (/[\u0080-\uffff]/.test(str))
-            throw new Error("this string seems to contain (still encoded) multibytes");
-
-        return str;
+        return str.substring(0, str.length-2);
     }
 };
 
