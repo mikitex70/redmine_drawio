@@ -13,9 +13,32 @@ module RedmineDrawio
         # fragment after the jstoolbar-textile is loaded, which pathes the jsToolBar
         # object.
         def view_layouts_base_html_head(context={})
-            return '' unless editable?(context)
+            header = ''
             
-            header = <<-EOF
+            if Setting.plugin_redmine_drawio['drawio_mathjax']
+                inline = <<-EOF
+                <script type="text/x-mathjax-config">
+                  MathJax.Hub.Config({
+                    /*menuSettings: {
+                      context: "Browser"
+                    },*/
+                    tex2jax: {
+                      //inlineMath: [['$', '$'], ['\\(', '\\)']],
+                      ignoreClass: "no-mathjax|error|warning|notice"
+                    },
+                    asciimath2jax: {
+                      ignoreClass: "no-mathjax|error|warning|notice"
+                    }
+                  });
+                </script>
+                EOF
+                header << inline
+                header << javascript_include_tag("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML")
+            end
+            
+            return header unless editable?(context)
+            
+            inline = <<-EOF
                 <script type=\"text/javascript\">//<![CDATA[
                     var Drawio = {
                       settings: {
@@ -29,12 +52,14 @@ module RedmineDrawio
                 //]]></script>
             EOF
             
+            header << inline
             header << stylesheet_link_tag("drawioEditor.css"  , :plugin => "redmine_drawio", :media => "screen")
+            header << javascript_include_tag("encoding-indexes.js", :plugin => "redmine_drawio")
+            header << javascript_include_tag("encoding.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("lang/drawio_jstoolbar-en.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("lang/drawio_jstoolbar-#{current_language.to_s.downcase}.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("drawio_jstoolbar.js", :plugin => "redmine_drawio") unless ckeditor_enabled?
-            header << javascript_include_tag("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML")  if Setting.plugin_redmine_drawio['drawio_mathjax']
             header
         end
         
