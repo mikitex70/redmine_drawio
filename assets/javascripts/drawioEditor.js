@@ -256,7 +256,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                     }
                     
                     // EasyRedmine can update attachments, no need to add a new note
-                    if(!Drawio.isEasyRedmine)
+                    if(!Drawio.settings.isEasyRedmine)
                         // Find journal note referencing the image
                         for(var i=page.issue.journals.length-1; i>=0; i--) {
                             if(referencesDiagram(page.issue.journals[i].notes)) {
