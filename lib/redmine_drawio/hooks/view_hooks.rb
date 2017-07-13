@@ -5,7 +5,7 @@ require 'base64'
 module RedmineDrawio
 
     class ViewLayoutsBaseHtmlHeadHook < Redmine::Hook::ViewListener
-
+        
         # This method will add the necessary CSS and JS scripts to the page header.
         # The scripts are loaded before the 'jstoolbar-textile.min.js' is loaded so
         # the toolbar cannot be patched.
@@ -16,6 +16,9 @@ module RedmineDrawio
             header = ''
             
             if Setting.plugin_redmine_drawio['drawio_mathjax']
+                # Some MathJax tuning:
+                # * set regexp for classes to ignore, for to no apply MathJax to wrong elements
+                # * MathJax context menu (enabled, maybe is better to disable it?)
                 inline = <<-EOF
                 <script type="text/x-mathjax-config">
                   MathJax.Hub.Config({
@@ -52,13 +55,15 @@ module RedmineDrawio
                 //]]></script>
             EOF
             
+            supported_langs = ['it','ru','zh']
+            
             header << inline
             header << stylesheet_link_tag("drawioEditor.css"  , :plugin => "redmine_drawio", :media => "screen")
             header << javascript_include_tag("encoding-indexes.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("encoding.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("lang/drawio_jstoolbar-en.js", :plugin => "redmine_drawio")
-            header << javascript_include_tag("lang/drawio_jstoolbar-#{current_language.to_s.downcase}.js", :plugin => "redmine_drawio")
+            header << javascript_include_tag("lang/drawio_jstoolbar-#{current_language.to_s.downcase}.js", :plugin => "redmine_drawio") if lang_supported? current_language.to_s.downcase
             header << javascript_include_tag("drawio_jstoolbar.js", :plugin => "redmine_drawio") unless ckeditor_enabled?
             header
         end
@@ -100,8 +105,12 @@ module RedmineDrawio
         def easyredmine?
             Redmine::Plugin.installed?(:easy_redmine)
         end
+        
+        def lang_supported? lang
+            return False if lang == 'en' # English is always loaded, avoid double load
+            File.exist? "#{File.expand_path('../../../../assets/javascripts/lang', __FILE__)}/drawio_jstoolbar-#{lang}.js"
+        end
 
     end
     
 end
-
