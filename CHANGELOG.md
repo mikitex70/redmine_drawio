@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.7.2-develop (unreleased)
+## v0.8.0 (2017-07-16)
 
 ### New
 
@@ -18,7 +18,15 @@
 
 * Added Simplified Chinese translation file. [Steven.W@UTH]
 
+### Changes
+
+* Translated messages for Simplifed Chinese. [Steven.W@UTH]
+
+  Translation of file drawio_jstoolbar-zh.js into Simplified Chinese.
+
 ### Fix
+
+* Fixed duplicated notes with EasyRedmine (fixes #40) [Michele Tessaro]
 
 * Fixed foreign characters in SVG diagrams (refs #36) [Michele Tessaro]
 
