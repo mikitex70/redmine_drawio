@@ -1,5 +1,8 @@
 <p>
   <label><%= l(:drawio_url) %></label>
   <%= text_field_tag 'settings[drawio_service_url]', @settings['drawio_service_url'], size: 60 %><br/>
-  <em><%= l(:drawio_service_url_hint) %></em>
+  <em><%= l(:drawio_service_url_hint) %></em><br/>
+  <label><%= l(:drawio_mathjax) %></label>
+  <%= check_box_tag 'settings[drawio_mathjax]', true, @settings['drawio_mathjax'] %><br/>
+  <em><%= l(:drawio_mathjax_hint) %></em>
 </p>

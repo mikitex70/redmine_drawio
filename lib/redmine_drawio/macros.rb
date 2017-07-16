@@ -25,7 +25,7 @@ EOF
         return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
         
         args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
-        filename = args.first
+        filename = strip_non_filename_chars(args.first)
         
         hilight  = "#0000ff"
         lightbox = true
@@ -105,7 +105,7 @@ EOF
         return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
         
         args, options = extract_macro_options(args, :size)
-        diagramName   = args.first.gsub(/[^-0-9A-Za-z_.]/, '')
+        diagramName   = strip_non_filename_chars(args.first)
         
         return "«Please set a diagram name»".html_safe unless diagramName
         return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
@@ -197,7 +197,7 @@ EOF
             return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
             
             args, options = extract_macro_options(args, :size)
-            diagramName   = args.first.gsub(/[^-0-9A-Za-z_.\\\/]/, '')
+            diagramName   = strip_non_filename_chars(args.first).force_encoding("UTF-8")
             
             return "«Please set a diagram name»".html_safe unless diagramName
             return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
@@ -208,6 +208,7 @@ EOF
             size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
             
             inlineStyle = ""
+            
             inlineStyle = "width:#{size}px;" if size
             
             if obj.is_a?(WikiContent)
@@ -236,7 +237,12 @@ EOF
 
             if canEdit
                 # Diagram and document are editable
-                saveName  = "#{project.id}/#{diagramName}"
+                if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+                    # DMSF 1.5.9+ can use project name as folder
+                    saveName = "#{project.name} -#{project.id}-/#{diagramName}"
+                else
+                    saveName = "#{project.id}/#{diagramName}"
+                end
             else
                 # Diagram cannot be saved, it wil become not editable
                 saveName = nil
@@ -296,17 +302,17 @@ def encapsulateSvg(svg, inlineStyle, title, saveName, isDmsf)
         style    = " style='#{inlineStyle}cursor:pointer'"
     end
     
-    "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}>#{svg}</span>".html_safe
+    "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}>#{svg.force_encoding("UTF-8")}</span>".html_safe
 end
 
 def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
     if saveName.nil?
-        return image_tag("data:image/png;base64,#{png}", 
+        return image_tag("data:image/png;charset=utf-8;base64,#{png}", 
                          :alt   => "Diagram #{diagramName}", 
                          :class => "drawioDiagram",
                          :style => "#{inlineStyle}")
     else
-        return image_tag("data:image/png;base64,#{png}", 
+        return image_tag("data:image/png;charset=utf-8;base64,#{png}", 
                          :alt        => "Diagram #{diagramName}", 
                          :title      => "Double click to edit diagram",
                          :class      => "drawioDiagram",
@@ -317,4 +323,12 @@ end
 
 def svg?(diagramName)
     diagramName =~ /\.svg$/i
+end
+
+def strip_non_filename_chars(filename)
+    # Replace directory separator from \ to /
+    filename = filename.gsub(/\\/, '/')
+    return filename.gsub(/[\x00:*?"<>|,;]/, '_') if Gem.win_platform?
+    # *nix
+    filename.gsub(/[,;|"]/, '_')
 end

@@ -1,8 +1,57 @@
 # Changelog
 
+## v0.8.0 (2017-07-16)
+
+### New
+
+* Tested on Redmine 3.4.0-stable. [Michele Tessaro]
+
+* Added russian translation. [Denis Sidorov]
+
+  Russian for drawio_jstoolbar
+
+* Added mathemathics support in SVG (refs #17) [Michele Tessaro]
+
+  Added support for mathematical symbols in SVG diagrams.
+  The support must be enabled in the plugin configuration as it adds about
+  170k of Javascript.
+
+* Added Simplified Chinese translation file. [Steven.W@UTH]
+
+### Changes
+
+* Translated messages for Simplifed Chinese. [Steven.W@UTH]
+
+  Translation of file drawio_jstoolbar-zh.js into Simplified Chinese.
+
+### Fix
+
+* Fixed duplicated notes with EasyRedmine (fixes #40) [Michele Tessaro]
+
+* Fixed foreign characters in SVG diagrams (refs #36) [Michele Tessaro]
+
+* Fixed invalid character stripping from filenames (refs #35) [Michele Tessaro]
+
+  The filenames must be stripped from some characters that can cause
+  troubles in the filesystem or in the web page.
+  The old algorithm was too strict and was removing international
+  characters too.
+
+* Fixed typo in drawio_jstoolbar-en.js. [Denis Sidorov]
+
+* Fixed saving on DMSF 1.5.9+ (fixes #32) [Michele Tessaro]
+
+  Fixed saving on DMSF 1.5.9+ when &quot;Use project name for project folder&quot;
+  is selected in the plugin settings.
+  Note that the version tagged 1.5.9 has a bug in the webdav path URI: at
+  this time the master branch must be used.
+
+
 ## v0.7.1 (2017-06-12)
 
 ### Changes
+
+* Updated changelog. [Michele Tessaro]
 
 * Disabled SSL if drawio service has HTTP protocol. [Michele Tessaro]
 
