@@ -135,7 +135,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     };
     
     // Disables SSL if the protocol isn't HTTPS; simplifies use of local drawio installations
-    var useHttps = (Drawio.settings.drawioUrl.match(/^https:/i)? 1: 0);
+    var useHttps = (Drawio.settings.drawioUrl.match(/^(https:)?\/\//i)? 1: 0);
 
     window.addEventListener('message', receive);
     iframe.setAttribute('src', Drawio.settings.drawioUrl+'?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json&https='+useHttps);
