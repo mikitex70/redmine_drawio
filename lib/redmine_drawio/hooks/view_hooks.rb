@@ -36,7 +36,7 @@ module RedmineDrawio
                 </script>
                 EOF
                 header << inline
-                header << javascript_include_tag("MathJax-2.7.1.js?config=TeX-MML-AM_HTMLorMML", :plugin => "redmine_drawio")
+                header << javascript_include_tag("MathJax-2.7.2/MathJax.js?config=TeX-MML-AM_HTMLorMML", :plugin => "redmine_drawio")
             end
             
             return header unless editable?(context)
