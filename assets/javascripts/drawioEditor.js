@@ -199,7 +199,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     function saveAttachment(resource, imageData, type, pageName) {
         var pageUrl = window.location.pathname;
         
-        if(!pageUrl.match(pageName+'$'))
+        if(!pageUrl.match(encodeURIComponent(pageName)+'$'))
             pageUrl += '/'+pageName;
         
         function readWikiPage(uploadResponse) {
