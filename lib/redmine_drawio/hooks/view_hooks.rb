@@ -36,7 +36,7 @@ module RedmineDrawio
                 </script>
                 EOF
                 header << inline
-                header << javascript_include_tag("//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML")
+                header << javascript_include_tag("#{mathjax_url}?config=TeX-MML-AM_HTMLorMML")
             end
             
             return header unless editable?(context)
@@ -109,6 +109,12 @@ module RedmineDrawio
         def lang_supported? lang
             return False if lang == 'en' # English is always loaded, avoid double load
             File.exist? "#{File.expand_path('../../../../assets/javascripts/lang', __FILE__)}/drawio_jstoolbar-#{lang}.js"
+        end
+        
+        def mathjax_url
+            url = Setting.plugin_redmine_drawio['drawio_mathjax_url']
+            url = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js' unless url
+            url
         end
 
     end

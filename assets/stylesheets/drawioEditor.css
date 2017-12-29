@@ -21,3 +21,9 @@ iframe.drawioEditor {
 #drawio_diagName {
     border-color: #d05050;
 }
+
+input[readonly].drawio {
+    opacity: 0.5;
+    color: #545454;
+    background-color: #EAEAEA;
+}
