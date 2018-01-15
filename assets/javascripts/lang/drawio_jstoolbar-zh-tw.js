@@ -18,5 +18,5 @@ Drawio.strings['drawio_cke_dmsf_btnlabel'  ] = '文件總管流程圖';
 // Standard jstoolbar editor messages
 Drawio.strings['drawio_btn_ok'      ] = '插入巨集';
 Drawio.strings['drawio_btn_cancel'  ] = '取消';
-Drawio.strings['drawio_attach_title'] = '附加 Drawio 流程圖';
+Drawio.strings['drawio_attach_title'] = '將 Drawio 流程圖附加到本頁面';
 Drawio.strings['drawio_dmsf_title'  ] = '將 Drawio 流程圖儲存到文件總管';
