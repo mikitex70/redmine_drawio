@@ -53,6 +53,9 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 
                 if(stringData.charCodeAt(stringData.length-1) === 0)
                     stringData = stringData.substring(0, stringData.length-1);
+                else if(stringData.endsWith("</sv"))
+                    // It seems that the SVG image coming from Drawio is not correcly encoded (or decoded)
+                    stringData += "g>";
                 
                 return stringData;
             },
