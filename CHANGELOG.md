@@ -4,12 +4,26 @@
 
 ### New
 
+* Added Danish translation. [Anders Thomsen]
+
+* Added traditional chinese translation. [Nickle]
+
+* Added markdown editor support (refs #49) [Michele Tessaro]
+
+  Added in the markdown editor the buttons for inserting macros.
+
 * Local MathJax installation support (refs #46) [Michele Tessaro]
 
   The MathJax Javascript library can now be referenced from a local
   installation to avoid downloading it from Internet.
 
+### Changes
+
+* Updated documentation. [Michele Tessaro]
+
 ### Fix
+
+* Fixed SVG saving in DMSF (refs #51) [Michele Tessaro]
 
 * Fixed working with rails 5 (fixes #44) [Michele Tessaro]
 
