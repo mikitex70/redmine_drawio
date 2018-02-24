@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'redmine'
 
-module Redmine::WikiFormatting::Textile::Helper
+module Redmine::WikiFormatting::Markdown::Helper
     def heads_for_wiki_formatter_with_drawio
         heads_for_wiki_formatter_without_drawio
         unless @heads_for_wiki_formatter_with_drawio_included
@@ -15,10 +15,6 @@ module Redmine::WikiFormatting::Textile::Helper
         end
     end
     
-    # alias_method_chain is deprecated in Rails 5: replaced with two alias_method
-    # as a quick workaround. Using the 'prepend' method can generate an
-    # 'stack level too deep' error in conjunction with other (non ported) plugins.
-    #alias_method_chain :heads_for_wiki_formatter, :drawio
     alias_method :heads_for_wiki_formatter_without_drawio, :heads_for_wiki_formatter
     alias_method :heads_for_wiki_formatter, :heads_for_wiki_formatter_with_drawio
 end

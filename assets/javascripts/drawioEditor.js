@@ -53,6 +53,9 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 
                 if(stringData.charCodeAt(stringData.length-1) === 0)
                     stringData = stringData.substring(0, stringData.length-1);
+                else if(stringData.endsWith("</sv"))
+                    // It seems that the SVG image coming from Drawio is not correcly encoded (or decoded)
+                    stringData += "g>";
                 
                 return stringData;
             },
@@ -135,7 +138,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     };
     
     // Disables SSL if the protocol isn't HTTPS; simplifies use of local drawio installations
-    var useHttps = (Drawio.settings.drawioUrl.match(/^https:/i)? 1: 0);
+    var useHttps = (Drawio.settings.drawioUrl.match(/^(https:)?\/\//i)? 1: 0);
 
     window.addEventListener('message', receive);
     iframe.setAttribute('src', Drawio.settings.drawioUrl+'?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json&https='+useHttps);
@@ -199,7 +202,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     function saveAttachment(resource, imageData, type, pageName) {
         var pageUrl = window.location.pathname;
         
-        if(!pageUrl.match(pageName+'$'))
+        if(!pageUrl.match(encodeURIComponent(pageName)+'$'))
             pageUrl += '/'+pageName;
         
         function readWikiPage(uploadResponse) {
@@ -388,9 +391,76 @@ var Base64Binary = {
 
 $(function() {
     if(typeof CKEDITOR === 'undefined') return false;
+
+  var basePath = CKEDITOR.basePath;
   
-    var basePath = CKEDITOR.basePath;
-    
-    basePath = basePath.substr(0, basePath.indexOf("plugin_assets")+"plugin_assets".length);   
-    CKEDITOR.config.customConfig = basePath+'/redmine_drawio/javascripts/ckeditor_config.js';
+  basePath = basePath.substr(0, basePath.indexOf("plugin_assets")+"plugin_assets".length);   
+  basePath = basePath.replace(/https?:\/\/[^\/]+/, "");
+  CKEDITOR.plugins.addExternal('drawio', basePath+'/redmine_drawio/javascripts/', 'drawio_plugin.js');
+  
+  if(typeof(Object.getOwnPropertyDescriptor(CKEDITOR, 'editorConfig')) === "undefined") {
+      // CKEDITOR.editorConfig is not patched: add a patch to intercept changes of the
+      // editorConfig property and be able to apply more than one setup.
+      var oldEditorConfig = CKEDITOR.editorConfig || null;
+      
+      Object.defineProperty(CKEDITOR, 'editorConfig', { 
+          get: function() { return oldEditorConfig; },
+          set: function(newValue) {
+                   if(oldEditorConfig) {
+                       var prevValue = oldEditorConfig;
+                   
+                       oldEditorConfig = function(config) {
+                            prevValue(config);
+                            newValue(config);
+                       }
+                   }
+                   else
+                       oldEditorConfig = newValue;
+                }
+      });
+  }
+  
+  CKEDITOR.editorConfig = function(config) {
+      // Workaround for the configuration override.
+      // The Redmine CKEditor plugin has its own config.js that resets 
+      // any change to the extraPlugins property.
+      // This code implements a setter on the config.extraPlugins property
+      // so the new value is not replaced but instead appended to the
+      // existing value. It is supported by the major modern browser (for
+      // example from IE 9).
+      if(typeof(Object.getOwnPropertyDescriptor(config, 'extraPlugins')) === "undefined") {
+          var _extraPlugins = config.extraPlugins || '';
+          
+          Object.defineProperty(config, 'extraPlugins', { 
+              get: function() { return _extraPlugins; },
+              set: function(newValue) {
+                    if(_extraPlugins === '')
+                        _extraPlugins = newValue;
+                    else
+                        _extraPlugins += ','+newValue;
+                }
+          });
+      }
+
+      // Same as before, but this time I want the drawio toolbar appended
+      // after the default toolbar
+      if(typeof(Object.getOwnPropertyDescriptor(config, 'toolbar')) === "undefined") {
+          var _toolbar = config.toolbar || [];
+
+          Object.defineProperty(config, 'toolbar', {
+              get: function() { 
+                  return _toolbar.concat(config.extraToolbar);
+              },
+              set: function(newValue) {
+                  _toolbar = newValue;
+              }
+          });
+      }
+      
+      // Now we can proceed with the CKEDITOR setup
+      var drawio_toolbar = [['btn_drawio_attach', 'btn_drawio_dmsf']];
+      
+      config.extraPlugins = 'drawio';
+      config.extraToolbar = (config.extraToolbar || []).concat(drawio_toolbar);
+  }
 });
