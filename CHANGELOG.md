@@ -1,6 +1,6 @@
 # Changelog
 
-## development (unreleased)
+## v0.8.1 (2018-02-24)
 
 ### New
 
@@ -18,6 +18,8 @@
   installation to avoid downloading it from Internet.
 
 ### Changes
+
+* Updated documentation. [Michele Tessaro]
 
 * Updated documentation. [Michele Tessaro]
 

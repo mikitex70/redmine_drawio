@@ -107,7 +107,7 @@ module RedmineDrawio
         end
         
         def lang_supported? lang
-            return False if lang == 'en' # English is always loaded, avoid double load
+            return false if lang == 'en' # English is always loaded, avoid double load
             File.exist? "#{File.expand_path('../../../../assets/javascripts/lang', __FILE__)}/drawio_jstoolbar-#{lang}.js"
         end
         
