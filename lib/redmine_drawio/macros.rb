@@ -238,13 +238,6 @@ EOF
             if canEdit
                 # Diagram and document are editable
                 saveName = dmsf_save_name project, diagramName
-#                 if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-#                     # DMSF 1.5.9+ can use project name as folder
-#                     saveName = dmsf_save_name project, diagramName
-#                     #saveName = "#{project.name} -#{project.id}-/#{diagramName}"
-#                 else
-#                     saveName = "#{project.id}/#{diagramName}"
-#                 end
             else
                 # Diagram cannot be saved, it wil become not editable
                 saveName = nil
@@ -262,7 +255,7 @@ EOF
             
             diagram = File.read(filename, mode: 'rb')
             # if png, encode image and remove newlines (required by Internet Explorer)
-            diagram = Base64.encode64(File.read(filename, mode: 'rb')).gsub("\n", '') unless svg? diagramName
+            diagram = Base64.encode64(diagram).gsub("\n", '') unless svg? diagramName
             
             if svg? diagramName
                 return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, true)
