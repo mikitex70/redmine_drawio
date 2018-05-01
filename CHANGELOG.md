@@ -1,8 +1,14 @@
 # Changelog
 
-## development (unreleased)
+## v0.8.2 (2018-05-01)
 
 ### Fix
+
+* Fixed mathjax configuration url always disabled (refs #56) [Michele Tessaro]
+
+* Fixed saving with DMSF 1.6.1+ (refs #32) [Michele Tessaro]
+
+  DMSF 1.6.1 has changed the webdav path used to access documents.
 
 * Fixed attachment saving with restricted extensions (fixes #54) [Michele Tessaro]
 
