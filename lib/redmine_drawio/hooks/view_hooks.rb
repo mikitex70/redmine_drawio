@@ -55,8 +55,6 @@ module RedmineDrawio
                 //]]></script>
             EOF
             
-            supported_langs = ['it','ru','zh']
-            
             header << inline
             header << stylesheet_link_tag("drawioEditor.css"  , :plugin => "redmine_drawio", :media => "screen")
             header << javascript_include_tag("encoding-indexes.js", :plugin => "redmine_drawio")

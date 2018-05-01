@@ -7,10 +7,10 @@ Drawio.strings = {};
 
 /**
  * Handles editing of a diagram.
- * @param image 
- * @param resource
- * @param isDmsf
- * @param pageName
+ * @param image DOM element of the diagram image
+ * @param resource The filename of the diagram (with extension)
+ * @param isDmsf true if the diagram is stored with the DMSF module
+ * @param pageName The wiki page name (if the document is a wiki page)
  */
 function editDiagram(image, resource, isDmsf, pageName) {
     /**
@@ -300,7 +300,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
         if(resource) {
             // Upload the attachment
             $.ajax({
-                url        : Drawio.settings.redmineUrl+'uploads.json',
+                url        : Drawio.settings.redmineUrl+'uploads.json?filename='+resource,
                 type       : 'POST',
                 contentType: 'application/octet-stream',
                 headers    : { 'X-Redmine-API-Key': getHash() },

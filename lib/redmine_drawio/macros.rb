@@ -237,12 +237,7 @@ EOF
 
             if canEdit
                 # Diagram and document are editable
-                if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-                    # DMSF 1.5.9+ can use project name as folder
-                    saveName = "#{project.name} -#{project.id}-/#{diagramName}"
-                else
-                    saveName = "#{project.id}/#{diagramName}"
-                end
+                saveName = dmsf_save_name project, diagramName
             else
                 # Diagram cannot be saved, it wil become not editable
                 saveName = nil
@@ -260,7 +255,7 @@ EOF
             
             diagram = File.read(filename, mode: 'rb')
             # if png, encode image and remove newlines (required by Internet Explorer)
-            diagram = Base64.encode64(File.read(filename, mode: 'rb')).gsub("\n", '') unless svg? diagramName
+            diagram = Base64.encode64(diagram).gsub("\n", '') unless svg? diagramName
             
             if svg? diagramName
                 return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, true)
@@ -272,6 +267,29 @@ EOF
 end
 
 private
+
+def dmsf_version
+    Redmine::Plugin.find(:redmine_dmsf).version
+end
+
+def dmsf_save_name(project, diagramName)
+    if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+        dmsf_version = Redmine::Plugin.find(:redmine_dmsf).version
+        Rails.logger.error "dmsf_version=#{dmsf_version}"
+        if dmsf_version <= '1.5.8'
+            # Prior to DMSF 1.5.9 project names cannot be used for folder names
+            "#{project.id}/#{diagramName}"
+        elsif dmsf_version <= '1.6.0'
+            # DMSF 1.5.9+ can use project name as folder
+            "#{project.name} -#{project.id}-/#{diagramName}"
+        else
+            # With DMSF 1.6.1+ the path is changed
+            "#{project.name} #{project.id}/#{diagramName}"
+        end
+    else
+        "#{project.id}/#{diagramName}"
+    end
+end
 
 def imagePath(defaultImage)
     File.expand_path(File.join(File.dirname(__FILE__), '../../spec', defaultImage))
