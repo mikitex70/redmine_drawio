@@ -238,6 +238,13 @@ function editDiagram(image, resource, isDmsf, pageName) {
                     return body.match(new RegExp(macroRegExp));
                 }
                 
+                /**
+                 * Fix for `{{fnlist}}` duplication with the `redmine_wiki_extensions` plugin.
+                 */
+                function fixFnListDuplication(value) {
+                    return value.replace(/\n\n\{\{fnlist\}\}\n*$/, '')
+                }
+                
                 var data = {
                     attachments: [{ 
                         token         : token, 
@@ -249,13 +256,13 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 if(page.wiki_page) {
                     // Wiki page
                     data.wiki_page = {
-                        text: updateDiagramReference(page.wiki_page.text)
+                        text: fixFnListDuplication(updateDiagramReference(page.wiki_page.text))
                     }
                 }
                 else {
                     // Issue
                     data.issue = {
-                        description: updateDiagramReference(page.issue.description)
+                        description: fixFnListDuplication(updateDiagramReference(page.issue.description))
                     }
                     
                     // EasyRedmine can update attachments, no need to add a new note
