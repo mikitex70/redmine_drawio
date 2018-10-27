@@ -1,6 +1,20 @@
 # Changelog
 
+## v0.8.3 (2018-10-27)
+
+### Fix
+
+* Fixed conflict with `redmine_wiki_extensions` (fixes #60) [Michele Tessaro]
+
+  Fixed `fnlist` macro duplication when the `drawio_attach` macro is used
+  and the `redmine_wiki_extensions` plugin is installed.
+
+
 ## v0.8.2 (2018-05-01)
+
+### Changes
+
+* Updated changelog. [Michele Tessaro]
 
 ### Fix
 
