@@ -59,7 +59,7 @@ EOF
             container = obj
         end
         
-        attach = container.attachments.find_by_filename(filename)
+        attach = container.attachments.where(filename: filename).last
         return "Diagram attachment missing or isn't a text file".html_safe unless attach && attach.is_text?
         
         file = File.open(attach.diskfile)
@@ -133,7 +133,7 @@ EOF
         diagramName += ".png" if File.extname(diagramName.strip) == ""
         
         # Search attachment position
-        attach = container.attachments.find_by_filename(diagramName)
+        attach = container.attachments.where(filename: diagramName).last
         
         if canEdit
             # Diagram and document are editable
