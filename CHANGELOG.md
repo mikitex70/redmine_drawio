@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.8.4 (2018-05-25)
+
+### Fix
+
+* Make regex case-insensitive. [Vincent Robert]
+
+### Other
+
+* Use last edited diagram if several have an identical name. [Vincent Robert]
+
+
 ## v0.8.3 (2018-10-27)
 
 ### Fix
@@ -434,5 +445,4 @@
   First working release
 
 * Initial commit. [Michele Tessaro]
-
 
