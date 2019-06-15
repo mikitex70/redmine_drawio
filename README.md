@@ -10,7 +10,7 @@ Before submit an issue please read carefully the `README.md` file (this page): m
 
 ## Requirements
 
-- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4, v3.3.3 and v3.4.0 as well as Easy Redmine 2016.05.07.
+- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4, v3.3.3, v3.4.0, v4.0.4 as well as Easy Redmine 2016.05.07.
 
 ## Installation
 

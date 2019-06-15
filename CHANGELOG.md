@@ -1,6 +1,17 @@
 # Changelog
 
-## v0.8.4 (2018-05-25)
+## v0.8.5 (2016-06-15)
+
+### Fix
+
+* Fixed incompatibility with Redmine 4/ Rails 5 (fixes #66) [Michele Tessaro]
+
+
+## v0.8.4 (2019-05-25)
+
+### Changes
+
+* Updated changelog for the new release. [Michele Tessaro]
 
 ### Fix
 
