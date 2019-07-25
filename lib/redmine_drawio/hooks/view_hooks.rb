@@ -111,7 +111,7 @@ module RedmineDrawio
         
         def mathjax_url
             url = Setting.plugin_redmine_drawio['drawio_mathjax_url']
-            url = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js' unless url
+            url = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js' unless url.present?
             url
         end
 
