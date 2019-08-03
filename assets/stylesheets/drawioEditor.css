@@ -27,3 +27,17 @@ input[readonly].drawio {
     color: #545454;
     background-color: #EAEAEA;
 }
+
+/* Fix for tinymce buttongroup hidden after adding buttons */
+.mce-btn-group {
+    left: auto !important;
+    top: auto !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.mce-btn-group > div {
+    width: auto !important;
+    height: auto !important;
+}
+/* End tinymce fix */

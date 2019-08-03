@@ -1,6 +1,28 @@
 # Changelog
 
-## v0.8.5 (2016-06-15)
+## v0.9.0 (2019-08-03)
+
+### New
+
+* Added integration with `redmine_wysiwyg_editor` (refs #69) [Michele Tessaro]
+
+  Now the drawio editor buttons appears also in the toolbar of the
+  `redmine_wysiwyg_editor`.
+
+### Changes
+
+* Upgraded MathJax at version 2.7.5. [Michele Tessaro]
+
+### Fix
+
+* Load MathJax through CDN if custom url is an empty string. [Vincent Robert]
+
+
+## v0.8.5 (2019-06-15)
+
+### Changes
+
+* Updated CHANGELOG for the new release. [Michele Tessaro]
 
 ### Fix
 
