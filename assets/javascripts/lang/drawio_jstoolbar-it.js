@@ -1,6 +1,9 @@
 // General messages
 Drawio.strings['drawio_updating_page'] = 'Aggiornamento pagina';
 Drawio.strings['drawio_error_saving' ] = 'Errore durante il salvataggio del diagramma:\n';
+Drawio.strings['drawio_empty_diag'   ] = 'Non si possono salvare diagrammi vuoti';
+Drawio.strings['drawio_empty_diag_page'] = "Il diagramma di questa pagina è vuoto, selezionare un'altra pagina da salvare";
+// Drawio.strings['drawio_confirm_empty'] = "Il diagram è vuoto! Salvare ugualmente e usare l'immagine predefinita?";
 Drawio.strings['drawio_http_401'     ] = 'Non autorizzato';
 Drawio.strings['drawio_http_404'     ] = 'Assicurarsi che le funzionalità WebDAV del modulo DMSF siano abilitate';
 Drawio.strings['drawio_http_409'     ] = 'Assicurarsi che la cartella nel gestore documentale esista e sia accessibile';
