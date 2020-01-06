@@ -1,5 +1,18 @@
 # Changelog
 
+
+## v0.9.1 (2020-01-06)
+
+### Fix
+
+* Fixed saving of empty diagrams (fixes #71) [Michele Tessaro]
+
+  When saving and empty diagram there will be no image to click on the
+  page, so the diagram cannot be modified anymore.
+  This fix will detect these situations and block savings of empty
+  diagrams.
+
+
 ## v0.9.0 (2019-08-03)
 
 ### New
@@ -10,6 +23,8 @@
   `redmine_wysiwyg_editor`.
 
 ### Changes
+
+* Updated documentation for the new release. [Michele Tessaro]
 
 * Upgraded MathJax at version 2.7.5. [Michele Tessaro]
 
@@ -158,7 +173,7 @@
 
 * Fixed saving on DMSF 1.5.9+ (fixes #32) [Michele Tessaro]
 
-  Fixed saving on DMSF 1.5.9+ when &quot;Use project name for project folder&quot;
+  Fixed saving on DMSF 1.5.9+ when "Use project name for project folder"
   is selected in the plugin settings.
   Note that the version tagged 1.5.9 has a bug in the webdav path URI: at
   this time the master branch must be used.
@@ -269,7 +284,7 @@
   diagram without reloading page causes an `Not a diagram` error in the
   drawio diagram editor.
   Seems that updating the SVG in the page causes the insertion of an
-  `&quot;=&quot;&quot;&#x27; text, that confuses the parser.
+  `"=""' text, that confuses the parser.
   Removed with an regex, but not identified the source problem (maybe
   related to the `XMLSerializer` Firefox browser object).
 
@@ -315,7 +330,7 @@
 * Fixed computation of Redmine URL (fixes #11) [Michele Tessaro]
 
   Fixed a missing slash in the url while uploading attachments throught
-  drawio_attach macro, that caused &quot;Not found&quot; errors.
+  drawio_attach macro, that caused "Not found" errors.
 
 
 ## v0.4.0 (2016-12-10)
@@ -335,11 +350,11 @@
 
 ### Fix
 
-* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
+* Load 'loading' image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
+  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
 
 * Fixed errors when used outside wiki pages (refs #9) [Michele Tessaro]
 
@@ -349,11 +364,11 @@
   when using a single project as Redmine home page (see
   http://www.redmine.org/boards/2/topics/32811)
 
-* Load &#x27;loading&#x27; image using protocol-relative paths. [Javango]
+* Load 'loading' image using protocol-relative paths. [Javango]
 
   When loading the ajax-loader image from a https site I am getting the following error message,  this switches to protocol-relative paths.
 
-  Mixed Content: The page at &#x27;https://support.my-site.com/issues/9999&#x27; was loaded over HTTPS, but requested an insecure image &#x27;http://www.draw.io/images/ajax-loader.gif&#x27;. This content should also be served over HTTPS.
+  Mixed Content: The page at 'https://support.my-site.com/issues/9999' was loaded over HTTPS, but requested an insecure image 'http://www.draw.io/images/ajax-loader.gif'. This content should also be served over HTTPS.
 
 
 ## v0.3.2 (2016-11-22)
@@ -478,4 +493,5 @@
   First working release
 
 * Initial commit. [Michele Tessaro]
+
 

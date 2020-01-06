@@ -35,8 +35,10 @@ function editDiagram(image, resource, isDmsf, pageName) {
                            '<svg preserve_aspect_ratio="xMaxYMax meet" style="max-width:100%" width="$2px" height="$3px" viewBox="0 0 $2 $3" $1');
     }
     
-    var imageType = (resource.match(/\.svg$/i)? 'image/svg+xml': 'image/png');
-    var isSvg     = imageType === 'image/svg+xml';
+    var pngMime   = 'image/png';
+    var svgMime   = 'image/svg+xml';
+    var imageType = (resource.match(/\.svg$/i)? svgMime: pngMime);
+    var isSvg     = imageType === svgMime;
     var imgDescriptor;
     var iframe = document.createElement('iframe');
     
@@ -46,16 +48,26 @@ function editDiagram(image, resource, isDmsf, pageName) {
     if(isSvg)
         imgDescriptor = {
             fmt: "xmlsvg",
+            mimeType: svgMime,
+            ext: 'svg',
             initial: getXmlAsString(image).replace(/"=""/, ''), // Fix for corrupted SVG after save without reloading page
             extractImageData: function(rawImage) {
-                var data = extractData(rawImage, 'image/svg+xml');
+                var data = extractData(rawImage, imgDescriptor.mimeType);
                 var stringData = Base64Binary.arrayBufferToString(data);
                 
-                if(stringData.charCodeAt(stringData.length-1) === 0)
+                if(stringData.charCodeAt(stringData.length-1) === 0) {
                     stringData = stringData.substring(0, stringData.length-1);
-                else if(stringData.endsWith("</sv"))
-                    // It seems that the SVG image coming from Drawio is not correcly encoded (or decoded)
+                }
+                if(stringData.charCodeAt(stringData.length-1) === 0) {
+                    stringData = stringData.substring(0, stringData.length-1);
+                }
+                // It seems that the SVG image coming from Drawio is not correcly encoded (or decoded)
+                if(stringData.endsWith("</sv")) {
                     stringData += "g>";
+                }
+                else if(stringData.endsWith("</svg")) {
+                    stringData += ">";
+                }
                 
                 return stringData;
             },
@@ -78,9 +90,11 @@ function editDiagram(image, resource, isDmsf, pageName) {
     else
         imgDescriptor = {
             fmt: "xmlpng",
+            mimeType: pngMime,
+            ext: 'png',
             initial: image.getAttribute('src'),
             extractImageData: function(rawImage) {
-                return extractData(rawImage, 'image/png')
+                return extractData(rawImage, imgDescriptor.mimeType)
             },
             showLoader: function() {
                 image.setAttribute('src', Drawio.settings.drawioUrl+'/images/ajax-loader.gif');
@@ -98,13 +112,13 @@ function editDiagram(image, resource, isDmsf, pageName) {
     
     imgDescriptor.showLoader();
     
-    var close = function() {
+    function close() {
         imgDescriptor.hideLoader(imgDescriptor.initial);
         document.body.removeChild(iframe);
         window.removeEventListener('message', receive);
     };
     
-    var receive = function(evt) {
+    function receive(evt) {
         if (evt.data.length > 0) {
             // https://desk.draw.io/support/solutions/articles/16000042544-how-does-embed-mode-work-
             // https://desk.draw.io/support/solutions/articles/16000042546-what-url-parameters-are-supported-
@@ -115,19 +129,22 @@ function editDiagram(image, resource, isDmsf, pageName) {
                     imgDescriptor.launchEditor(imgDescriptor.initial);
                     break;
                 case 'export':
-                    var svgImage = imgDescriptor.extractImageData(msg.data);
-                    
-                    close();
-                    imgDescriptor.updateImage(msg.data);
-                    
-                    if(isDmsf) {
-                        saveDmsf(Drawio.settings.redmineUrl+'dmsf/webdav/'+resource, svgImage, imageType);
-                    }
-                    else {
-                        saveAttachment(resource , svgImage, imageType, pageName);
-                    }
+                    save(msg.data);
                     break;
                 case 'save':
+                    if(!(msg.bounds.width && msg.bounds.height)) {
+                        // The diagram is empty. If it were saved, there would be no image 
+                        // on the page to click to be able to modify the diagram.
+                        // So we ask the user to choose to stay in the editor or to leave and
+                        // use the default image placeholder.
+                        if(msg.currentPage > 0) {
+                            alert(Drawio.strings['drawio_empty_diag_page']);
+                        }
+                        else {
+                            alert(Drawio.strings['drawio_empty_diag']);
+                        }
+                        break;
+                    }
                     iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: imgDescriptor.fmt, spin: Drawio.strings['drawio_updating_page']}), '*');
                     break;
                 case 'exit':
@@ -167,6 +184,26 @@ function editDiagram(image, resource, isDmsf, pageName) {
     
     function getHash() {
         return Base64Binary.arrayBufferToString(Base64Binary.decodeArrayBuffer(Drawio.settings.hashCode.replace(/\\n/, '').split('').reverse().join('')));
+    }
+    
+    /**
+     * Save the image data as attachment or in DMSF.<br/>
+     * The image will also be updateted in the page, without reloading.
+     * @param data Image data url (content of the {@code src} attribute).
+     */
+    function save(data) {
+        // Diagram is not empty
+        var svgImage = imgDescriptor.extractImageData(data);
+        
+        close();
+        imgDescriptor.updateImage(data);
+        
+        if(isDmsf) {
+            saveDmsf(Drawio.settings.redmineUrl+'dmsf/webdav/'+resource, svgImage, imageType);
+        }
+        else {
+            saveAttachment(resource , svgImage, imageType, pageName);
+        }
     }
     
     /**
@@ -325,12 +362,13 @@ function editDiagram(image, resource, isDmsf, pageName) {
 
 // From http://blog.danguer.com/2011/10/24/base64-binary-decoding-in-javascript/
 var Base64Binary = {
-    _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
     
     /* will return a  Uint8Array type */
     decodeArrayBuffer: function(input) {
         var bytes = (input.length/4) * 3;
         var ab = new ArrayBuffer(bytes);
+        
         this.decode(input, ab);
         
         return ab;
@@ -362,9 +400,9 @@ var Base64Binary = {
         else
             uarray = new Uint8Array(bytes);
         
-        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+        input = input.replace(/[^A-Za-z0-9+/=]/g, "");
         
-        for (i=0; i<bytes; i+=3) {	
+        for (i=0; i<bytes; i+=3) {
             //get the 3 octects in 4 ascii chars
             enc1 = this._keyStr.indexOf(input.charAt(j++));
             enc2 = this._keyStr.indexOf(input.charAt(j++));
@@ -375,12 +413,42 @@ var Base64Binary = {
             chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
             chr3 = ((enc3 & 3) << 6) | enc4;
             
-            uarray[i] = chr1;			
+            uarray[i] = chr1;
             if (enc3 != 64) uarray[i+1] = chr2;
             if (enc4 != 64) uarray[i+2] = chr3;
         }
         
-        return uarray;	
+        return uarray;
+    },
+    
+    encode: function (input) {
+        var output = "";
+        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+        var i = 0;
+
+        while(i < input.length) {
+            chr1 = input.charCodeAt(i++);
+            chr2 = input.charCodeAt(i++);
+            chr3 = input.charCodeAt(i++);
+
+            enc1 = chr1 >> 2;
+            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+            enc4 = chr3 & 63;
+
+            if(isNaN(chr2)) {
+                enc3 = enc4 = 64;
+            } else if(isNaN(chr3)) {
+                enc4 = 64;
+            }
+
+            output = output +
+                this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+                this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+        }
+
+        return output;
     },
     
     /**
@@ -393,7 +461,7 @@ var Base64Binary = {
         // See https://github.com/inexorabletash/text-encoding
         var str = new TextDecoder('utf-8').decode(arr);
         
-        return str.substring(0, str.length-2);
+        return str;
     }
 };
 

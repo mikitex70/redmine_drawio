@@ -1,6 +1,9 @@
 // General messages
 Drawio.strings['drawio_updating_page'] = 'Updating page';
 Drawio.strings['drawio_error_saving' ] = 'Error saving diagram:\n';
+Drawio.strings['drawio_empty_diag'   ] = 'Cannot save empty diagrams';
+Drawio.strings['drawio_empty_diag_page'] = "The diagram on this page is empty, choose another page to save";
+// Drawio.strings['drawio_confirm_empty'] = 'The diagram is empty! Save anyway and use the default image?';
 Drawio.strings['drawio_http_401'     ] = 'Not authorized';
 Drawio.strings['drawio_http_404'     ] = 'Make sure WebDAV capabilities of DMSF module is enabled';
 Drawio.strings['drawio_http_409'     ] = 'Make sure the DMSF folder exists and is accessible';
