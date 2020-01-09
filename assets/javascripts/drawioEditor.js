@@ -183,7 +183,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     }
     
     function getHash() {
-        return Base64Binary.arrayBufferToString(Base64Binary.decodeArrayBuffer(Drawio.settings.hashCode.replace(/\\n/, '').split('').reverse().join('')));
+        return Base64Binary.arrayBufferToString(Base64Binary.decodeArrayBuffer(Drawio.settings.hashCode.split('').reverse().join(''))).replace(/\u0000/g,'');
     }
     
     /**
