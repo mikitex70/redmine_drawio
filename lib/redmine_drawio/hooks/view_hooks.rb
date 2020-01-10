@@ -46,7 +46,7 @@ module RedmineDrawio
                     var Drawio = {
                       settings: {
                         redmineUrl: '#{redmine_url}',
-                        hashCode  : '#{Base64.encode64(User.current.api_key).reverse!.gsub(/\n/, '\\\\\n')}',
+                        hashCode  : '#{Base64.encode64(User.current.api_key).gsub(/\n/, '').reverse!}',
                         drawioUrl : '#{Setting.plugin_redmine_drawio['drawio_service_url']}',
                         DMSF      : #{dmsf_enabled? context},
                         isEasyRedmine: #{easyredmine?}
