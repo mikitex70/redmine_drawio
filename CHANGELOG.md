@@ -1,11 +1,18 @@
 # Changelog
 
 
+## v0.9.2 (2020-01-10)
+
+### Fix
+
+* Fixed ajax header in saving attachments (refs #72) [Michele Tessaro]
+
+
 ## v0.9.1 (2020-01-06)
 
 ### Fix
 
-* Fixed saving of empty diagrams (fixes #71) [Michele Tessaro]
+* Fixed saving of empty diagrams (fixes #67) [Michele Tessaro]
 
   When saving and empty diagram there will be no image to click on the
   page, so the diagram cannot be modified anymore.
