@@ -1,7 +1,18 @@
 # Changelog
 
 
+## v0.9.3 (2020-02-10)
+
+### New
+
+* Initial Korean tanslation. [Ji-Hyeon Gim]
+
+
 ## v0.9.2 (2020-01-10)
+
+### Changes
+
+* Updated documentation. [Michele Tessaro]
 
 ### Fix
 
