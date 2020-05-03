@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.9.4 (2020-05-03)
+
+### Fix
+
+* Fixed save attachments on main wiki page (fixes #76) [Michele Tessaro]
+
+  Saving diagrams as attachments on main wiki page was failing cause a
+  *page not found* error.
+  Main wiki page url does not contain the wiki page name, which must be
+  explicitly used when saving.
+
+
 ## v0.9.3 (2020-02-10)
 
 ### New
