@@ -148,7 +148,7 @@ EOF
                 end
             end
         else
-            # Diagram cannot be saved, it wil become not editable
+            # Diagram cannot be saved, it will become not editable
             saveName = nil
         end
         
@@ -239,7 +239,7 @@ EOF
                 # Diagram and document are editable
                 saveName = dmsf_save_name project, diagramName
             else
-                # Diagram cannot be saved, it wil become not editable
+                # Diagram cannot be saved, it will become not editable
                 saveName = nil
             end
             
