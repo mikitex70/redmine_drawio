@@ -240,8 +240,9 @@ function editDiagram(image, resource, isDmsf, pageName) {
         var pageUrl = window.location.pathname;
         var encodedPageName = new RegExp('/wiki/'+encodeURIComponent(pageName)+'$', 'i');
 
-        if(!pageUrl.match(encodedPageName))
-            pageUrl += '/'+pageName;
+        // pageName !== "" means it's a wiki page
+        if(pageName !== "" && !pageUrl.match(encodedPageName))
+            pageUrl += '/'+pageName; // Fix main wiki page url
         
         function readWikiPage(uploadResponse) {
             // This is the token to reference the uploaded attachment
