@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v0.9.5 (2020-05-04)
+
+### Fix
+
+* Fixed saving diagram attachments in issues (fixes #77) [Michele Tessaro]
+
+
 ## v0.9.4 (2020-05-03)
 
 ### Fix
