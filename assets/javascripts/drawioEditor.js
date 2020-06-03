@@ -281,7 +281,21 @@ function editDiagram(image, resource, isDmsf, pageName) {
                  * Fix for `{{fnlist}}` duplication with the `redmine_wiki_extensions` plugin.
                  */
                 function fixFnListDuplication(value) {
-                    return value.replace(/\n\n\{\{fnlist\}\}\n*$/, '')
+                    return value.replace(/\n\n\{\{fnlist\}\}\n*$/, '');
+                }
+                
+                /**
+                 * Fix for Wiki Extensions header page.
+                 */
+                function fixWikiExtensionsHeader(value) {
+                    return value.replace(/\n<div id="wiki_extentions_header">[\S\s]+?\n<\/div>\n\n/gi, '');
+                }
+                
+                /**
+                 * Fix for Wiki Extensions header page.
+                 */
+                function fixWikiExtensionsFooter(value) {
+                    return value.replace(/\n\n<div id="wiki_extentions_footer">[\S\s]+?\n<\/div>$/gi, '');
                 }
                 
                 var data = {
@@ -295,7 +309,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 if(page.wiki_page) {
                     // Wiki page
                     data.wiki_page = {
-                        text: fixFnListDuplication(updateDiagramReference(page.wiki_page.text))
+                        text: fixFnListDuplication(fixWikiExtensionsFooter(fixWikiExtensionsHeader(updateDiagramReference(page.wiki_page.text))))
                     }
                 }
                 else {
