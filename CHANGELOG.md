@@ -1,6 +1,16 @@
 # Changelog
 
 
+## v0.9.6 (2020-06-21)
+
+### Fix
+
+* Fixed header/footer dup with Wiki Extensions (fixes #79) [Michele Tessaro]
+
+  With the Wiki Extensions plugin the header and footer fragments were
+  duplicated everytime a diagram attachment was changed.
+
+
 ## v0.9.5 (2020-05-04)
 
 ### Fix
