@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v0.9.7 (2020-09-24)
+
+### Fix
+
+* Updated drawio url (fixes #80) [Michele Tessaro]
+
+
 ## v0.9.6 (2020-06-21)
 
 ### Fix
