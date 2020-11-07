@@ -72,7 +72,7 @@ with an embedded XML source of the diagram (the diagram must be created with the
 
 Usage is very simple:
 
-- make sure ``REST`` API are enabled in Redmine global settings; this is need to be able to save diagrams as attachments
+- **make sure ``REST`` API are enabled in Redmine global settings**; this **is needed** to be able to save diagrams as attachments. To enable it, go into `Administration` -> `Settings` -> `API` tab and check the `Enable REST web service` flag.
 - in Wiki or issue pages use the `drawio_attach` macro to specify the name of attachment containing the diagram. For example:
 
   ``{{drawio_attach(myDiagram)}}``
@@ -96,7 +96,7 @@ The dialog can be used also for modifying a macro: simply place the caret (the c
 This macro handles diagrams saved in the [DMSF] repository as PNG+XML or SVG+XML images. The DMSF module must be enabled for the project to be able to use this macro.
 Usage is very simple:
 
-- enable the WebDAV functionality of the [DMSF] plugin in ``Read/Write`` mode; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
+- **enable the WebDAV functionality of the [DMSF] plugin in ``Read/Write`` mode**; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
 - in Wiki or issue pages use the `drawio_dmsf` macro to specify the path of the diagram, relative to the DMSF documents of the current project. For example:
 
   ``{{drawio_dmsf(diagrams/myDiagram)}}``
@@ -177,7 +177,7 @@ Once updated the settings, go to a wiki page with a mathematical SVG diagram and
 
   - ~~use a file managed by the [DMSF] plugin~~
   - embed diagram as macro body
-  - use GoogleDrive, Dropbox and OneDrive as possible diagram sources.
+  - ~~use GoogleDrive, Dropbox and OneDrive as possible diagram sources.~~ I don't have time, and I think is not so useful
   - implement tests
   - make diagram images exportable in PDF
   - CKEditor widgets: this is a bit complicated but it would be cool. Problems:
