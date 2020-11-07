@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.9.8 (2020-11-07)
+
+### New
+
+* Updated README to highlight need to enable of REST API. [Michele Tessaro]
+
+  Highlighted the need to enable the REST API for the usage of the
+  `drawio_attach` macro, as it seems it isn't enough visible.
+
+* Support Japanese. [sk-ys]
+
+
 ## v0.9.7 (2020-09-24)
 
 ### Fix
