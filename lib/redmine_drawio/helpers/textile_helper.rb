@@ -46,4 +46,4 @@ else
     module Redmine::WikiFormatting::Textile::Helper
         prepend RedmineDrawio_textile
     end
-# end
+end
