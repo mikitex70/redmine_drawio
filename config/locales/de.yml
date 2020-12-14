@@ -1,0 +1,12 @@
+# German strings go here for Rails i18n
+de:
+  drawio_url: "Draw.io Dienst URL"
+  drawio_service_url_hint: "URL deiner lokalen Installation; Setze 'https://app.diagrams.net/' um den Web-Dienst zu nutzen."
+  drawio_mathjax: "SVG mathemathics Unterstützung"
+  drawio_mathjax_hint: "Aktiviere mathematische Symbolunterstützung für SVG Diagramme"
+  drawio_mathjax_url: "MathJax Bibliothek URL"
+  drawio_mathjax_url_hint: "Bibliothek für mathematische Symbolunterstützung; Voreingestellter Wert ist //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+  drawio_dlg_title: "Definiere Diagramm"
+  drawio_dlg_diagName: "Diagramm Name"
+  drawio_dlg_diagType: "Diagramm Format"
+  drawio_dlg_size: "Breite"
