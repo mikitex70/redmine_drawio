@@ -1,7 +1,14 @@
 # Changelog
 
 
-## v0.9.8 (2020-11-07)
+## v0.9.9 (2020-12-19)
+
+### New
+
+* Support german. [Andreas Hunholz]
+
+
+## v0.9.8 (2020-11-19)
 
 ### New
 
@@ -11,6 +18,10 @@
   `drawio_attach` macro, as it seems it isn't enough visible.
 
 * Support Japanese. [sk-ys]
+
+### Fix
+
+* Fixed stupidly forgotten commented code. [Michele Tessaro]
 
 
 ## v0.9.7 (2020-09-24)
