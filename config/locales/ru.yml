@@ -1,7 +1,7 @@
 # Russian strings go here for Rails i18n
 ru:
   drawio_url: "URL сервиса Draw.io"
-  drawio_service_url_hint: "URL для вашей локальной установки сервиса; задайте как '//www.draw.io' для использования онлайн-сервиса"
+  drawio_service_url_hint: "URL для вашей локальной установки сервиса; задайте как '//embed.diagrams.net' для использования онлайн-сервиса"
   drawio_mathjax: "Поддержка математики для SVG"
   drawio_mathjax_hint: "Включить поддержку математических символов для SVG-диаграмм"
   drawio_mathjax_url: "MathJax library URL"

@@ -1,7 +1,7 @@
 # Danish strings go here for Rails i18n
 da:
   drawio_url: "Draw.io service URL"
-  drawio_service_url_hint: "URL til lokal installation; sæt til '//www.draw.io' for at anvende onlnie-servicen"
+  drawio_service_url_hint: "URL til lokal installation; sæt til '//embed.diagrams.net' for at anvende onlnie-servicen"
   drawio_mathjax: "SVG-matematik-understøttelse"
   drawio_mathjax_hint: "Aktivér support for matematiske symboler i SVG-diagrammer"
   drawio_mathjax_url: "MathJax library URL"

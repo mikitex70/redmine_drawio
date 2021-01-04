@@ -1,7 +1,7 @@
 # German strings go here for Rails i18n
 de:
   drawio_url: "Draw.io Dienst URL"
-  drawio_service_url_hint: "URL deiner lokalen Installation; Setze 'https://app.diagrams.net/' um den Web-Dienst zu nutzen."
+  drawio_service_url_hint: "URL deiner lokalen Installation; Setze 'https://embed.diagrams.net' um den Web-Dienst zu nutzen."
   drawio_mathjax: "SVG mathemathics Unterstützung"
   drawio_mathjax_hint: "Aktiviere mathematische Symbolunterstützung für SVG Diagramme"
   drawio_mathjax_url: "MathJax Bibliothek URL"
