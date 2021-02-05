@@ -5,80 +5,11 @@ require 'json'
 
 Redmine::WikiFormatting::Macros.register do
     desc <<EOF
-Draw.io widget plugin to embed diagrams. Example usage:
-
-{{drawio(diagram_attachment.xml[, ...options...])}}
-
-Use http://draw.io to draw diagrams, save them locally and attach to wiki or issue pages.
-On page view, the diagrams are sent to draw.io site for rendering.
-
-options:
-lightbox=false  : enable lightbox usage
-resize=false    : enable zoom control toolbar
-zoom=100        : initial zoom of diagram (percentage of original diagram)
-fit=true        : fit page width (only if resize=false)
-hilight=#0000ff : color to hilight hyperlinks
+This macro is deprecated. Use the drawio_attach macro instead.
 EOF
     
     macro :drawio do |obj, args|
-        return "«Please save content first»" unless obj
-        return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
-        
-        args, options = extract_macro_options(args, :lightbox, :fit, :resize, :zoom, :nav, :hilight)
-        filename = strip_non_filename_chars(args.first)
-        
-        hilight  = "#0000ff"
-        lightbox = true
-        fit      = true
-        resize   = false
-        zoom     = nil
-        nav      = false
-        
-        hilight  = options[:hilight]          unless options[:hilight].blank?
-        lightbox = options[:lightbox].to_bool unless options[:lightbox].blank?
-        fit      = options[:fit].to_bool      unless options[:fit].blank?
-        nav      = options[:nav].to_bool      unless options[:nav].blank?
-        resize   = options[:resize].to_bool   unless options[:resize].blank?
-        zoom     = options[:zoom].to_i/100.0  unless options[:zoom].blank? or not options[:zoom][/^\d+$/]
-        
-        if resize
-            toolbar = "zoom"+(if lightbox then " lightbox" else "" end)
-        else
-            toolbar = nil
-        end
-        
-        if fit
-            style = 'style="max-width:100%;"'
-        else
-            style = ""
-        end
-        
-        if obj.is_a?(WikiContent)
-            container = obj.page
-        else
-            container = obj
-        end
-        
-        attach = container.attachments.where(filename: filename).last
-        return "Diagram attachment missing or isn't a text file".html_safe unless attach && attach.is_text?
-        
-        file = File.open(attach.diskfile)
-        contents = file.read
-        file.close
-        
-        graphOpts = JSON.generate({
-                                   "highlight" => hilight,
-                                   "nav"       => nav,
-                                   "edit"      => "_blank",
-                                   "lightbox"  => lightbox,
-                                   "resize"    => resize,
-                                   "zoom"      => zoom,
-                                   "toolbar"   => toolbar,
-                                   "xml"       => contents
-                                  })
-        
-        return "<div class=\"mxgraph\" #{style} data-mxgraph=\"#{CGI::escapeHTML(graphOpts)}\"></div>".html_safe+
-            javascript_tag(nil, src: "#{Setting.plugin_redmine_drawio['drawio_service_url']}/embed2.js?s=general;flowchart;bpmn;lean_mapping;electrical;pid;rack;ios;aws2;azure;cisco;clipart;signs;uml;er;mockups")
+        return "«The drawio macro is deprecated, use the drawio_attach macro instead»"
     end
 end
 
@@ -88,29 +19,59 @@ Macro for embedding www.draw.io diagrams stored as attachments. Example usage:
 
 {{drawio_attach(myDiagram[, ...options...])}}
 
-The diagram is draw from the attachment myDiagram.png; if you want to use the
-SVG image format, specify thw '.svg' document extension. If the attachment doesn't exists
-a default diagram wil be drawn. Double click it to start editing.
+The diagram is drawn from the attachment myDiagram.png (diagram esported as png+xml);
+if the attachment doesn't exists a default diagram wil be drawn. Double click it to start
+editing.
+
+Supported diagrams format are:
+* png: diagram exported as png+xml (embedded source diagram)
+* svg: diagram exported as svg+xml (embedded source diagram)
+* xml: classic diagram xml source
 
 Every time a diagram is saved, a new attachment will be created; for now you must 
 manually delete old attachments (missing Redmine API; version 3.3.0 seems to have included
 an API to delete attachments but need investigation).
 
 options:
-size=number : forced width of the diagram image, in pixels
+size=number     : forced width of the diagram image, in pixels
+
+options specific for diagrams in XML format:
+tbautohide=true : show the toolbar only when the mouse is over the diagram
+hilight=#0000ff : color to hilight hyperlinks
+layers=false    : enable layer selector (only for multi-layer diagrams)
+page=false      : enable page control (only for multi-page diagrams)
+zoom=false      : enable zoom controls
+lightbox=false  : enable lightbox usage
 EOF
     
     macro :drawio_attach do |obj, args|
         return "«Please save content first»" unless obj
         return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
         
-        args, options = extract_macro_options(args, :size)
+        args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :page, :layers)
         diagramName   = strip_non_filename_chars(args.first)
         
         return "«Please set a diagram name»".html_safe unless diagramName
-        return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
+        return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml))?$/i
+        
+        # defalts
+        hilight    = "#0000ff"
+        tbautohide = true
+        lightbox   = false
+        size       = nil
+        page       = 0
+        layers     = ''
+        zoom       = false
         
         size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
+        # parameters checkings
+        hilight    = options[:hilight]            unless options[:hilight].blank?
+        tbautohide = options[:tbautohide].to_bool unless options[:tbautohide].blank?
+        lightbox   = options[:lightbox].to_bool   unless options[:lightbox].blank?
+        #size       = options[:fit].to_i           unless options[:fit].blank?
+        zoom       = options[:zoom].to_bool       unless options[:zoom].blank?
+        page       = options[:page].to_i          unless options[:page].blank?
+        layers     = options[:layers]             unless options[:layers].blank?
         
         inlineStyle = ""
         inlineStyle = "width:#{size}px;" if size
@@ -131,6 +92,7 @@ EOF
 
         # Add an extension, if missing
         diagramName += ".png" if File.extname(diagramName.strip) == ""
+        diagramExt  = File.extname(diagramName.strip)
         
         # Search attachment position
         attach = container.attachments.where(filename: diagramName).last
@@ -155,17 +117,45 @@ EOF
         if attach
             filename = attach.diskfile
         else
-            filename = imagePath(if svg? diagramName then 'defaultImage.svg' else 'defaultImage.png' end)
+            filename = imagePath('defaultImage'+diagramExt)
         end
-        
+
         diagram = File.read(filename, mode: 'rb')
-        # if png, encode image and remove newlines (required by Internet Explorer)
-        diagram = Base64.encode64(diagram).gsub("\n", '') unless svg? diagramName
         
         if svg? diagramName
             return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, false)
-        else
+        elsif png? diagramName
+            # if png, encode image and remove newlines (required by Internet Explorer)
+            diagram = Base64.encode64(diagram).gsub("\n", '')
             return encapsulatePng(diagram, inlineStyle, diagramName, title, saveName, false)
+        else
+            tb = []
+            tb << 'pages'    unless options[:page].blank?
+            tb << 'layers'   unless layers.blank?
+            tb << 'zoom'     if zoom
+            tb << 'lightbox' if lightbox
+            
+            toolbar = if tb.empty? then nil else tb.join(' ') end
+            #style   = if size then 'style="max-width:'+size+'px;"' else "" end
+
+            # https://desk.draw.io/support/solutions/articles/16000042542-embed-html
+            # https://desk.draw.io/support/solutions/articles/16000042544-embed-mode
+            graphOpts = {
+                'highlight'      => hilight,
+                'nav'            => false,
+                'edit'           => '_blank',
+                'lightbox'       => lightbox,
+                'resize'         => true,
+                'auto-fit'       => true,
+                'editable'       => false,
+                ##'zoom'           => zoom,
+                'page'           => page,
+                'layers'         => if layers == '*' then nil else layers end,
+                'toolbar-nohide' => (not tbautohide),
+                'toolbar'        => toolbar,
+                'xml'            => diagram
+            }
+            return encapsulateXml(graphOpts, inlineStyle, title, saveName, false)
         end
     end
 end
@@ -196,7 +186,7 @@ EOF
             return "«Please save content first»" unless obj
             return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
             
-            args, options = extract_macro_options(args, :size)
+            args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :page, :layers)
             diagramName   = strip_non_filename_chars(args.first).force_encoding("UTF-8")
             
             return "«Please set a diagram name»".html_safe unless diagramName
@@ -204,11 +194,19 @@ EOF
             
             # Add an extension, if missing
             diagramName += ".png" if File.extname(diagramName.strip) == ""
+            diagramExt  = File.extname(diagramName.strip)
             
             size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
+            # parameters checkings
+            hilight    = options[:hilight]            unless options[:hilight].blank?
+            tbautohide = options[:tbautohide].to_bool unless options[:tbautohide].blank?
+            lightbox   = options[:lightbox].to_bool   unless options[:lightbox].blank?
+            #size       = options[:fit].to_i           unless options[:fit].blank?
+            zoom       = options[:zoom].to_bool       unless options[:zoom].blank?
+            page       = options[:page].to_i          unless options[:page].blank?
+            layers     = options[:layers]             unless options[:layers].blank?
             
             inlineStyle = ""
-            
             inlineStyle = "width:#{size}px;" if size
             
             if obj.is_a?(WikiContent)
@@ -249,7 +247,7 @@ EOF
                 canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
             else
                 # Document does not exists: use a predefined diagram to start editing
-                filename = imagePath(if svg? diagramName then 'defaultImage.svg' else 'defaultImage.png' end)
+                filename = imagePath('defaultImage'+diagramExt)
                 canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, project)
             end
             
@@ -259,8 +257,34 @@ EOF
             
             if svg? diagramName
                 return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, true)
-            else
+            elsif png? diagramName
                 return encapsulatePng(diagram, inlineStyle, diagramName, title, saveName, true)
+            else
+                tb = []
+                tb << 'pages'    unless options[:page].blank?
+                tb << 'layers'   unless layers.blank?
+                tb << 'zoom'     if zoom
+                tb << 'lightbox' if lightbox
+                
+                toolbar = if tb.empty? then nil else tb.join(' ') end
+                #style   = if size then 'style="max-width:'+size+'px;"' else "" end
+
+                graphOpts = {
+                    'highlight'      => hilight,
+                    'nav'            => false,
+                    'edit'           => '_blank',
+                    'lightbox'       => lightbox,
+                    'resize'         => true,
+                    'auto-fit'       => true,
+                    'editable'       => false,
+                    ##'zoom'           => zoom,
+                    'page'           => page,
+                    'layers'         => if layers == '*' then nil else layers end,
+                    'toolbar-nohide' => (not tbautohide),
+                    'toolbar'        => toolbar,
+                    'xml'            => diagram
+                }
+                return encapsulateXml(graphOpts, inlineStyle, title, saveName, false)
             end
         end
     end
@@ -268,14 +292,19 @@ end
 
 private
 
+def drawio_url
+    return '//embed.diagrams.net' if Setting.plugin_redmine_drawio['drawio_service_url'].to_s.strip.empty?
+    Setting.plugin_redmine_drawio['drawio_service_url']
+end
+
 def dmsf_version
     Redmine::Plugin.find(:redmine_dmsf).version
 end
 
 def dmsf_save_name(project, diagramName)
     if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
-        dmsf_version = Redmine::Plugin.find(:redmine_dmsf).version
         Rails.logger.error "dmsf_version=#{dmsf_version}"
+        
         if dmsf_version <= '1.5.8'
             # Prior to DMSF 1.5.9 project names cannot be used for folder names
             "#{project.id}/#{diagramName}"
@@ -335,12 +364,35 @@ def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
                          :title      => "Double click to edit diagram",
                          :class      => "drawioDiagram",
                          :style      => "#{inlineStyle}cursor:pointer;",
-                         :ondblclick => "editDiagram(this,'#{saveName}',#{isDmsf}, '#{title}');")
+                         :ondblclick => "editDiagram(this,'#{saveName}', #{isDmsf}, '#{title}');")
     end
+end
+
+def encapsulateXml(graphOpts, inlineStyle, title, saveName, isDmsf)
+    randomId = 'dg_'+('a'..'z').to_a.shuffle[0,8].join
+    
+    unless saveName.nil?
+        # Diagram is editable, add toolbar declarations for editing
+        graphOpts['toolbar'] = "#{graphOpts['toolbar']} edit"
+        graphOpts['toolbar-buttons'] = {
+            'edit' => {
+                'title'   => 'Edit',
+                'handler' => "(function(){editDiagram($('##{randomId}'),'#{saveName}', #{isDmsf}, '#{title}');})",
+                'image'   => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAQAAAADHm0dAAAAbUlEQVQoz93NoRGAMBAAwXNIZCQlUEZKoQRkOqAESqAEJBIZiURGYh/DhKjPS4bTO3Pw2TwrK2MdOhKCIAQdtkD/4KTBwEGX8aVBQQq86LDErgZfbIAKHayw4bTOvRXCZIUQM9x1CBtCZMbzi25WtlGUbURavAAAAABJRU5ErkJggg==',
+            }
+        }
+    end
+    
+    return "<div id=\"#{randomId}\" class=\"mxgraph\" #{inlineStyle} data-mxgraph=\"#{CGI::escapeHTML(JSON.generate(graphOpts))}\"></div>".html_safe+
+            javascript_include_tag(nil, src: "https://viewer.diagrams.net/js/viewer-static.min.js", :plugin => "redmine_drawio")
 end
 
 def svg?(diagramName)
     diagramName =~ /\.svg$/i
+end
+
+def png?(diagramName)
+    diagramName =~ /\.png$/i
 end
 
 def strip_non_filename_chars(filename)

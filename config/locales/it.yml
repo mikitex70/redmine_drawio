@@ -10,3 +10,10 @@ it:
   drawio_dlg_diagName: "Nome diagramma"
   drawio_dlg_diagType: "Formato"
   drawio_dlg_size: "Larghezza"
+  drawio_dlg_toolbar_autohide: "Nascondi automaticamente la toolbar"
+  drawio_dlg_lightbox: "Usa LightBox"
+  drawio_dlg_layers: "Layer iniziali"
+  drawio_dlg_page: "Pagina iniziale"
+  drawio_dlg_hiligh: "Colore degli hyperlink"
+  drawio_dlg_zoom: "Controlli zoom"
+  

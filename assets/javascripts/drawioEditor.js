@@ -37,8 +37,10 @@ function editDiagram(image, resource, isDmsf, pageName) {
     
     var pngMime   = 'image/png';
     var svgMime   = 'image/svg+xml';
-    var imageType = (resource.match(/\.svg$/i)? svgMime: pngMime);
+    var xmlMime   = 'application/xml';
+    var imageType = (resource.match(/\.svg$/i)? svgMime: (resource.match(/\.png$/i)? pngMime: xmlMime));
     var isSvg     = imageType === svgMime;
+    var isPng     = imageType === pngMime;
     var imgDescriptor;
     var iframe = document.createElement('iframe');
     
@@ -61,7 +63,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 if(stringData.charCodeAt(stringData.length-1) === 0) {
                     stringData = stringData.substring(0, stringData.length-1);
                 }
-                // It seems that the SVG image coming from Drawio is not correcly encoded (or decoded)
+                // It seems that the SVG image coming from Drawio is not correctly encoded (or decoded)
                 if(stringData.endsWith("</sv")) {
                     stringData += "g>";
                 }
@@ -85,9 +87,12 @@ function editDiagram(image, resource, isDmsf, pageName) {
             },
             launchEditor: function(initial) {
                 iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xml: initial}), '*');
+            },
+            save: function(msg) {
+                iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: "xmlsvg", spin: Drawio.strings['drawio_updating_page']}), '*');
             }
         };
-    else
+    else if(isPng)
         imgDescriptor = {
             fmt: "xmlpng",
             mimeType: pngMime,
@@ -107,6 +112,38 @@ function editDiagram(image, resource, isDmsf, pageName) {
             },
             launchEditor: function(initial) {
                 iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xmlpng: initial}), '*');
+            },
+            save: function(msg) {
+                iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: "xmlpng", spin: Drawio.strings['drawio_updating_page']}), '*');
+            }
+        };
+    else
+        imgDescriptor = {
+            fmt: 'xml',
+            mimeType: xmlMime,
+            ext: 'xml',
+            initial: $.parseJSON($(image).attr('data-mxgraph')).xml,
+            extractImageData: function(rawImage) {
+                return rawImage;
+            },
+            showLoader: function() {
+                $(image).html('<img id="drawioLoader" src="'+Drawio.settings.drawioUrl+'/images/ajax-loader.gif"/>');
+            },
+            hideLoader: function(initial) {
+                // Destroy div contents and redraw the diagram
+                $(image).html("");
+                GraphViewer.createViewerForElement(image[0]);
+            },
+            updateImage: function(rawImage) {
+                var newValue = $.parseJSON($(image).attr('data-mxgraph'));
+                newValue.xml = rawImage;
+                $(image).attr('data-mxgraph', JSON.stringify(newValue));
+            },
+            launchEditor: function(initial) {
+                iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xml: initial}), '*');
+            },
+            save: function(msg) {
+                save(msg.xml);
             }
         };
     
@@ -145,7 +182,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                         }
                         break;
                     }
-                    iframe.contentWindow.postMessage(JSON.stringify({action: 'export', format: imgDescriptor.fmt, spin: Drawio.strings['drawio_updating_page']}), '*');
+                    imgDescriptor.save(msg);
                     break;
                 case 'exit':
                     close();
@@ -193,16 +230,16 @@ function editDiagram(image, resource, isDmsf, pageName) {
      */
     function save(data) {
         // Diagram is not empty
-        var svgImage = imgDescriptor.extractImageData(data);
+        var imageData = imgDescriptor.extractImageData(data);
         
-        close();
         imgDescriptor.updateImage(data);
+        close();
         
         if(isDmsf) {
-            saveDmsf(Drawio.settings.redmineUrl+'dmsf/webdav/'+resource, svgImage, imageType);
+            saveDmsf(Drawio.settings.redmineUrl+'dmsf/webdav/'+resource, imageData, imageType);
         }
         else {
-            saveAttachment(resource , svgImage, imageType, pageName);
+            saveAttachment(resource , imageData, imageType, pageName);
         }
     }
     
@@ -480,8 +517,25 @@ var Base64Binary = {
     }
 };
 
+window.onDrawioViewerLoad = function() {
+    // The 'toolbar-buttons' configuration option expects a function in the `handler` option.
+    // But in the 'data-mxgraph' attribute the JSON is a string, which is converted to an object,
+    // so a literal function name o even an function expression will raise an error.
+    // The only solution is to express the handler as an expression in a string, but this requires
+    // a small patch in the `addToolbar` function.
+    // To not keep a patched version of the `viewer-static.min.js` file, I will patch it runtime.
+    // Maybe it will broke in the future, but for now is working.
+    
+    // Patch the code
+    var code = GraphViewer.prototype.addToolbar.toString().replace(/u\.enabled\?u\.handler:function/, 'u.enabled?("string"===typeof(u.handler)?eval(u.handler):u.handler):function');
+    // Apply the patch
+    GraphViewer.prototype.addToolbar = eval("("+code+")");
+    // Draw graphs
+    GraphViewer.processElements();
+}
+
 $(function() {
-    if(typeof CKEDITOR === 'undefined') return false;
+  if(typeof CKEDITOR === 'undefined') return false;
 
   var basePath = CKEDITOR.basePath;
   

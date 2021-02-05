@@ -7,7 +7,15 @@
             return this.substr(position, searchString.length) === searchString;
         };
     }
-  
+
+    if(!String.prototype.endsWith) {
+        String.prototype.endsWith = function(suffix) { 
+            var l = this.length-suffix.length;
+            
+            return l >= 0 && this.lastIndexOf(suffix) === l;
+        }
+    }
+
     if (!String.prototype.trim) {
         String.prototype.trim = function () {
             return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
@@ -98,7 +106,7 @@
         if(text.startsWith('{{', caretPos)) {
             // Start of a macro
             var macro = text.substring(caretPos);
-            var match = macro.match('^\\{\\{'+expectedMacro+'(?:\\((.*)\\))?');
+            var match = macro.match('^\\{\\{'+expectedMacro+'(?:\\((.*)\\))?(?:\\}\\})?');
               
             if(match) {
                 // Select macro text
@@ -136,7 +144,7 @@
      * @param editorAdapter Adapter for editor interaction
      * @param macroName Name of macro to edit/insert
      */
-    function openMacroDialog(editorAdapter, macroName) {
+    function openMacroDialog(dlg, editorAdapter, macroName) {
         var params = findMacro(editorAdapter, macroName);
       
         dlg.data('editor', editorAdapter)
@@ -182,8 +190,8 @@
             setTimeout(updateTinyMCEToolbar, 200);
     }
   
-    // The dialog for macro editing must be defined only when the document is ready
-    var dlg;
+    // The dialogs for macro editing must be defined only when the document is ready
+    var dlg, dlgXml;
   
     $(function() {
         var dlgButtons = {};
@@ -204,6 +212,33 @@
                 if(/^\d+$/.test(size))
                     options.push('size='+size);
                 
+                if(diagType === 'xml') {
+                    var tbAutoHide = $("#drawio_tbautohide").is(":checked");
+                    var lightbox   = $("#drawio_lightbox").is(":checked");
+                    var zoom       = $("#drawio_zoom").is(":checked");
+                    var layers     = $("#drawio_layers").val();
+                    var page       = $("#drawio_page").val();
+                    var hilight    = $("#drawio_hilight").val();
+                    
+                    if(!tbAutoHide)
+                        options.push('tbautohide='+tbAutoHide);
+                    
+                    if(zoom)
+                        options.push('zoom='+zoom);
+                    
+                    if(lightbox)
+                        options.push('lightbox='+lightbox);
+                    
+                    if(layers != '')
+                        options.push('layers='+layers);
+                    
+                    if(/^\d+$/.test(page))
+                        options.push('page='+page);
+                    
+                    if(hilight != '')
+                        options.push('hilight='+hilight);
+                }
+                
                 if(options.length)
                     options = '('+options.join(',')+')';
                 else
@@ -211,7 +246,7 @@
                 
                 if(dlg.data('params')) 
                     // Edited macro: replace the old macro (with parameters) with the new text
-                    editor.replaceSelected('{{'+macroName+options, false);
+                    editor.replaceSelected('{{'+macroName+options+'}}', false);
                 else
                     // New macro
                     editor.replaceSelected('{{'+macroName+options+'}}\n', true);
@@ -232,11 +267,51 @@
             open    : function(event, ui) {
                 var params = dlg.data("params");
               
-                if(params)
-                    for(key in params)
-                        $("#drawio_"+key).val(params[key]);
+                if(params) {
+                    var filename = params['_P1'];
+                    // pre-set diagram type
+                    params['diagType'] = filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2).toLowerCase();
+                    
+                    for(key in params) {
+                        var field = $("#drawio_"+key);
+                        
+                        if(field.attr('type') === 'checkbox')
+                            field.prop('checked', params[key]);
+                        else if(field.length) // field found
+                            field.val(params[key]);
+                        else {
+                            // field not found, maybe a radio, try by name
+                            $("input[name=drawio_"+key+"][value="+params[key]+"]").prop('checked', true);
+                        }
+                    }
+                    
+                    if($('input:radio[name=drawio_diagType]:checked').val() === 'xml')
+                        $("#drawio_xml_params").show();
+                }
             },
             buttons : dlgButtons
+        });
+        
+        // Check the filename extension and change the drawio_diagType
+        $("input[name=drawio__P1]").on("keyup", function() {
+            var ext =  /(?:\.([^.]+))?$/.exec(this.value.toLowerCase())[1];
+            
+            $("input[name=drawio_diagType][value="+ext+"]").click(); //prop("checked", true);
+        });
+        
+        // Hide/show options specific for diiagrams in XML format
+        $("input[name=drawio_diagType]").on("change", function() {
+            var filename = $("input[name=drawio__P1]").val();
+            
+            if(!filename.endsWith("."+this.value)) {
+                // Fix filename extension on radio change
+                $("input[name=drawio__P1]").val(filename.replace(/\.[^/.]+$/, "")+"."+this.value);
+            }
+            
+            if(this.value === 'xml')
+                $("#drawio_xml_params").show();
+            else
+                $("#drawio_xml_params").hide();
         });
         
         // Make digits input accepting only digits
@@ -253,13 +328,23 @@
     
     // Initialize the jsToolBar object; called explicitly after the jsToolBar has been created
     Drawio.initToolbar = function() {
+//         jsToolBar.prototype.elements.drawio = {
+//             type : 'button',
+//             after: 'img',
+//             title: Drawio.strings['drawio_title'],
+//             fn   : {
+//                 wiki: function() {
+//                     openMacroDialog(dlgXml, getRedmineEditorAdapter(this), 'drawio');
+//                 }
+//             }
+//         };
         jsToolBar.prototype.elements.drawio_attach = {
             type : 'button',
             after: 'img',
             title: Drawio.strings['drawio_attach_title'],
             fn   : { 
                 wiki: function() { 
-                    openMacroDialog(getRedmineEditorAdapter(this), 'drawio_attach');
+                    openMacroDialog(dlg, getRedmineEditorAdapter(this), 'drawio_attach');
                 }
             }
         };
@@ -268,10 +353,10 @@
             jsToolBar.prototype.elements.drawio_dmsf = {
                 type : 'button',
                 after: 'drawio_attach',
-                title: Drawio.strings['drawio_dmsf_title'  ],
+                title: Drawio.strings['drawio_dmsf_title'],
                 fn   : { 
                     wiki : function() { 
-                        openMacroDialog(getRedmineEditorAdapter(this), 'drawio_dmsf');
+                        openMacroDialog(dlg, getRedmineEditorAdapter(this), 'drawio_dmsf');
                     }
                 }
             };

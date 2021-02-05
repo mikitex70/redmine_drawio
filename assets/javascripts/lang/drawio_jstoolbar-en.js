@@ -21,5 +21,6 @@ Drawio.strings['drawio_cke_dmsf_btnlabel'  ] = 'Drawio DMSF diagram';
 // Standard jstoolbar editor messages
 Drawio.strings['drawio_btn_ok'      ] = 'Insert macro';
 Drawio.strings['drawio_btn_cancel'  ] = 'Cancel';
+Drawio.strings['drawio_title'       ] = 'Use an XML diagram';
 Drawio.strings['drawio_attach_title'] = 'Attach a Drawio diagram';
 Drawio.strings['drawio_dmsf_title'  ] = 'Use Drawio diagram stored in DMSF module';

@@ -21,5 +21,6 @@ Drawio.strings['drawio_cke_dmsf_btnlabel'  ] = 'Usa diagramma Drawio da gestore 
 // Standard jstoolbar editor messages
 Drawio.strings['drawio_btn_ok'      ] = 'Inserisci macro';
 Drawio.strings['drawio_btn_cancel'  ] = 'Annulla';
+Drawio.strings['drawio_title'       ] = 'Usa un diagramma XML';
 Drawio.strings['drawio_attach_title'] = 'Allega diagramma Drawio';
 Drawio.strings['drawio_dmsf_title'  ] = 'Usa diagramma Drawio da gestore documentale';

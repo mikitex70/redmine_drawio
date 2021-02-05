@@ -38,29 +38,28 @@ In this form you can also enable the mathematical symbol support for SVG diagram
 There are three macros that can be used to embed diagrams in wiki pages/issues; use what best fits your needs.
 
 ### `drawio` macro
-This macro draws diagrams saved in attachments. This is for compatibility with `0.1.x` versions of the plugin and is now a bit obsolete. To use it:
+This macro is now deprecated and not working anymore. Use the `drawio_attach` macro diret replacement.
 
-- save your [draw.io] diagram locally and upload it as attachment to a Wiki or issue page.
-- in Wiki (or issue) pages use the `drawio` macro to load the widget, specifying the name of the attachment. For example:
+~~This macro draws diagrams saved in attachments. This is for compatibility with `0.1.x` versions of the plugin and is now a bit obsolete. To use it:~~
+
+- ~~save your [draw.io] diagram locally and upload it as attachment to a Wiki or issue page.~~
+- ~~in Wiki (or issue) pages use the `drawio` macro to load the widget, specifying the name of the attachment. For example:~~
 
   ```
   {{drawio(activity.xml, options)}}
   ```
-- the following macro options are available (default values are shown):
-  - ``lightbox=false`` : enable lightbox usage
-  - ``resize=false`` : enable zoom control box
-  - ``zoom=100`` : initial zoom of diagram (percentage of original diagram)
-  - ``fit=true`` : fit page width (only if ``resize=false``)
-  - ``hilight=#0000ff`` : color to hilight hyperlinks
+- ~~the following macro options are available (default values are shown):~~
+  - ~~``lightbox=false`` : enable lightbox usage~~
+  - ~~``resize=false`` : enable zoom control box~~
+  - ~~``zoom=100`` : initial zoom of diagram (percentage of original diagram)~~
+  - ~~``fit=true`` : fit page width (only if ``resize=false``)~~
+  - ~~``hilight=#0000ff`` : color to hilight hyperlinks~~
   
-With this macro diagrams are drawn using SVG (or maybe Canvas) so they are interactive: they are navigable,
-they respond to ``over`` and ``click`` actions. Hyperlinks can be used to navigate to other items.
+~~With this macro diagrams are drawn using SVG (or maybe Canvas) so they are interactive: they are navigable, they respond to ``over`` and ``click`` actions. Hyperlinks can be used to navigate to other items.~~
 
-This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages).
+~~This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages).~~
 
-This macro is now obsolete: you can now use SVG diagrams with the other two macros (``drawio_attach`` and ``drawio_dmsf``)
-but you must import the the diagram in the *draw.io editor* and then export as SVG with an included copy of the diagram
-(see the *Export as SVG* function of the *draw.io editor*).
+~~This macro is now obsolete: you can now use SVG diagrams with the other two macros (``drawio_attach`` and ``drawio_dmsf``) but you must import the the diagram in the *draw.io editor* and then export as SVG with an included copy of the diagram (see the *Export as SVG* function of the *draw.io editor*).~~
 
 ### `drawio_attach` macro
 This macro handles diagrams saved as attachments of issues or wiki pages. 
@@ -69,6 +68,8 @@ With this macro the attachments are in PNG+XML, a special format consisting in a
 
 With an``.svg`` attachment name extension the image format is handled as SVG+XML; like the PNG+XML, this is an SVG image
 with an embedded XML source of the diagram (the diagram must be created with the *draw.io editor*, normal SVG are displayed but cannot be edited).
+
+From version `1.0.0` are also supported diagrams in XML format (as used with the old `drawio` macro).
 
 Usage is very simple:
 
@@ -81,19 +82,29 @@ Usage is very simple:
 
   ![Diagram placeholder][diagramPlaceholder]
 
-  Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved in a new attachment and the reference in the wiki/issue page is updated.
+  For PNG and SVG diagrams, double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved in a new attachment and the reference in the wiki/issue page is updated.
+  
+  For XML diagrams, a toolbar will appear when the mouse enters the diagram area; in the toolbar there is a button for start editing the diagram.
 
   The **diagram attachments are versioned** by suffixing the name with a counter. This is necessary because is not possible to update an existing attachment. Moreover, is not possible to delete attachments throught rest API (seems to be possible from Redmine 3.3.0, but I need to experiment), so the old versions of an attachment must be explicitly (manually) deleted from the Redmine web interface.
 
 - the following macro options are available (default values are shown):
   - ``size=number`` : force image width, in pixels (default, show in original size)
+  - only for XML diagrams:
+    - ``hilight=#0000ff``: color to highlight diagram hyperlinks
+    - ``tbautohide=true``: if `false` the toolbar is always visibile (if there are buttons), else it will be shown only when the mouse enters the diagram area
+    - ``lightbox=false``: activates the *LightBox* viewer button in the toolbar
+    - ``zoom=false``: activates the zoom buttons in the toolbar
+    - ``page=number``: if not empty a *page selector* will appear in the toolbar (for multi-page diagrams) and the initial page (starting from 0) will be selected
+    - ``layers``: if set as a list of space separated number of layers, those layer will be activated for default, and a *layer selector* controlo will appear in the toolbar.
 
 In the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_attach.png) that opens a dialog that can be used to insert a macro for a new diagram to be saved as attachment (for lazy people).
 
 The dialog can be used also for modifying a macro: simply place the caret (the cursor in the editing area) somewhere in the body of the macro, click the corresponding button in the toolbar, and the dialog will open with fields pre-filled with values from the macro source. When confirming new values, the macro source will be updated.
 
 ### `drawio_dmsf` macro
-This macro handles diagrams saved in the [DMSF] repository as PNG+XML or SVG+XML images. The DMSF module must be enabled for the project to be able to use this macro.
+This macro handles diagrams saved in the [DMSF] repository as PNG+XML or SVG+XML images, or as XML documents (from version `1.0.0`). The DMSF module must be enabled for the project to be able to use this macro.
+
 Usage is very simple:
 
 - **enable the WebDAV functionality of the [DMSF] plugin in ``Read/Write`` mode**; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
@@ -105,10 +116,19 @@ Usage is very simple:
 
   ![Diagram placeholder][diagramPlaceholder]
 
-  Double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved (versioned) in the specified DMSF documents path for the current project, and the diagram will be automatically updated.
+  For PNG and SVG diagrams, double click on the diagram to start editing with the embedded editor. When you save the the diagram the editor will close, the diagram will be saved in a new attachment and the reference in the wiki/issue page is updated.
+  
+  For XML diagrams, a toolbar will appear when the mouse enters the diagram area; in the toolbar there is a button for start editing the diagram.
 
 - the following macro options are available (default values are shown):
   - ``size=number`` : force image width, in pixels (default, show in original size)
+  - only for XML diagrams:
+    - ``hilight=#0000ff``: color to highlight diagram hyperlinks
+    - ``tbautohide=true``: if `false` the toolbar is always visibile (if there are buttons), else it will be shown only when the mouse enters the diagram area
+    - ``lightbox=false``: activates the *LightBox* viewer button in the toolbar
+    - ``zoom=false``: activates the zoom buttons in the toolbar
+    - ``page=number``: if not empty a *page selector* will appear in the toolbar (for multi-page diagrams) and the initial page (starting from 0) will be selected
+    - ``layers``: if set as a list of space separated number of layers, those layer will be activated for default, and a *layer selector* controlo will appear in the toolbar.
 
 Like for the ``drawio_attach`` macro, in the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_dmsf.png) that opens a dialog that can be used to insert a macro for a new diagram to be saved as [DMSF] document.
 

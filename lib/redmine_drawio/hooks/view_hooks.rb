@@ -41,13 +41,19 @@ module RedmineDrawio
             
             return header unless editable?(context)
             
+            if Setting.plugin_redmine_drawio['drawio_service_url'].to_s.strip.empty?
+                drawio_url = '//embed.diagrams.net'
+            else
+                drawio_url = Setting.plugin_redmine_drawio['drawio_service_url']
+            end
+            
             inline = <<-EOF
                 <script type=\"text/javascript\">//<![CDATA[
                     var Drawio = {
                       settings: {
                         redmineUrl: '#{redmine_url}',
                         hashCode  : '#{Base64.encode64(User.current.api_key).gsub(/\n/, '').reverse!}',
-                        drawioUrl : '#{Setting.plugin_redmine_drawio['drawio_service_url']}',
+                        drawioUrl : '#{drawio_url}',
                         DMSF      : #{dmsf_enabled? context},
                         isEasyRedmine: #{easyredmine?}
                       }
