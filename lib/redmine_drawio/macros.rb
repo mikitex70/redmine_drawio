@@ -287,7 +287,7 @@ def dmsf_save_name(project, diagramName)
             "#{project.name} #{project.id}/#{diagramName}"
         end
     else
-        "#{project.id}/#{diagramName}"
+        "#{project.identifier}/#{diagramName}"
     end
 end
 
