@@ -167,9 +167,14 @@ Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage
 
 {{drawio_dmsf(myDiagram[, ...options...])}}
 
-The diagram is drawn from the DMSF document myDiagram.png; if you want to use the
-SVG image format, specify thw '.svg' document extension. If the document doesn't 
-exists a default diagram will be drawn. Double click it to start editing.
+The diagram is drawn from the DMSF document myDiagram.png(diagram esported as png+xml);
+if the attachment doesn't exists a default diagram wil be drawn. Double click it to start
+editing.
+
+Supported diagrams format are:
+* png: diagram exported as png+xml (embedded source diagram)
+* svg: diagram exported as svg+xml (embedded source diagram)
+* xml: classic diagram xml source
 
 The diagram name can contain a path. For example:
 
@@ -179,7 +184,15 @@ will create/edit the document myDiagram.svg in the DMSF folder path/to/folder of
 the current project (the folder must exists).
 
 options:
-size=number : forced width of the diagram image, in pixels
+size=number     : forced width of the diagram image, in pixels
+
+options specific for diagrams in XML format:
+tbautohide=true : show the toolbar only when the mouse is over the diagram
+hilight=#0000ff : color to hilight hyperlinks
+layers=false    : enable layer selector (only for multi-layer diagrams)
+page=false      : enable page control (only for multi-page diagrams)
+zoom=false      : enable zoom controls
+lightbox=false  : enable lightbox usage
 EOF
         
         macro :drawio_dmsf do |obj, args|
@@ -252,12 +265,12 @@ EOF
             end
             
             diagram = File.read(filename, mode: 'rb')
-            # if png, encode image and remove newlines (required by Internet Explorer)
-            diagram = Base64.encode64(diagram).gsub("\n", '') unless svg? diagramName
             
             if svg? diagramName
                 return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, true)
             elsif png? diagramName
+                # if png, encode image and remove newlines (required by Internet Explorer)
+                diagram = Base64.encode64(diagram).gsub("\n", '')
                 return encapsulatePng(diagram, inlineStyle, diagramName, title, saveName, true)
             else
                 tb = []
@@ -383,8 +396,12 @@ def encapsulateXml(graphOpts, inlineStyle, title, saveName, isDmsf)
         }
     end
     
-    return "<div id=\"#{randomId}\" class=\"mxgraph\" #{inlineStyle} data-mxgraph=\"#{CGI::escapeHTML(JSON.generate(graphOpts))}\"></div>".html_safe+
+    tag = "<div id=\"#{randomId}\" class=\"mxgraph\" data-mxgraph=\"#{CGI::escapeHTML(JSON.generate(graphOpts))}\"></div>".html_safe+
             javascript_include_tag(nil, src: "https://viewer.diagrams.net/js/viewer-static.min.js", :plugin => "redmine_drawio")
+    
+    return tag if inlineStyle.empty?
+    
+    return "<div style=\"#{inlineStyle}\">#{tag}</div>".html_safe
 end
 
 def svg?(diagramName)

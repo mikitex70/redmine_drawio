@@ -109,6 +109,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
             },
             updateImage: function(rawImage) {
                 image.setAttribute('src', rawImage);
+                imgDescriptor.initial = rawImage; // so the hideLoader() in the close() will not revert the image
             },
             launchEditor: function(initial) {
                 iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xmlpng: initial}), '*');
@@ -225,7 +226,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     
     /**
      * Save the image data as attachment or in DMSF.<br/>
-     * The image will also be updateted in the page, without reloading.
+     * The image will also be updated in the page, without reloading.
      * @param data Image data url (content of the {@code src} attribute).
      */
     function save(data) {
