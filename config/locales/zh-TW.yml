@@ -1,10 +1,16 @@
 # zh-TW strings go here for Rails i18n
 zh-TW:
   drawio_url: "Draw.io 服務網址"
-  drawio_service_url_hint: "可設定本地drawio服務，或設定為 '//www.draw.io' 使用線上的服務"
+  drawio_service_url_hint: "可設定本地drawio服務，或設定為 '//embed.diagrams.net' 使用線上的服務"
   drawio_mathjax: "啟用 SVG 數學符號"
   drawio_mathjax_hint: "SVG 向量圖啟用數學符號"
   drawio_dlg_title: "流程圖設定"
   drawio_dlg_diagName: "流程圖檔名"
   drawio_dlg_diagType: "流程圖格式"
   drawio_dlg_size: "寬度"
+  drawio_dlg_toolbar_autohide: "Hide toolbar"
+  drawio_dlg_lightbox: "Use LightBox"
+  drawio_dlg_layers: "Inizial layers"
+  drawio_dlg_page: "Initial page"
+  drawio_dlg_hiligh: "Hyperlinks color"
+  drawio_dlg_zoom: "Zoom controls"

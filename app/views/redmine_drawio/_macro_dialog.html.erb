@@ -10,10 +10,39 @@
           <label for="drawio_diagType"><%= l(:drawio_dlg_diagType) %></label>
           <input type="radio" name="drawio_diagType" value="png" checked="checked"/>PNG
           <input type="radio" name="drawio_diagType" value="svg" style="margin-left:1em"/>SVG
+          <input type="radio" name="drawio_diagType" value="xml" style="margin-left:1em" id="drawio_diagTypeXml"/>XML
         </p>
         <p>
           <label for="drawio_size"><%= l(:drawio_dlg_size) %></label>
           <input type="text" name="drawio_size" id="drawio_size" class="digits" size="4" maxlength="4"/> pixel
+        </p>
+      </div>
+    </fieldset>
+    <fieldset id="drawio_xml_params" style="display: none">
+      <div class="tabular">
+        <p>
+          <label for="drawio_tbautohide"><%= l(:drawio_dlg_toolbar_autohide) %></label>
+          <input type="checkbox" name="drawio_tbautohide" id="drawio_tbautohide" checked="checked"/>
+        </p>
+        <p>
+          <label for="drawio_lightbox"><%= l(:drawio_dlg_lightbox) %></label>
+          <input type="checkbox" name="drawio_lightbox" id="drawio_lightbox"/>
+        </p>
+        <p>
+          <label for="drawio_zoom"><%= l(:drawio_dlg_zoom) %></label>
+          <input type="checkbox" name="drawio_zoom" id="drawio_zoom"/>
+        </p>
+        <p>
+          <label for="drawio_page"><%= l(:drawio_dlg_page) %></label>
+          <input type="text" name="drawio_page" id="drawio_page"/>
+        </p>
+        <p>
+          <label for="drawio_layers"><%= l(:drawio_dlg_layers) %></label>
+          <input type="text" name="drawio_layers" id="drawio_layers"/>
+        </p>
+        <p>
+          <label for="drawio_hilight"><%= l(:drawio_dlg_hiligh) %></label>
+          <input type="text" name="drawio_hilight" id="drawio_hilight" value="#0000ff"/>
         </p>
       </div>
     </fieldset>

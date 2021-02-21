@@ -41,13 +41,19 @@ module RedmineDrawio
             
             return header unless editable?(context)
             
+            if Setting.plugin_redmine_drawio['drawio_service_url'].to_s.strip.empty?
+                drawio_url = '//embed.diagrams.net'
+            else
+                drawio_url = Setting.plugin_redmine_drawio['drawio_service_url']
+            end
+            
             inline = <<-EOF
                 <script type=\"text/javascript\">//<![CDATA[
                     var Drawio = {
                       settings: {
                         redmineUrl: '#{redmine_url}',
                         hashCode  : '#{Base64.encode64(User.current.api_key).gsub(/\n/, '').reverse!}',
-                        drawioUrl : '#{Setting.plugin_redmine_drawio['drawio_service_url']}',
+                        drawioUrl : '#{drawio_url}',
                         DMSF      : #{dmsf_enabled? context},
                         isEasyRedmine: #{easyredmine?}
                       }
@@ -58,7 +64,7 @@ module RedmineDrawio
             header << inline
             header << stylesheet_link_tag("drawioEditor.css"  , :plugin => "redmine_drawio", :media => "screen")
             header << javascript_include_tag("encoding-indexes.js", :plugin => "redmine_drawio")
-            header << javascript_include_tag("encoding.js", :plugin => "redmine_drawio")
+            header << javascript_include_tag("encoding.min.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("lang/drawio_jstoolbar-en.js", :plugin => "redmine_drawio")
             header << javascript_include_tag("lang/drawio_jstoolbar-#{current_language.to_s.downcase}.js", :plugin => "redmine_drawio") if lang_supported? current_language.to_s.downcase

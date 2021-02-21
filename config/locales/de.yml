@@ -1,7 +1,7 @@
 # German strings go here for Rails i18n
 de:
   drawio_url: "Draw.io Dienst URL"
-  drawio_service_url_hint: "URL deiner lokalen Installation; Setze 'https://app.diagrams.net/' um den Web-Dienst zu nutzen."
+  drawio_service_url_hint: "URL deiner lokalen Installation; Setze 'https://embed.diagrams.net' um den Web-Dienst zu nutzen."
   drawio_mathjax: "SVG mathemathics Unterstützung"
   drawio_mathjax_hint: "Aktiviere mathematische Symbolunterstützung für SVG Diagramme"
   drawio_mathjax_url: "MathJax Bibliothek URL"
@@ -10,3 +10,9 @@ de:
   drawio_dlg_diagName: "Diagramm Name"
   drawio_dlg_diagType: "Diagramm Format"
   drawio_dlg_size: "Breite"
+  drawio_dlg_toolbar_autohide: "Hide toolbar"
+  drawio_dlg_lightbox: "Use LightBox"
+  drawio_dlg_layers: "Inizial layers"
+  drawio_dlg_page: "Initial page"
+  drawio_dlg_hiligh: "Hyperlinks color"
+  drawio_dlg_zoom: "Zoom controls"

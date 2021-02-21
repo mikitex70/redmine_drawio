@@ -6,15 +6,15 @@ index 29035e5..a2e1ead 100644
  
  	<target name="javac" depends="app" description="Java compilation">
  		<mkdir dir="${javac.dir}"/>
--		<javac srcdir="${src.dir}" excludes="**/EmbedServlet2.java" encoding="utf-8" destdir="${javac.dir}" source="1.7" target="1.7" debug="true" debuglevel="lines,vars,source">
-+		<javac srcdir="${src.dir}" encoding="utf-8" destdir="${javac.dir}" source="1.7" target="1.7" debug="true" debuglevel="lines,vars,source">
+-		<javac includeantruntime="false" srcdir="${src.dir}" excludes="**/EmbedServlet2.java" destdir="${javac.dir}">
++		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${javac.dir}">
  			<classpath refid="javac.class.path" />
  		</javac>
  		<copy todir="${javac.dir}/META-INF">
-diff --git a/src/com/mxgraph/online/EmbedServlet2.java b/src/com/mxgraph/online/EmbedServlet2.java
+diff --git a/src/main/java/com/mxgraph/online/EmbedServlet2.java b/src/main/java/com/mxgraph/online/EmbedServlet2.java
 index cced6ae..6eca5ed 100644
---- a/src/com/mxgraph/online/EmbedServlet2.java
-+++ b/src/com/mxgraph/online/EmbedServlet2.java
+--- a/src/main/java/com/mxgraph/online/EmbedServlet2.java
++++ b/src/main/java/com/mxgraph/online/EmbedServlet2.java
 @@ -35,7 +35,7 @@ import javax.servlet.http.HttpServlet;
  import javax.servlet.http.HttpServletRequest;
  import javax.servlet.http.HttpServletResponse;
