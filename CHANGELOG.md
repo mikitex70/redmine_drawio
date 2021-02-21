@@ -1,6 +1,27 @@
 # Changelog
 
 
+## development (unreleased)
+
+### New
+
+* Added page and layer selector for XML diagrams (refs #86) [Michele Tessaro]
+
+* Fixed patch for building draw.io server (fixes #81) [Michele Tessaro]
+
+### Changes
+
+* Updated README for the new release. [Michele Tessaro]
+
+* Updated CHANGELOG. [Michele Tessaro]
+
+### Fix
+
+* Fixed save on recents dmsf (refs #87) [Michele Tessaro]
+
+* Fixed wrong url hint in config dialog. [Michele Tessaro]
+
+
 ## v0.9.9 (2020-12-19)
 
 ### New
