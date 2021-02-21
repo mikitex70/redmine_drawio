@@ -33,36 +33,27 @@ In the configuration form you can set the Drawio server url; the default is `//e
 
 In this form you can also enable the mathematical symbol support for SVG diagrams. The default is disabled because enabling this adds about 170k of Javascript to download, so enable only if you really need it.
 
+
 ## Usage
 
 There are three macros that can be used to embed diagrams in wiki pages/issues; use what best fits your needs.
 
+
 ### `drawio` macro
-This macro is now deprecated and not working anymore. Use the `drawio_attach` macro diret replacement.
 
-~~This macro draws diagrams saved in attachments. This is for compatibility with `0.1.x` versions of the plugin and is now a bit obsolete. To use it:~~
+This macro is now deprecated and not working anymore. Use the `drawio_attach` macro as a direct replacement.
 
-- ~~save your [draw.io] diagram locally and upload it as attachment to a Wiki or issue page.~~
-- ~~in Wiki (or issue) pages use the `drawio` macro to load the widget, specifying the name of the attachment. For example:~~
-
-  ```
-  {{drawio(activity.xml, options)}}
-  ```
-- ~~the following macro options are available (default values are shown):~~
-  - ~~``lightbox=false`` : enable lightbox usage~~
-  - ~~``resize=false`` : enable zoom control box~~
-  - ~~``zoom=100`` : initial zoom of diagram (percentage of original diagram)~~
-  - ~~``fit=true`` : fit page width (only if ``resize=false``)~~
-  - ~~``hilight=#0000ff`` : color to hilight hyperlinks~~
-  
-~~With this macro diagrams are drawn using SVG (or maybe Canvas) so they are interactive: they are navigable, they respond to ``over`` and ``click`` actions. Hyperlinks can be used to navigate to other items.~~
-
-~~This macro render diagrams as SVG, so diagrams are interactive and navigable (link can be used to navigate to other pages).~~
-
-~~This macro is now obsolete: you can now use SVG diagrams with the other two macros (``drawio_attach`` and ``drawio_dmsf``) but you must import the the diagram in the *draw.io editor* and then export as SVG with an included copy of the diagram (see the *Export as SVG* function of the *draw.io editor*).~~
 
 ### `drawio_attach` macro
-This macro handles diagrams saved as attachments of issues or wiki pages. 
+
+This macro handles diagrams saved as attachments of issues or wiki pages.
+
+The supported diagrams format are:
+* `xml`: normal diagram source in XML format
+* `png`: PNG image with an embedded XML source of the diagram (PNG+XML)
+* `svg`: SVG image with an embedded XML source of the diagram (SVG+XML)
+
+The `xml` format uses a Javascript viewer to render the diagram runtime. It maybe a bit slow, but adds navigation options to the diagram (zoom, page and layer selector).
 
 With this macro the attachments are in PNG+XML, a special format consisting in an PNG image of the diagram plus the XML diagram source embeded as a field of the image.
 
@@ -102,6 +93,7 @@ In the toolbar editor there is a button with icon ![drawio_attach icon](assets/i
 
 The dialog can be used also for modifying a macro: simply place the caret (the cursor in the editing area) somewhere in the body of the macro, click the corresponding button in the toolbar, and the dialog will open with fields pre-filled with values from the macro source. When confirming new values, the macro source will be updated.
 
+
 ### `drawio_dmsf` macro
 This macro handles diagrams saved in the [DMSF] repository as PNG+XML or SVG+XML images, or as XML documents (from version `1.0.0`). The DMSF module must be enabled for the project to be able to use this macro.
 
@@ -136,9 +128,11 @@ As for the `drawio_attach` macro, the dialog can be used for updating a macro si
 
 
 ## Some note on the drawio editor
+
 Someone can be concerned about security in sending own diagrams to the [draw.io] site.
 
 The diagrams aren't sent to [draw.io] for editing/rendering, but all the operations are done by the browser using only Javascript and HTML5. The only things loaded externally are the scripts and the editor page, when the diagram editor is opened. The diagram source remains local to browser/redmine site.
+
 
 ## Using a personal installation of draw.io
 
@@ -183,6 +177,7 @@ However it is possible to use a local installation of the library following thes
 
 Once updated the settings, go to a wiki page with a mathematical SVG diagram and you should see the diagram exactly as before. You can check from where the library is downloaded using the browser developer tools.
 
+
 ## Known issues
 
 - Diagrams are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.
@@ -190,6 +185,7 @@ Once updated the settings, go to a wiki page with a mathematical SVG diagram and
 - There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters. If the diagram is too big, use the ``drawio`` macro to render the diagram from an XML source.
 
 - The ``drawio_attach`` macro doesn't completly work with issue notes: Redmine APIs allow to create new issue notes, but not to change them, so the issue note must be changed manually. As alternative use the ``drawio`` and ``drawio_dmsf`` macros, which work fine.
+
 
 ## TODO
 
@@ -206,24 +202,12 @@ Once updated the settings, go to a wiki page with a mathematical SVG diagram and
     + url of image: the url is generated by the macro (from attachment or [DMSF]), using in a widget may require an AJAX call
 
 
-## Other works
-If you are using [draw.io] to create *Entity Relationship* database schemas, you may be interested to the [schema2script].
-
-This is a Ruby command line tool that parses a [draw.io] ER diagram and produces a DDL script to initialize a database schema.
-
-For now only [H2](http://www.h2database.com) and [Oracle](https://www.oracle.com/it/database) SQL dialects are supported, but it will grow in the future.
-
-Related to [schema2script] is the [sboot] project, that helps to create a skeleton Java application based on [Spring boot](https://projects.spring.io/spring-boot). It creates entities, repositories ([Hibernate](http://hibernate.org) based for now), DTOs, services, REST interfaces, up to a simple CRUD web interface based on [Thymeleaf](www.thymeleaf.org) or [Angular2](https://angular.io). It also creates some tests, which can be used as a starting point for other, more specific tests.
-
-It is in early state but it is promising; with the current version you can create a complete skeleton application starting from an ER schema, which may be a good starting point for more complex applications.
-
-
 ## Contributing
 
 Any code contribution is well accepted. There are only a few rules that I would like to be respected to easy merging:
 
 - work on ``develop`` branch and leave the ``master`` branch untouched. This is importat to keep the released versions stable.
-- I would prefer comments in the style used by [gitchangelog](https://github.com/vaab/gitchangelog); this will simplify  generation of the ``CHANGELOG.md``.
+- I would prefer comments in the style used by [gitchangelog](https://github.com/vaab/gitchangelog); this will simplify generation of the ``CHANGELOG.md``.
   It isn't fundamental, I can edit comments and insert prefixes, or edit manually the ``CHANGELOG.md``, but it would be nice if you can help me.
 
 
