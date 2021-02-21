@@ -1,7 +1,7 @@
 # Changelog
 
 
-## development (unreleased)
+## v1.0.0 (2021-02-21)
 
 ### New
 
