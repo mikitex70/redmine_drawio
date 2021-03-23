@@ -1,6 +1,17 @@
 # Changelog
 
 
+## 1.0.1 (2021-03-23)
+
+### Fix
+
+* Fixed missing javascript file (refs #89) [Michele Tessaro]
+
+  The file `encoding.min.js` was not added in the last commit.
+
+* Fixed release in the CHANGELOG. [Michele Tessaro]
+
+
 ## v1.0.0 (2021-02-21)
 
 ### New
@@ -10,6 +21,8 @@
 * Fixed patch for building draw.io server (fixes #81) [Michele Tessaro]
 
 ### Changes
+
+* Updated CHANGELOG for the new release. [Michele Tessaro]
 
 * Updated README for the new release. [Michele Tessaro]
 
