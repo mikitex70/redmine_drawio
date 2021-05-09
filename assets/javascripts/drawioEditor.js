@@ -297,7 +297,9 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 
                 function updateDiagramReference(pageBody) {
                     // Build a pattern like attachName(_\d+)?\.*
-                    var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, '(_\\d+)?($2)?')
+                    var resourcePattern = escapeRegExp(resource).replace(/^(.*?)(_\d+)?(\\\.\w+)?$/, function(m,p1,p2,p3) {
+                        return p1.replace(/_/g, '.')+'(_\\d+)?('+p3+')?';
+                    })
                     // Build pattern to match the drawio_attach macro with resource pattern
                     var macroRegExp = escapeRegExp('{{drawio_attach(')+resourcePattern+'(\\s*,.*)?'+escapeRegExp(')}}');
                     // Replace old attachment name with the new name

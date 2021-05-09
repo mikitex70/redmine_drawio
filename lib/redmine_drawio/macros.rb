@@ -415,7 +415,7 @@ end
 def strip_non_filename_chars(filename)
     # Replace directory separator from \ to /
     filename = filename.gsub(/\\/, '/')
-    return filename.gsub(/[\x00:*?"<>|,;]/, '_') if Gem.win_platform?
+    return filename.gsub(/[\x00:*?"'<>|,;]/, '_') if Gem.win_platform?
     # *nix
-    filename.gsub(/[,;|"]/, '_')
+    filename.gsub(/[,;|"']/, '_')
 end
