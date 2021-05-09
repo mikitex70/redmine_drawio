@@ -52,7 +52,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
             fmt: "xmlsvg",
             mimeType: svgMime,
             ext: 'svg',
-            initial: getXmlAsString(image).replace(/"=""/, ''), // Fix for corrupted SVG after save without reloading page
+            initial: atob(image.getAttribute('src').substring(('data:'+imageType+';base64,').length)),
             extractImageData: function(rawImage) {
                 var data = extractData(rawImage, imgDescriptor.mimeType);
                 var stringData = Base64Binary.arrayBufferToString(data);
