@@ -342,10 +342,10 @@ def adaptSvg(svg, size)
     localSvg = svg.sub(/<svg /, '<svg preserve_aspect_ratio="xMaxYMax meet" ') unless svg =~ /.* preserve_aspect_ratio=.*/
     
     if size.nil?
-        localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px"/, 
+        localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px viewBox"(.*)""/, 
                      '<svg style="max-width:100%" width="\2px" height="\3px" viewBox="0 0 \2 \3" \1')
     else
-        localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px"/,
+        localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px viewBox"(.*)""/,
                      "<svg style=\"max-width:100%\" width=\"#{size}\" viewBox=\"0 0 \\2 \\3\" \\1")
     end
 end
@@ -357,12 +357,12 @@ def encapsulateSvg(svg, inlineStyle, title, saveName, isDmsf)
     style    = inlineStyle unless inlineStyle.blank?
     
     unless saveName.nil?
-        dblClick = " ondblclick=\"editDiagram($(this).find('svg')[0],'#{saveName}',#{isDmsf}, '#{title}');\"" 
+        dblClick = " ondblclick=\"editDiagram($(this).find('img')[0],'#{saveName}',#{isDmsf}, '#{title}');\"" 
         tooltip  = " title='Double click to edit diagram'"
         style    = " style='#{inlineStyle}cursor:pointer'"
     end
     
-    "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}>#{svg.force_encoding("UTF-8")}</span>".html_safe
+    "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}><img src='data:image/svg+xml;base64,#{Base64.encode64(svg.force_encoding("UTF-8"))}'></span>".html_safe
 end
 
 def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
