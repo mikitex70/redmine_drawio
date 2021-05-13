@@ -276,7 +276,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
      */             
     function saveAttachment(resource, imageData, type, pageName) {
         var pageUrl = window.location.pathname;
-        var encodedPageName = new RegExp('/wiki/'+encodeURIComponent(pageName)+'$', 'i');
+        var encodedPageName = new RegExp('/wiki/'+encodeURI(pageName).replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')+'$', 'i');
 
         // pageName !== "" means it's a wiki page
         if(pageName !== "" && !pageUrl.match(encodedPageName))
