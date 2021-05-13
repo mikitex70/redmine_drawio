@@ -6,6 +6,7 @@ Drawio.strings['drawio_http_404'     ] = '請確認文件總管模組的 WebDAV 
 Drawio.strings['drawio_http_409'     ] = '請確認文件總管資料夾已經存在且可以被存取';
 Drawio.strings['drawio_http_422'     ] = '流程圖檔案太大，請在 Redmine/網站管理/設定/檔案 調整附件大小限制';
 Drawio.strings['drawio_http_502'     ] = '請確認文件總管模組的 WebDAV 已啟用可讀/寫模式';
+Drawio.strings['drawiosave_error'    ] = 'Error while saving the attachment';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = '流程圖名稱';
 Drawio.strings['drawio_cke_diagType'       ] = '流程圖格式';

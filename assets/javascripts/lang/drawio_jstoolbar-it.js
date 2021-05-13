@@ -9,6 +9,7 @@ Drawio.strings['drawio_http_404'     ] = 'Assicurarsi che le funzionalità WebDA
 Drawio.strings['drawio_http_409'     ] = 'Assicurarsi che la cartella nel gestore documentale esista e sia accessibile';
 Drawio.strings['drawio_http_422'     ] = 'Diagramma troppo grande: aumentare la dimensione degli allegati nelle impostazioni di Redmine';
 Drawio.strings['drawio_http_502'     ] = 'Assicurarsi che le funzionalità WebDAV del modulo DMSF siano abilitate in modalità di lettura/scrittura';
+Drawio.strings['drawiosave_error'    ] = 'Errore durante il salvataggio dell\'allegato';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = 'Nome diagramma';
 Drawio.strings['drawio_cke_diagType'       ] = 'Formato';

@@ -210,7 +210,12 @@ function editDiagram(image, resource, isDmsf, pageName) {
         else
             switch(jqXHR.status) {
                 case 401: msg = Drawio.strings['drawio_http_401']; break;
-                case 404: msg = Drawio.strings['drawio_http_404']; break;
+                case 404: 
+                    if(isDmsf)
+                        msg = Drawio.strings['drawio_http_404'];
+                    else
+                        msg = Drawio.strings['drawio_save_error'];
+                    break;
                 case 409: msg = Drawio.strings['drawio_http_409']; break;
                 case 422: msg = Drawio.strings['drawio_http_422']; break;
                 case 502: msg = Drawio.strings['drawio_http_502']; break;
@@ -276,7 +281,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
      */             
     function saveAttachment(resource, imageData, type, pageName) {
         var pageUrl = window.location.pathname;
-        var encodedPageName = new RegExp('/wiki/'+encodeURIComponent(pageName)+'$', 'i');
+        var encodedPageName = new RegExp('/wiki/'+encodeURI(pageName).replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')+'$', 'i');
 
         // pageName !== "" means it's a wiki page
         if(pageName !== "" && !pageUrl.match(encodedPageName))
@@ -297,7 +302,9 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 
                 function updateDiagramReference(pageBody) {
                     // Build a pattern like attachName(_\d+)?\.*
-                    var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, '(_\\d+)?($2)?')
+                    var resourcePattern = escapeRegExp(resource).replace(/^(.*?)(_\d+)?(\\\.\w+)?$/, function(m,p1,p2,p3) {
+                        return p1.replace(/_/g, '.')+'(_\\d+)?('+p3+')?';
+                    })
                     // Build pattern to match the drawio_attach macro with resource pattern
                     var macroRegExp = escapeRegExp('{{drawio_attach(')+resourcePattern+'(\\s*,.*)?'+escapeRegExp(')}}');
                     // Replace old attachment name with the new name

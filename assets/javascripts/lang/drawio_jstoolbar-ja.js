@@ -9,6 +9,7 @@ Drawio.strings['drawio_http_404'     ] = 'DMSFプラグインのWebDAV機能が�
 Drawio.strings['drawio_http_409'     ] = 'DMSFフォルダが存在し、アクセス可能であることを確認してください。';
 Drawio.strings['drawio_http_422'     ] = 'ダイアグラムのファイルサイズが大きすぎます。Redmineの設定から添付ファイルサイズの上限を引き上げて下さい。';
 Drawio.strings['drawio_http_502'     ] = 'DMSFプラグインのWebDAVアクセス制御が読み書き可能になっていることを確認してください。';
+Drawio.strings['drawiosave_error'    ] = 'Error while saving the attachment';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = 'ダイアグラム名';
 Drawio.strings['drawio_cke_diagType'       ] = 'ダイアグラムの形式';
