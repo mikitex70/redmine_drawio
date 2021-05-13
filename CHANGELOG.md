@@ -1,7 +1,19 @@
 # Changelog
 
 
-## 1.0.1 (2021-03-23)
+## v1.0.2 (2021-05-13)
+
+### Fix
+
+* Fixed use of special chars as page name (fixes #92) [Michele Tessaro]
+
+  The use of special characters (like `+`) in the name of a wiki page was
+  causing am HTTP 404 during diagram save as attachment.
+
+* Fixed use of single quote in image name (fixes #91) [Michele Tessaro]
+
+
+## v1.0.1 (2021-03-23)
 
 ### Fix
 
