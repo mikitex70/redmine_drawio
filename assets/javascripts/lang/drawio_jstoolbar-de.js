@@ -9,6 +9,7 @@ Drawio.strings['drawio_http_404'     ] = 'Stelle sicher, dass WebDAV für das DM
 Drawio.strings['drawio_http_409'     ] = 'Stelle sicher, dass der DMSF Ordner existiert und erreichbar ist';
 Drawio.strings['drawio_http_422'     ] = 'Diagrammgröße ist zu hoch: Erhöhe die Größe für Anhänge in den Redmine Einstellungen';
 Drawio.strings['drawio_http_502'     ] = 'Stelle sicher, dass WebDAV für das DMSF Modul mit Lese/Schreibrechten aktiviert ist';
+Drawio.strings['drawiosave_error'    ] = 'Error while saving the attachment';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = 'Diagramm Name';
 Drawio.strings['drawio_cke_diagType'       ] = 'Diagramm Format';

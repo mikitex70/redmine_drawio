@@ -210,7 +210,12 @@ function editDiagram(image, resource, isDmsf, pageName) {
         else
             switch(jqXHR.status) {
                 case 401: msg = Drawio.strings['drawio_http_401']; break;
-                case 404: msg = Drawio.strings['drawio_http_404']; break;
+                case 404: 
+                    if(isDmsf)
+                        msg = Drawio.strings['drawio_http_404'];
+                    else
+                        msg = Drawio.strings['drawio_save_error'];
+                    break;
                 case 409: msg = Drawio.strings['drawio_http_409']; break;
                 case 422: msg = Drawio.strings['drawio_http_422']; break;
                 case 502: msg = Drawio.strings['drawio_http_502']; break;

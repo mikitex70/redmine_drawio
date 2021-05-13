@@ -6,6 +6,7 @@ Drawio.strings['drawio_http_404'     ] = '请确保 DMSF 的 WebDAV 功能已启
 Drawio.strings['drawio_http_409'     ] = '请确保 DMSF 文件夹已创建并可被访问';
 Drawio.strings['drawio_http_422'     ] = '图形尺寸过大：请在 Redmine 的设置中扩大附件容量';
 Drawio.strings['drawio_http_502'     ] = '请确保 DMSF 的 WebDAV 功能已启用读/写模式';
+Drawio.strings['drawiosave_error'    ] = 'Error while saving the attachment';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = '图形名称';
 Drawio.strings['drawio_cke_diagType'       ] = '图形格式';
