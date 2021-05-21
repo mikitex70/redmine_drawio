@@ -312,7 +312,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 }
                 
                 function referencesDiagram(body) {
-                    if (typeof body == 'undefined') body = "";
+                    if (body == null || typeof body == 'undefined') body = "";
 
                     // Build a pattern like attachName(_\d+)?\.*
                     var resourcePattern = escapeRegExp(resource).replace(/(_\d+)?(\\\.\w+)?$/, '(_\\d+)?($2)?')
