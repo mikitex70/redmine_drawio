@@ -34,6 +34,28 @@ In the configuration form you can set the Drawio server url; the default is `//e
 In this form you can also enable the mathematical symbol support for SVG diagrams. The default is disabled because enabling this adds about 170k of Javascript to download, so enable only if you really need it.
 
 
+## Security
+
+By configuring the header [Content-Security-Policy](https://content-security-policy.com/) in the Redmine webserver is possible to restrict what can be loaded in a web page. An example value is this:
+```
+default-src 'self'; script-src 'unsafe-inline' 'self' 'unsafe-eval'; connect-src 'self'; img-src 'self'; style-src 'unsafe-inline' 'self'
+```
+
+This setting is very restrictive: is allows loading scripts, stylesheets and images only from local server. This kind of setting is too restrictive for the `redmine_drawio` plugin, but can be relaxed a bit:
+```
+default-src 'self' embed.diagrams.net; script-src 'unsafe-inline' 'self' 'unsafe-eval' ; connect-src 'self'; img-src 'self' data: embed.diagrams.net; style-src 'unsafe-inline' 'self'
+```
+
+In this case we have relaxed the policy allowing to load scripts and images from `embed.diagrams.net` (the external site which serves the diagram editor). If security is an issue, you can use a local installation of the editor website (see the section *Using a personal installation of draw.io*), modifying the `Content-Security-Policy` header accordingly.
+
+Another value added in the configuration above is the `data:` for the `image-src` policy: this allows to use inline embedded images, and is fundamental for the plugin to work as it is the way edited images are shown after editing without the need to reload the page.
+
+An additional important configuration that may be present is the `frame-src`: it configures the policy for the use of iframes. The diagram editor is run in a `iframe`, so the setting must be relaxed to allow loading contents from embed.diagrams.net. Example (to be added in the `Content-Security-Policy` header):
+```
+frame-src: embed.diagrams.net 'self'; child-src: e,bed.diagrams.net 'self'
+```
+
+
 ## Usage
 
 There are three macros that can be used to embed diagrams in wiki pages/issues; use what best fits your needs.
