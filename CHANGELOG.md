@@ -1,7 +1,22 @@
 # Changelog
 
 
+## v1.0.3 (2021-05-25)
+
+### New
+
+* Added configuration section on CSP headers. [Michele Tessaro]
+
+### Fix
+
+* Fixed save on null journal notes (refs #93) [Michele Tessaro]
+
+
 ## v1.0.2 (2021-05-13)
+
+### Changes
+
+* Updated CHANGELOG.md. [Michele Tessaro]
 
 ### Fix
 
