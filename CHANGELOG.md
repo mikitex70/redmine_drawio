@@ -1,11 +1,22 @@
 # Changelog
 
 
-## v1.0.3 (2021-05-25)
+## v1.1.0 (2021-06-18)
+
+### New
+
+* Enabled use of drawio libraries (implements #95) [Michele Tessaro]
+
+
+## v1.0.3 (2021-05-26)
 
 ### New
 
 * Added configuration section on CSP headers. [Michele Tessaro]
+
+### Changes
+
+* Update CHANGELOG.md. [Michele Tessaro]
 
 ### Fix
 
