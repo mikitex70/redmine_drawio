@@ -196,7 +196,7 @@ function editDiagram(image, resource, isDmsf, pageName) {
     var useHttps = (Drawio.settings.drawioUrl.match(/^(https:)?\/\//i)? 1: 0);
 
     window.addEventListener('message', receive);
-    iframe.setAttribute('src', Drawio.settings.drawioUrl+'?embed=1&ui=atlas&spin=1&modified=unsavedChanges&proto=json&https='+useHttps);
+    iframe.setAttribute('src', Drawio.settings.drawioUrl+'?embed=1&ui=atlas&spin=1&modified=unsavedChanges&libraries=1&proto=json&https='+useHttps);
     document.body.appendChild(iframe);
 
     /**
