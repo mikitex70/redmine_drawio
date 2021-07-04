@@ -13,14 +13,25 @@ module RedmineDrawio
         # fragment after the jstoolbar-textile is loaded, which pathes the jsToolBar
         # object.
         def view_layouts_base_html_head(context={})
-            header = ''
+            # loading XML viewer library, only if necessary
+            header = <<-EOF
+                <script type="text/javascript">//<![CDATA[
+                    $(function() {
+                        if($(".mxgraph").length) {
+                            var script = document.createElement('script');
+                            script.src = 'https://viewer.diagrams.net/js/viewer-static.min.js';
+                            document.head.append(script);
+                        }
+                    });
+                //]]</script>
+            EOF
             
             if Setting.plugin_redmine_drawio['drawio_mathjax']
                 # Some MathJax tuning:
                 # * set regexp for classes to ignore, for to no apply MathJax to wrong elements
                 # * MathJax context menu (enabled, maybe is better to disable it?)
                 inline = <<-EOF
-                <script type="text/x-mathjax-config">
+                <script type="text/x-mathjax-config">//<![CDATA[
                   MathJax.Hub.Config({
                     /*menuSettings: {
                       context: "Browser"
@@ -33,7 +44,7 @@ module RedmineDrawio
                       ignoreClass: "no-mathjax|error|warning|notice"
                     }
                   });
-                </script>
+                //]]</script>
                 EOF
                 header << inline
                 header << javascript_include_tag("#{mathjax_url}?config=TeX-MML-AM_HTMLorMML")

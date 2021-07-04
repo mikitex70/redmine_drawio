@@ -396,8 +396,7 @@ def encapsulateXml(graphOpts, inlineStyle, title, saveName, isDmsf)
         }
     end
     
-    tag = "<div id=\"#{randomId}\" class=\"mxgraph\" data-mxgraph=\"#{CGI::escapeHTML(JSON.generate(graphOpts))}\"></div>".html_safe+
-            javascript_include_tag(nil, src: "https://viewer.diagrams.net/js/viewer-static.min.js", :plugin => "redmine_drawio")
+    tag = "<div id=\"#{randomId}\" class=\"mxgraph\" data-mxgraph=\"#{CGI::escapeHTML(JSON.generate(graphOpts))}\"></div>".html_safe
     
     return tag if inlineStyle.empty?
     
