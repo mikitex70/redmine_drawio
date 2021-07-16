@@ -535,7 +535,8 @@ window.onDrawioViewerLoad = function() {
     // Maybe it will broke in the future, but for now is working.
     
     // Patch the code
-    var code = GraphViewer.prototype.addToolbar.toString().replace(/u\.enabled\?u\.handler:function/, 'u.enabled?("string"===typeof(u.handler)?eval(u.handler):u.handler):function');
+    //var code = GraphViewer.prototype.addToolbar.toString().replace(/t\.enabled\?t\.handler:function/, 't.enabled?("string"===typeof(t.handler)?eval(t.handler):t.handler):function');
+    var code = GraphViewer.prototype.addToolbar.toString().replace(/([a-z])\.enabled\?\1\.handler:function/, '$1.enabled?("string"===typeof($1.handler)?eval($1.handler):$1.handler):function');
     // Apply the patch
     GraphViewer.prototype.addToolbar = eval("("+code+")");
     // Draw graphs
