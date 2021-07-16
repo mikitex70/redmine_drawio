@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v1.1.1 (2021-07-16)
+
+### Fix
+
+* Fixed xml diagram viewer patch (refs #96) [Michele Tessaro]
+
+  The dynamic patch of the `viewer-static.min.js` was broken due to an
+  update of the library.
+  Now the dynamic patch should be more robust.
+
+
 ## v1.1.0 (2021-06-18)
 
 ### New
