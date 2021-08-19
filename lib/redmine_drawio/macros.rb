@@ -357,7 +357,7 @@ def encapsulateSvg(svg, inlineStyle, title, saveName, isDmsf)
     style    = inlineStyle unless inlineStyle.blank?
     
     unless saveName.nil?
-        dblClick = " ondblclick=\"editDiagram($(this).find('svg')[0],'#{saveName}',#{isDmsf}, '#{title}');\"" 
+        dblClick = " ondblclick=\"editDiagram($(this).find('svg')[0],'#{saveName}',#{isDmsf}, '#{js_safe(title)}');\"" 
         tooltip  = " title='Double click to edit diagram'"
         style    = " style='#{inlineStyle}cursor:pointer'"
     end
@@ -377,7 +377,7 @@ def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
                          :title      => "Double click to edit diagram",
                          :class      => "drawioDiagram",
                          :style      => "#{inlineStyle}cursor:pointer;",
-                         :ondblclick => "editDiagram(this,'#{saveName}', #{isDmsf}, '#{title}');")
+                         :ondblclick => "editDiagram(this,'#{saveName}', #{isDmsf}, '#{js_safe(title)}');")
     end
 end
 
@@ -390,7 +390,7 @@ def encapsulateXml(graphOpts, inlineStyle, title, saveName, isDmsf)
         graphOpts['toolbar-buttons'] = {
             'edit' => {
                 'title'   => 'Edit',
-                'handler' => "(function(){editDiagram($('##{randomId}'),'#{saveName}', #{isDmsf}, '#{title}');})",
+                'handler' => "(function(){editDiagram($('##{randomId}'),'#{saveName}', #{isDmsf}, '#{js_safe(title)}');})",
                 'image'   => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAQAAAADHm0dAAAAbUlEQVQoz93NoRGAMBAAwXNIZCQlUEZKoQRkOqAESqAEJBIZiURGYh/DhKjPS4bTO3Pw2TwrK2MdOhKCIAQdtkD/4KTBwEGX8aVBQQq86LDErgZfbIAKHayw4bTOvRXCZIUQM9x1CBtCZMbzi25WtlGUbURavAAAAABJRU5ErkJggg==',
             }
         }
@@ -417,4 +417,8 @@ def strip_non_filename_chars(filename)
     return filename.gsub(/[\x00:*?"'<>|,;]/, '_') if Gem.win_platform?
     # *nix
     filename.gsub(/[,;|"']/, '_')
+end
+
+def js_safe(string)
+    string.gsub(/'/){ %q(\') }
 end
