@@ -1,7 +1,18 @@
 # Changelog
 
 
+## v1.1.2 (2021-08-19)
+
+### Fix
+
+* Fixed wiki page with single quotes (fixes #98) [Michele Tessaro]
+
+
 ## v1.1.1 (2021-07-16)
+
+### Changes
+
+* Updated changelog for the new release. [Michele Tessaro]
 
 ### Fix
 
