@@ -1,7 +1,18 @@
 # Changelog
 
 
+## v1.1.3 (2021-08-26)
+
+### Fix
+
+* Fixed diagrams in issues (fixes #99) [Michele Tessaro]
+
+
 ## v1.1.2 (2021-08-19)
+
+### Changes
+
+* Updated changelog for the new release. [Michele Tessaro]
 
 ### Fix
 
