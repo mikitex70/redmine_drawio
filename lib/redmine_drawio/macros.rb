@@ -420,5 +420,6 @@ def strip_non_filename_chars(filename)
 end
 
 def js_safe(string)
-    string.gsub(/'/){ %q(\') }
+    string.gsub(/'/){ %q(\') } if string
+    ''
 end
