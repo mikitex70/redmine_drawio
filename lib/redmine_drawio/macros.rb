@@ -123,7 +123,7 @@ EOF
         diagram = File.read(filename, mode: 'rb')
         
         if svg? diagramName
-            return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, false)
+            return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, diagramName, title, saveName, false)
         elsif png? diagramName
             # if png, encode image and remove newlines (required by Internet Explorer)
             diagram = Base64.encode64(diagram).gsub("\n", '')
@@ -155,7 +155,7 @@ EOF
                 'toolbar'        => toolbar,
                 'xml'            => diagram
             }
-            return encapsulateXml(graphOpts, inlineStyle, title, saveName, false)
+            return encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, false)
         end
     end
 end
@@ -267,7 +267,7 @@ EOF
             diagram = File.read(filename, mode: 'rb')
             
             if svg? diagramName
-                return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, title, saveName, true)
+                return encapsulateSvg(adaptSvg(diagram, size), inlineStyle, diagramName, title, saveName, true)
             elsif png? diagramName
                 # if png, encode image and remove newlines (required by Internet Explorer)
                 diagram = Base64.encode64(diagram).gsub("\n", '')
@@ -297,7 +297,7 @@ EOF
                     'toolbar'        => toolbar,
                     'xml'            => diagram
                 }
-                return encapsulateXml(graphOpts, inlineStyle, title, saveName, false)
+                return encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, false)
             end
         end
     end
@@ -350,14 +350,14 @@ def adaptSvg(svg, size)
     end
 end
 
-def encapsulateSvg(svg, inlineStyle, title, saveName, isDmsf)
+def encapsulateSvg(svg, inlineStyle, diagramName, title, saveName, isDmsf)
     dblClick = ""
     tooltip  = ""
     style    = ""
     style    = inlineStyle unless inlineStyle.blank?
     
     unless saveName.nil?
-        dblClick = " ondblclick=\"editDiagram($(this).find('svg')[0],'#{saveName}',#{isDmsf}, '#{js_safe(title)}');\"" 
+        dblClick = " ondblclick=\"editDiagram($(this).find('svg')[0],'#{saveName}',#{isDmsf}, '#{js_safe(title)}', '#{diagramName}');\"" 
         tooltip  = " title='Double click to edit diagram'"
         style    = " style='#{inlineStyle}cursor:pointer'"
     end
@@ -377,11 +377,11 @@ def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
                          :title      => "Double click to edit diagram",
                          :class      => "drawioDiagram",
                          :style      => "#{inlineStyle}cursor:pointer;",
-                         :ondblclick => "editDiagram(this,'#{saveName}', #{isDmsf}, '#{js_safe(title)}');")
+                         :ondblclick => "editDiagram(this,'#{saveName}', #{isDmsf}, '#{js_safe(title)}', '#{diagramName}');")
     end
 end
 
-def encapsulateXml(graphOpts, inlineStyle, title, saveName, isDmsf)
+def encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, isDmsf)
     randomId = 'dg_'+('a'..'z').to_a.shuffle[0,8].join
     
     unless saveName.nil?
@@ -390,7 +390,7 @@ def encapsulateXml(graphOpts, inlineStyle, title, saveName, isDmsf)
         graphOpts['toolbar-buttons'] = {
             'edit' => {
                 'title'   => 'Edit',
-                'handler' => "(function(){editDiagram($('##{randomId}'),'#{saveName}', #{isDmsf}, '#{js_safe(title)}');})",
+                'handler' => "(function(){editDiagram($('##{randomId}'),'#{saveName}', #{isDmsf}, '#{js_safe(title)}', '#{diagramName}');})",
                 'image'   => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAVCAQAAAADHm0dAAAAbUlEQVQoz93NoRGAMBAAwXNIZCQlUEZKoQRkOqAESqAEJBIZiURGYh/DhKjPS4bTO3Pw2TwrK2MdOhKCIAQdtkD/4KTBwEGX8aVBQQq86LDErgZfbIAKHayw4bTOvRXCZIUQM9x1CBtCZMbzi25WtlGUbURavAAAAABJRU5ErkJggg==',
             }
         }

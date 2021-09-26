@@ -12,7 +12,7 @@ Drawio.strings = {};
  * @param isDmsf true if the diagram is stored with the DMSF module
  * @param pageName The wiki page name (if the document is a wiki page)
  */
-function editDiagram(image, resource, isDmsf, pageName) {
+function editDiagram(image, resource, isDmsf, pageName, originalName) {
     /**
      * Convert a DOM element to a String.<br/>
      * This method is necessary because of the {@code content} attribute of the SVG tag, which is an XML.
@@ -354,7 +354,14 @@ function editDiagram(image, resource, isDmsf, pageName) {
                 if(page.wiki_page) {
                     // Wiki page
                     data.wiki_page = {
-                        text: fixFnListDuplication(fixWikiExtensionsFooter(fixWikiExtensionsHeader(updateDiagramReference(page.wiki_page.text))))
+                        text: fixFnListDuplication(fixWikiExtensionsFooter(fixWikiExtensionsHeader(updateDiagramReference(page.wiki_page.text)))),
+                        comments: originalName+" -> "+resource
+                    };
+                    // If it is the main wiki page, the full page name is needed for the put
+                    var l = pageUrl.length-'/wiki'.length;
+                    
+                    if(l >= 0 && pageUrl.lastIndexOf('/wiki') === l) {
+                        pageUrl += "/"+page.wiki_page.title;
                     }
                 }
                 else {
