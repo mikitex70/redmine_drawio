@@ -1,7 +1,25 @@
 # Changelog
 
 
+## v1.1.4 (2021-09-26)
+
+### New
+
+* Added wiki page comment on attachment update (refs #100) [Michele Tessaro]
+
+  By updating a diagram attached to a wiki page, a comment will be added to the
+  page history.
+
+### Fix
+
+* Fixed XSS security problems with svg diagrams (fixes #102) [Michele Tessaro]
+
+
 ## v1.1.3 (2021-08-26)
+
+### Changes
+
+* Updated changelog for the new release. [Michele Tessaro]
 
 ### Fix
 
