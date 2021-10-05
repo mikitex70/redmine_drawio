@@ -31,7 +31,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
     }
     
     function makeResizable(svg) {
-        return svg.replace(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px/, 
+        return svg.replace(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px viewBox"(.*)"/, 
                            '<svg preserve_aspect_ratio="xMaxYMax meet" style="max-width:100%" width="$2px" height="$3px" viewBox="0 0 $2 $3" $1');
     }
     
@@ -83,7 +83,8 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
             },
             updateImage: function(rawImage) {
                 var svgImage = imgDescriptor.extractImageData(rawImage);
-                $(image.parentNode).html(makeResizable(svgImage));
+                var base64Svg = "data:image/svg+xml;base64," + Base64Binary.encode(makeResizable(svgImage));
+                $(image).attr('src', base64Svg)
             },
             launchEditor: function(initial) {
                 iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xml: initial}), '*');
