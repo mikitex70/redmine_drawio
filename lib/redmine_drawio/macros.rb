@@ -338,8 +338,8 @@ def imagePath(defaultImage)
 end
 
 def adaptSvg(svg, size)
-    # Remove scripts from the SVG (prevent XSS issues)
-    localSvg = svg.sub(/<script\b[^>]*>(?:.*?)<\/script>/i, '')
+    # Remove some scripts from the SVG (prevent some XSS issues)
+    localSvg = svg.sub(/(?:<script\b[^>]*>(?:.*?)<\/script>)|(?:\\s*javascript:.*\))|(?:on\w+.*?=[^>]+)|(?:src=.?(&#x?[0-9a-f]+)+)/i, '')
     # Adapt SVG to make it resizable
     localSvg = localSvg.sub(/<svg /, '<svg preserve_aspect_ratio="xMaxYMax meet" ') unless svg =~ /.* preserve_aspect_ratio=.*/
     
