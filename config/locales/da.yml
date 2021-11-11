@@ -2,6 +2,8 @@
 da:
   drawio_url: "Draw.io service URL"
   drawio_service_url_hint: "URL til lokal installation; sæt til '//embed.diagrams.net' for at anvende onlnie-servicen"
+  drawio_svg_enabled: "Enable SVG diagrams"
+  drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "SVG-matematik-understøttelse"
   drawio_mathjax_hint: "Aktivér support for matematiske symboler i SVG-diagrammer"
   drawio_mathjax_url: "MathJax library URL"

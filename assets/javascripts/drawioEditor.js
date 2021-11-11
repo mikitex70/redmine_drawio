@@ -26,6 +26,16 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
             xmlDom.xml;
     }
     
+    function getInitialSvgData(image) {
+        if(image.nodeName.toLowerCase() === 'svg') {
+            // plain svg
+            return getXmlAsString(image).replace(/"=""/, ''); // Fix for corrupted SVG after save without reloading page
+        } else {
+            // base64 encoded svg
+            return atob(image.getAttribute('src').substring(('data:'+imageType+';base64,').length));
+        }
+    }
+    
     function extractData(data, type) {
         return Base64Binary.decodeArrayBuffer(data.substring(('data:'+type+';base64,').length));
     }
@@ -52,8 +62,10 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
             fmt: "xmlsvg",
             mimeType: svgMime,
             ext: 'svg',
-            initial: atob(image.getAttribute('src').substring(('data:'+imageType+';base64,').length)),
+            initial: getInitialSvgData(image),
+            //atob(image.getAttribute('src').substring(('data:'+imageType+';base64,').length)),
             extractImageData: function(rawImage) {
+                // FIXME: decode base64 svg
                 var data = extractData(rawImage, imgDescriptor.mimeType);
                 var stringData = Base64Binary.arrayBufferToString(data);
                 
@@ -84,7 +96,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
             updateImage: function(rawImage) {
                 var svgImage = imgDescriptor.extractImageData(rawImage);
                 var base64Svg = "data:image/svg+xml;base64," + Base64Binary.encode(makeResizable(svgImage));
-                $(image).attr('src', base64Svg)
+                $(image).attr('src', base64Svg);
             },
             launchEditor: function(initial) {
                 iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xml: initial}), '*');

@@ -53,6 +53,7 @@ EOF
         
         return "«Please set a diagram name»".html_safe unless diagramName
         return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml))?$/i
+        return "svg diagrams are disabled by the administrator" unless svg_enabled? || not(diagramName =~ /.*\.svg$/i)
         
         # defalts
         hilight    = "#0000ff"
@@ -204,6 +205,7 @@ EOF
             
             return "«Please set a diagram name»".html_safe unless diagramName
             return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
+            return "svg diagrams are disabled by the administrator" unless svg_enabled? || not(diagramName =~ /.*\.svg$/i)
             
             # Add an extension, if missing
             diagramName += ".png" if File.extname(diagramName.strip) == ""
@@ -339,17 +341,27 @@ end
 
 def adaptSvg(svg, size)
     # Remove some scripts from the SVG (prevent some XSS issues)
-    localSvg = svg.sub(/(?:<script\b[^>]*>(?:.*?)<\/script>)|(?:\\s*javascript:.*\))|(?:on\w+.*?=[^>]+)|(?:src=.?(&#x?[0-9a-f]+)+)/i, '')
+    localSvg = svg.sub(/(?:<script\b[^>]*>(?:.*?)<\/script>)|(?:\\s*javascript:.*\))|(?:\\bon\w+.*?=[^>]+)|(?:src=.?(&#x?[0-9a-f]+)+)/i, '')
     # Adapt SVG to make it resizable
     localSvg = localSvg.sub(/<svg /, '<svg preserve_aspect_ratio="xMaxYMax meet" ') unless svg =~ /.* preserve_aspect_ratio=.*/
-    
-    if size.nil?
-        localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px viewBox"(.*)""/, 
-                     '<svg style="max-width:100%" width="\2px" height="\3px" viewBox="0 0 \2 \3" \1')
+    localSvg = localSvg.sub(/<svg /, '<svg style="max-width:100%" ')
+    # Add a viewBox, if missing
+    localSvg = localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px"/, 
+                                '<svg viewBox="0 0 \2 \3" \1') unless localSvg=~ /.* viewBox="(.*)"/
+    # Fix size, if forced 
+    if localSvg =~ /<svg (.*) width="(?:[0-9]+)px"/
+        # width attribute presente, replace it with fized size, if present
+        localSvg = localSvg.sub(/<svg (.*) width="(?:[0-9]+)px"/, "<svg \1 width=\"#{size}\"") unless size.nil?
+    elsif size.nil?
+        # no forced size and no width attribute: in no height, try to extract size from viewbox
+        localSvg = localSvg.sub(/<svg (.*) viewBox="([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)"/,
+                                '<svg \1 viewBox="\2 \3 \4 \5" width="\4px"') if localSvg =~ /.* viewBox=".*"/
     else
-        localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px viewBox"(.*)""/,
-                     "<svg style=\"max-width:100%\" width=\"#{size}\" viewBox=\"0 0 \\2 \\3\" \\1")
+        # no width attribute, but the height attribute may be present: replace it with the fixed size, if present
+        localSvg = localSvg.sub(/<svg ([^>]+?)(?: height="([0-9]+)px")?/, "<svg \1 width=\"#{size}\"")
     end
+    
+    localSvg
 end
 
 def encapsulateSvg(svg, inlineStyle, diagramName, title, saveName, isDmsf)
@@ -359,12 +371,17 @@ def encapsulateSvg(svg, inlineStyle, diagramName, title, saveName, isDmsf)
     style    = inlineStyle unless inlineStyle.blank?
     
     unless saveName.nil?
-        dblClick = " ondblclick=\"editDiagram($(this).find('img')[0],'#{saveName}',#{isDmsf}, '#{js_safe(title)}', '#{diagramName}');\"" 
+        tagType  = if Setting.plugin_redmine_drawio['drawio_svg_enabled'] then 'svg' else 'img' end
+        dblClick = " ondblclick=\"editDiagram($(this).find('#{tagType}')[0],'#{saveName}',#{isDmsf}, '#{js_safe(title)}', '#{diagramName}');\"" 
         tooltip  = " title='Double click to edit diagram'"
         style    = " style='#{inlineStyle}cursor:pointer'"
     end
     
-    "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}><img src='data:image/svg+xml;base64,#{Base64.encode64(svg.force_encoding("UTF-8"))}'></span>".html_safe
+    if Setting.plugin_redmine_drawio['drawio_svg_enabled']
+        "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}>#{svg.force_encoding("UTF-8")}</span>".html_safe
+    else
+        "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}><img src='data:image/svg+xml;base64,#{Base64.strict_encode64(svg.force_encoding("UTF-8"))}'></span>".html_safe
+    end
 end
 
 def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
@@ -424,4 +441,10 @@ end
 def js_safe(string)
     string.gsub(/'/){ %q(\') } if string
     ''
+end
+
+def svg_enabled?
+    enabled = Setting.plugin_redmine_drawio['drawio_svg_enabled']
+    enabled = true if enabled.nil?
+    enabled
 end

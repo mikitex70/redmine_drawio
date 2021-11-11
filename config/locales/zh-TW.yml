@@ -2,6 +2,8 @@
 zh-TW:
   drawio_url: "Draw.io 服務網址"
   drawio_service_url_hint: "可設定本地drawio服務，或設定為 '//embed.diagrams.net' 使用線上的服務"
+  drawio_svg_enabled: "Enable SVG diagrams"
+  drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "啟用 SVG 數學符號"
   drawio_mathjax_hint: "SVG 向量圖啟用數學符號"
   drawio_dlg_title: "流程圖設定"

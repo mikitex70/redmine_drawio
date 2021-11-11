@@ -3,9 +3,15 @@
   <label><%= l(:drawio_url) %></label>
   <%= text_field_tag 'settings[drawio_service_url]', @settings['drawio_service_url'], size: 60 %><br/>
   <em><%= l(:drawio_service_url_hint) %></em><br/>
+  
+  <label><%= l(:drawio_svg_enabled) %></label>
+  <%= check_box_tag 'settings[drawio_svg_enabled]', true, @settings['drawio_svg_enabled'] %><br/>
+  <em><%= l(:drawio_svg_enabled_hint) %></em><br/>
+  
   <label><%= l(:drawio_mathjax) %></label>
   <%= check_box_tag 'settings[drawio_mathjax]', true, @settings['drawio_mathjax'] %><br/>
   <em><%= l(:drawio_mathjax_hint) %></em><br/>
+  
   <label><%= l(:drawio_mathjax_url) %></label>
   <%= text_field_tag 'settings[drawio_mathjax_url]', @settings['drawio_mathjax_url'], size: 60, readonly: @settings['drawio_mathjax'] != 'true', class: 'drawio' %><br/>
   <em><%= l(:drawio_mathjax_url_hint) %></em>

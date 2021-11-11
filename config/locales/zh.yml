@@ -2,6 +2,8 @@
 zh:
   drawio_url: "Draw.io 图形服务URL"
   drawio_service_url_hint: "您的本地图形服务URL，设置 '//embed.diagrams.net' 以使用在线服务。"
+  drawio_svg_enabled: "Enable SVG diagrams"
+  drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "SVG MathJax support"
   drawio_mathjax_hint: "Enable mathematical symbol support for SVG diagrams"
   drawio_mathjax_url: "MathJax library URL"

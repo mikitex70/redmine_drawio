@@ -9,7 +9,9 @@
         <p>
           <label for="drawio_diagType"><%= l(:drawio_dlg_diagType) %></label>
           <input type="radio" name="drawio_diagType" value="png" checked="checked"/>PNG
+          <% if svg_enabled %>
           <input type="radio" name="drawio_diagType" value="svg" style="margin-left:1em"/>SVG
+          <% end %>
           <input type="radio" name="drawio_diagType" value="xml" style="margin-left:1em" id="drawio_diagTypeXml"/>XML
         </p>
         <p>
