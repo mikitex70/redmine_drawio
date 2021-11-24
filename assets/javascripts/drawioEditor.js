@@ -95,8 +95,15 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
             },
             updateImage: function(rawImage) {
                 var svgImage = imgDescriptor.extractImageData(rawImage);
-                var base64Svg = "data:image/svg+xml;base64," + Base64Binary.encode(makeResizable(svgImage));
-                $(image).attr('src', base64Svg);
+                
+                if(image.nodeName.toLowerCase() === 'svg') {
+                    // plain svg
+                    $(image.parentNode).html(makeResizable(svgImage));
+                } else {
+                    // svg base64 encoded
+                    var base64Svg = "data:image/svg+xml;base64," + Base64Binary.encode(makeResizable(svgImage));
+                    $(image).attr('src', base64Svg);
+                }
             },
             launchEditor: function(initial) {
                 iframe.contentWindow.postMessage(JSON.stringify({action: 'load', xml: initial}), '*');
