@@ -31,6 +31,12 @@ The plugin can be configured by the *Redmine* administrator via the Redmine inte
 
 In the configuration form you can set the Drawio server url; the default is `//embed.diagrams.net`, to use the default internet installation regardless of the protocol. The value can be changed to use a private drawio editor installation (see more later).
 
+An important configuration is `Enable SVG diagrams`: diagrams in SVG format can introduce [Cross-Site Scripting](https://en.wikipedia.org/wiki/Cross-site_scripting) security issues, so from version `1.2.0` they are handled in a different way:
+* if the field is checked, the behaviour is similar to previous releases: SVG diagrams are rendered as-is, in particular hyperlinks can be used to navigate to other pages (or sites). XSS issues are mitigated, but cannot be completely removed
+* if the field is unchecked (default), SVG diagrams are encoded and rendered as images. The quality is the same as original SVG (they scale in the same way) and there are no security issues, but hyperlink don't work.
+
+So the *Redmine administrator* is responsible to choose a security level adequate to the installation (Internet vs Intranet, for example), and the usage (how much important are hyperlinks?).
+
 In this form you can also enable the mathematical symbol support for SVG diagrams. The default is disabled because enabling this adds about 170k of Javascript to download, so enable only if you really need it.
 
 
@@ -50,7 +56,7 @@ In this case we have relaxed the policy allowing to load scripts and images from
 
 Another value added in the configuration above is the `data:` for the `image-src` policy: this allows to use inline embedded images, and is fundamental for the plugin to work as it is the way edited images are shown after editing without the need to reload the page.
 
-An additional important configuration that may be present is the `frame-src`: it configures the policy for the use of iframes. The diagram editor is run in a `iframe`, so the setting must be relaxed to allow loading contents from embed.diagrams.net. Example (to be added in the `Content-Security-Policy` header):
+An additional important configuration that may be present is the `frame-src`: it configures the policy for the use of iframes. The diagram editor is run in a `iframe`, so the setting must be relaxed to allow loading contents from `embed.diagrams.net`. Example (to be added in the `Content-Security-Policy` header):
 ```
 frame-src: embed.diagrams.net 'self'; child-src: e,bed.diagrams.net 'self'
 ```
@@ -81,6 +87,8 @@ With this macro the attachments are in PNG+XML, a special format consisting in a
 
 With an``.svg`` attachment name extension the image format is handled as SVG+XML; like the PNG+XML, this is an SVG image
 with an embedded XML source of the diagram (the diagram must be created with the *draw.io editor*, normal SVG are displayed but cannot be edited).
+
+**WARNING**: SVG images can introduce [XSS(Cross-Site Scripting)](https://en.wikipedia.org/wiki/Cross-site_scripting) security issues. For internet deploys make sure the `Enable SVG diagrams` configuration options is unchecked, so the svg diagrams will rendered as a base64 encoded image (no XSS issues, same quality, but hyperlinks will not work).
 
 From version `1.0.0` are also supported diagrams in XML format (as used with the old `drawio` macro).
 

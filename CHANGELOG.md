@@ -1,6 +1,27 @@
 # Changelog
 
 
+## v1.2.0 (2021-11-24)
+
+### Changes
+
+* Updated documentation for the new release. [Michele Tessaro]
+
+### Fix
+
+* Added setting to choose svg implementation (refs #102) [Michele Tessaro]
+
+  Added a plugin setting to choose how svg images are displayed:
+  * if svg is disabled, they are rendered as a base64 svg (hyperlinks not
+    working)
+  * if svg is enabled, they are rendered as inline svg, but they are
+    vulnerable to XSS issues (mitigated, but not eliminated)
+
+* Prevent XSS from SVG. [Mauryl Dovand]
+
+* Fixed more svg XSS issues (refs #102) [Michele Tessaro]
+
+
 ## v1.1.4 (2021-09-26)
 
 ### New
