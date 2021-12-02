@@ -27,7 +27,7 @@ if Rails::VERSION::STRING < '5.0.0'
         alias_method :heads_for_wiki_formatter, :heads_for_wiki_formatter_with_drawio
     end
 else
-    # Rails 5, use new new `prepend` method
+    # Rails 5, use new `prepend` method
     module RedmineDrawio_markdown
         def heads_for_wiki_formatter
             super
