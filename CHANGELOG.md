@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v1.2.1 (2022-01-05)
+
+### Fix
+
+* Fixed use of diagrams in XML format (fixes #105) [Michele Tessaro]
+
+  Bug introduced by a change in an external Javascript from
+  `embed.diagrams.net`.
+
+* Updated documentation. [Michele Tessaro]
+
+
 ## v1.2.0 (2021-11-24)
 
 ### Changes
