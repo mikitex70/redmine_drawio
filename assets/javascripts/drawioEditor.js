@@ -563,7 +563,7 @@ window.onDrawioViewerLoad = function() {
     
     // Patch the code
     //var code = GraphViewer.prototype.addToolbar.toString().replace(/t\.enabled\?t\.handler:function/, 't.enabled?("string"===typeof(t.handler)?eval(t.handler):t.handler):function');
-    var code = GraphViewer.prototype.addToolbar.toString().replace(/([a-z])\.enabled\?\1\.handler:function/, '$1.enabled?("string"===typeof($1.handler)?eval($1.handler):$1.handler):function');
+    var code = GraphViewer.prototype.addToolbar.toString().replace(/([a-z])\.enabled\?\n?\1\.handler:function/, '$1.enabled?("string"===typeof($1.handler)?eval($1.handler):$1.handler):function');
     // Apply the patch
     GraphViewer.prototype.addToolbar = eval("("+code+")");
     // Draw graphs
