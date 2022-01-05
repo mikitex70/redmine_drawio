@@ -117,7 +117,7 @@ Usage is very simple:
     - ``lightbox=false``: activates the *LightBox* viewer button in the toolbar
     - ``zoom=false``: activates the zoom buttons in the toolbar
     - ``page=number``: if not empty a *page selector* will appear in the toolbar (for multi-page diagrams) and the initial page (starting from 0) will be selected
-    - ``layers``: if set as a list of space separated number of layers, those layer will be activated for default, and a *layer selector* controlo will appear in the toolbar.
+    - ``layers``: if set as a list of space separated number of layers, those layer will be activated for default, and a *layer selector* control will appear in the toolbar.
 
 In the toolbar editor there is a button with icon ![drawio_attach icon](assets/images/jstb_drawio_attach.png) that opens a dialog that can be used to insert a macro for a new diagram to be saved as attachment (for lazy people).
 
@@ -172,17 +172,17 @@ The build of the ``war`` file is a bit problematic because the ``drawio`` macro 
 
 This servlet is excluded from build because of a missing library from Google, maybe because of copyright issues.
 
-If you are planning to use only the ``drawio_attach`` and ``drawio_dmsf`` macros you can use the source as is without troubles, but if you want/need the ``drawio`` macro it is necessary to apply the ``embed2js.patch`` patch (included in this plugin sources).
+If you are planning to use only the ``png`` and ``svg`` formats you can use the source as is without troubles, but if you want/need diagrams in the ``xml`` format it is necessary to apply the ``embed2js.patch`` patch (included in this plugin sources).
 
 The build steps are:
 
-```
-  git clone https://github.com/jgraph/draw.io.git
-  cd draw.io
-  patch -p1 < PATH_TO_DRAWIO_PLUGIN/embed2js.patch
-  cd etc/build
-  ant war
-  cd ../../build
+```bash
+git clone https://github.com/jgraph/draw.io.git
+cd draw.io
+patch -p1 < PATH_TO_DRAWIO_PLUGIN/embed2js.patch
+cd etc/build
+ant war
+cd ../../build
 ```
 
 If the build ends without errors, in the ``build`` directory you should find a working version of the war file that you can deploy in your favourite servlet container (like *Tomcat*); be sure to enable the ``HTTPS`` protocol because is is required.
@@ -210,11 +210,11 @@ Once updated the settings, go to a wiki page with a mathematical SVG diagram and
 
 ## Known issues
 
-- Diagrams are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.
+- Diagrams in ``xml`` format are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.
 
-- There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters. If the diagram is too big, use the ``drawio`` macro to render the diagram from an XML source.
+- There can be a browser limit on the embedded diagram size. For example Opera 11 limits _Data URIs_ size to 65000 characters. If the diagram is too big, use the ``xml`` diagram format to render the diagram from an XML source.
 
-- The ``drawio_attach`` macro doesn't completly work with issue notes: Redmine APIs allow to create new issue notes, but not to change them, so the issue note must be changed manually. As alternative use the ``drawio`` and ``drawio_dmsf`` macros, which work fine.
+- The ``drawio_attach`` macro doesn't completly work with issue notes: Redmine APIs allow to create new issue notes, but not to change them, so the issue note must be changed manually. As alternative use ``drawio_dmsf`` macro, which works fine.
 
 
 ## TODO
