@@ -561,9 +561,12 @@ window.onDrawioViewerLoad = function() {
     // To not keep a patched version of the `viewer-static.min.js` file, I will patch it runtime.
     // Maybe it will broke in the future, but for now is working.
     
-    // Patch the code
-    //var code = GraphViewer.prototype.addToolbar.toString().replace(/t\.enabled\?t\.handler:function/, 't.enabled?("string"===typeof(t.handler)?eval(t.handler):t.handler):function');
-    var code = GraphViewer.prototype.addToolbar.toString().replace(/([a-z])\.enabled\?\n?\1\.handler:function/, '$1.enabled?("string"===typeof($1.handler)?eval($1.handler):$1.handler):function');
+    // Patch the code `mxEvent.addListener(g,"click",b)`
+    var code = GraphViewer.prototype.addToolbar.toString();
+    var searchRegex = /mxEvent\.addListener\(([a-zA-Z]),"click",([a-zA-Z])\)/;
+    var replaceRules = "mxEvent.addListener($1,\"click\",(typeof($2)==='string'?eval($2):$2))";
+
+    code = code.replace(searchRegex, replaceRules);
     // Apply the patch
     GraphViewer.prototype.addToolbar = eval("("+code+")");
     // Draw graphs
