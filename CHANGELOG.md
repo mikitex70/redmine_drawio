@@ -1,6 +1,15 @@
 # Changelog
 
 
+## unreleased
+
+### Fix
+
+* Fixed usage of drawio_svg_enabled setting
+
+  If svg is disabled the corresponding checkbox 
+  in _marcro_dialog.html.erb won't be displayed 
+
 ## v1.2.1 (2022-01-05)
 
 ### Fix
