@@ -7,6 +7,7 @@ require 'redmine_drawio/patches/string_patch'
 
 # Helpers
 require 'redmine_drawio/helpers/drawio_dmsf_helper'
+require 'redmine_drawio/helpers/drawio_settings_helper'
 require 'redmine_drawio/helpers/textile_helper'
 require 'redmine_drawio/helpers/markdown_helper'
 

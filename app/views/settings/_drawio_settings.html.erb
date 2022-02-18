@@ -3,7 +3,7 @@
   <label><%= l(:drawio_url) %></label>
   <%= text_field_tag 'settings[drawio_service_url]', @settings['drawio_service_url'], size: 60 %><br/>
   <em><%= l(:drawio_service_url_hint) %></em><br/>
-  
+
   <label><%= l(:drawio_svg_enabled) %></label>
   <%= check_box_tag 'settings[drawio_svg_enabled]', true, @settings['drawio_svg_enabled'] %><br/>
   <em><%= l(:drawio_svg_enabled_hint) %></em><br/>
