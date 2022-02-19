@@ -88,10 +88,12 @@ section_regexps = [
         r'^[aA]ggiornat[aeio]\s+([^\n]*)$',
         r'^[cC]ambiat[aeio]\s+([^\n]*)$',
         r'^[mM]odificat[aeio]\s+([^\n]*)$',
+        r'^[uU]pdates.*$',
      ]),
     ('Fix', [
         r'^[fF]ix\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?([^\n]*)$',
         r'^[cC]orrett[aeio]\s+([^\n]*)$',
+        r'^[fF]ixes\s.*$',
         r'^Load\s\'loading',
      ]),
 
