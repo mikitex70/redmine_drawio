@@ -1,14 +1,26 @@
 # Changelog
 
 
-## unreleased
+## development (unreleased)
+
+### Changes
+
+* Updates.gitignore. [Liane Hampe]
+
+  Adds .history what is a vs code extension storing the history of all
+  changes.
 
 ### Fix
 
-* Fixed usage of drawio_svg_enabled setting
+* Fixes usage of drawio_svg_enabled setting. [Liane Hampe]
 
-  If svg is disabled the corresponding checkbox 
-  in _marcro_dialog.html.erb won't be displayed 
+  If svg is disabled the corresponding checkbox
+  in _marcro_dialog.html.erb won't be displayed anymore.
+
+  Adds tests for this fix and a check for the settings table.
+  The table check is necessary for running tests since the table is not
+  available when loading the code.
+
 
 ## v1.2.1 (2022-01-05)
 
