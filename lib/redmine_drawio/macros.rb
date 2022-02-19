@@ -444,7 +444,5 @@ def js_safe(string)
 end
 
 def svg_enabled?
-    enabled = Setting.plugin_redmine_drawio['drawio_svg_enabled']
-    enabled = true if enabled.nil?
-    enabled
+    DrawioSettingsHelper.svg_enabled?
 end
