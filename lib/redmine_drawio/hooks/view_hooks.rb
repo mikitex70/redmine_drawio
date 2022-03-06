@@ -4,6 +4,14 @@ require 'base64'
 
 module RedmineDrawio
 
+    class ViewLayoutsBaseBodyTop < Redmine::Hook::ViewListener
+        def view_layouts_base_body_top(context = {})
+            return unless User.current.admin? && !Setting.rest_api_enabled?
+
+            context[:controller].send(:render_to_string, { partial: 'redmine_drawio/hooks/api_not_enabled_warning' })
+        end
+    end
+
     class ViewLayoutsBaseHtmlHeadHook < Redmine::Hook::ViewListener
         
         # This method will add the necessary CSS and JS scripts to the page header.
@@ -63,7 +71,7 @@ module RedmineDrawio
                     var Drawio = {
                       settings: {
                         redmineUrl: '#{redmine_url}',
-                        hashCode  : '#{Base64.encode64(User.current.api_key).gsub(/\n/, '').reverse!}',
+                        hashCode  : '#{hash_code}',
                         drawioUrl : '#{drawio_url}',
                         DMSF      : #{dmsf_enabled? context},
                         isEasyRedmine: #{easyredmine?}
@@ -132,6 +140,11 @@ module RedmineDrawio
             url
         end
 
+        def hash_code
+            return '' unless Setting.sys_api_enabled?
+
+            Base64.encode64(User.current.api_key).gsub(/\n/, '').reverse!
+        end
     end
     
 end
