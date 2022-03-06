@@ -18,3 +18,4 @@ de:
   drawio_dlg_page: "Initial page"
   drawio_dlg_hiligh: "Hyperlinks color"
   drawio_dlg_zoom: "Zoom controls"
+  drawio_warning_api_needs_to_be_enabled: Um drawio Diagramme speichern zu können, muss die REST API unter Administration -> Konfiguration -> API aktiviert werden.
