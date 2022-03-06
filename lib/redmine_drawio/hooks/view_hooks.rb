@@ -141,7 +141,7 @@ module RedmineDrawio
         end
 
         def hash_code
-            return '' unless Setting.sys_api_enabled?
+            return '' unless Setting.rest_api_enabled?
 
             Base64.encode64(User.current.api_key).gsub(/\n/, '').reverse!
         end
