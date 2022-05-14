@@ -1,9 +1,41 @@
 # Changelog
 
 
-## development (unreleased)
+## v1.3.1 (2022-05-14)
+
+### Fix
+
+* Fixed mxgraph viewer patch (refs #105) [Michele Tessaro]
+
+  Fixed the patch of the viewer of diagrams in XML format, caused by a
+  recent change in the Drawio scripts.
+
+### Other
+
+* Fixed check for api enabled. [Liane Hampe]
+
+  ViewLayoutsBaseHtmlHeadHook#hash_code uses a wrong api enabled check which
+  would not return true if rest api is enabled.
+
+* Fixed generating api key even if api not enabeld. [Liane Hampe]
+
+  When the api is not enabled there should be no api key requested
+  for the current user. Moreover, Redmine
+  MyControllerTest#test_reset_api_key_without_existing_key
+  would fail since it does not expect the current user to have an api key by
+  default.
+
+  Added a warning for the admin if api is disabled since the plugin needs
+  the api for saving diagrams as attachment.
+
+
+## v1.3.0 (2022-02-19)
 
 ### Changes
+
+* Updated CHANGELOG.md for the new release. [Michele Tessaro]
+
+* Def: updated version for the new release. [Michele Tessaro]
 
 * Updates.gitignore. [Liane Hampe]
 

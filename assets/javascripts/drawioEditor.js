@@ -563,7 +563,7 @@ window.onDrawioViewerLoad = function() {
     
     // Patch the code `mxEvent.addListener(g,"click",b)`
     var code = GraphViewer.prototype.addToolbar.toString();
-    var searchRegex = /mxEvent\.addListener\(([a-zA-Z]),"click",([a-zA-Z])\)/;
+    var searchRegex = /mxEvent\.addListener\(([a-zA-Z]+),"click",([a-zA-Z]+)\)/;
     var replaceRules = "mxEvent.addListener($1,\"click\",(typeof($2)==='string'?eval($2):$2))";
 
     code = code.replace(searchRegex, replaceRules);

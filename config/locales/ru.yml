@@ -18,3 +18,4 @@ ru:
   drawio_dlg_page: "Initial page"
   drawio_dlg_hiligh: "Hyperlinks color"
   drawio_dlg_zoom: "Zoom controls"
+  drawio_warning_api_needs_to_be_enabled: For saving drawio diagrams you need to enable the REST API in Administration -> Configuration -> API.
