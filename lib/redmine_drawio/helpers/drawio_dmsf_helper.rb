@@ -1,6 +1,8 @@
 # encoding: UTF-8
 
-class DMSF_helper
+module RedmineDrawio
+    module Helpers
+class DrawioDmsfHelper
     def self.deep_folder_search(project, folderPath)
         return nil if folderPath == "."
         search_folder_with_path(project, nil, folderPath.split(File::SEPARATOR))
@@ -14,4 +16,7 @@ class DMSF_helper
         search_folder_with_path(project, folder.id, path.drop(1))
     end
   
+end
+
+    end
 end

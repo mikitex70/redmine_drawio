@@ -3,20 +3,20 @@
 # Drawio libraries
 
 # Patches
-require 'redmine_drawio/patches/string_patch'
+require File.expand_path('../redmine_drawio/patches/string_patch', __FILE__)
 
 # Helpers
-require 'redmine_drawio/helpers/drawio_dmsf_helper'
-require 'redmine_drawio/helpers/drawio_settings_helper'
-require 'redmine_drawio/helpers/textile_helper'
-require 'redmine_drawio/helpers/markdown_helper'
+require File.expand_path('../redmine_drawio/helpers/drawio_dmsf_helper', __FILE__)
+require File.expand_path('../redmine_drawio/helpers/drawio_settings_helper', __FILE__)
+require File.expand_path('../redmine_drawio/helpers/textile_helper', __FILE__)
+require File.expand_path('../redmine_drawio/helpers/markdown_helper', __FILE__)
 
 # Hooks
-require 'redmine_drawio/hooks/view_hooks'
-require 'redmine_drawio/hooks/macro_dialog'
+require File.expand_path('../redmine_drawio/hooks/view_hooks', __FILE__)
+require File.expand_path('../redmine_drawio/hooks/macro_dialog', __FILE__)
 
 # Macros
-require 'redmine_drawio/macros'
+require File.expand_path('../redmine_drawio/macros', __FILE__)
 
 
 module RedmineDrawio
