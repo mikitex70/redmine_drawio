@@ -28,7 +28,9 @@ if Rails::VERSION::STRING < '5.0.0'
     end
 else
     # Rails 5, use new `prepend` method
-    module RedmineDrawio_markdown
+    module RedmineDrawio
+        module Helpers
+    module MarkdownHelper
         def heads_for_wiki_formatter
             super
             unless @heads_for_wiki_formatter_with_drawio_included
@@ -42,8 +44,10 @@ else
             end
         end
     end
+        end
+    end
     
     module Redmine::WikiFormatting::Markdown::Helper
-        prepend RedmineDrawio_markdown
+        prepend RedmineDrawio::Helpers::MarkdownHelper
     end
 end

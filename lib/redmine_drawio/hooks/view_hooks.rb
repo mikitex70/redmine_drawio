@@ -3,7 +3,7 @@ require 'redmine'
 require 'base64'
 
 module RedmineDrawio
-
+    module Hooks
     class ViewLayoutsBaseBodyTop < Redmine::Hook::ViewListener
         def view_layouts_base_body_top(context = {})
             return unless User.current.admin? && !Setting.rest_api_enabled?
@@ -12,7 +12,7 @@ module RedmineDrawio
         end
     end
 
-    class ViewLayoutsBaseHtmlHeadHook < Redmine::Hook::ViewListener
+    class ViewHooks < Redmine::Hook::ViewListener
         
         # This method will add the necessary CSS and JS scripts to the page header.
         # The scripts are loaded before the 'jstoolbar-textile.min.js' is loaded so
@@ -146,5 +146,5 @@ module RedmineDrawio
             Base64.encode64(User.current.api_key).gsub(/\n/, '').reverse!
         end
     end
-    
+    end
 end

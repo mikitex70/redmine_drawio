@@ -28,7 +28,9 @@ if Rails::VERSION::STRING < '5.0.0'
     end
 else
     # Rails 5, use new new `prepend` method
-    module RedmineDrawio_textile
+    module RedmineDrawio
+        module Helpers
+    module TextileHelper
         def heads_for_wiki_formatter
             super
             unless @heads_for_wiki_formatter_with_drawio_included
@@ -40,10 +42,12 @@ else
                 end
                 @heads_for_wiki_formatter_with_drawio_included = true
             end
+                end
+            end
         end
     end
     
     module Redmine::WikiFormatting::Textile::Helper
-        prepend RedmineDrawio_textile
+        prepend RedmineDrawio::Helpers::TextileHelper
     end
 end
