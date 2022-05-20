@@ -9,13 +9,13 @@
 #   available when loading this code first.
 #
 module RedmineDrawio
-  module Helpers
-module DrawioSettingsHelper
-  def self.svg_enabled?
-    return false unless ActiveRecord::Base.connection.data_source_exists? 'settings'
+    module Helpers
+        module DrawioSettingsHelper
+            def self.svg_enabled?
+                return false unless ActiveRecord::Base.connection.data_source_exists? 'settings'
 
-    Setting[:plugin_redmine_drawio]['drawio_svg_enabled'].present? ? true : false
-  end
-end
-  end
+                Setting[:plugin_redmine_drawio]['drawio_svg_enabled'].present? ? true : false
+            end
+        end
+    end
 end
