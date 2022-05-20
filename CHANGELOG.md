@@ -1,7 +1,18 @@
 # Changelog
 
 
+## v1.4.0 (2022-05-20)
+
+### New
+
+* Support Redmine 5.0 (refs #110) [sk-ys]
+
+
 ## v1.3.1 (2022-05-14)
+
+### Changes
+
+* Updated changelog. [Michele Tessaro]
 
 ### Fix
 
