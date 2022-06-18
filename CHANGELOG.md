@@ -1,11 +1,26 @@
 # Changelog
 
 
+## v1.4.1 (2022-06-18)
+
+### New
+
+* Added more german translations (refs #111, thanks to Liaham) [Michele Tessaro]
+
+### Fix
+
+* Fixed possible XSS (fixes #111, thanks to Liaham) [Michele Tessaro]
+
+
 ## v1.4.0 (2022-05-20)
 
 ### New
 
 * Support Redmine 5.0 (refs #110) [sk-ys]
+
+### Changes
+
+* Updated documentation for the new release. [Michele Tessaro]
 
 
 ## v1.3.1 (2022-05-14)
