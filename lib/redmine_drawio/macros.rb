@@ -124,6 +124,11 @@ EOF
                     filename = RedmineDrawio::Macros.imagePath('defaultImage'+diagramExt)
                 end
 
+                if attach && RedmineDrawio::Macros.pdf?(self.controller)
+                  url = download_named_attachment_url(attach, attach.filename, :only_path => true )
+                  return ActionController::Base.helpers.image_tag(url, :style => "#{inlineStyle}")
+                end
+
                 diagram = File.read(filename, mode: 'rb')
                 
                 if RedmineDrawio::Macros.svg? diagramName
@@ -270,7 +275,14 @@ EOF
                     end
                     
                     diagram = File.read(filename, mode: 'rb')
-                    
+
+                    if file && RedmineDrawio::Macros.pdf?(self.controller)
+                        member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
+                        filename = file.last_revision.formatted_name(member)
+                        url = static_dmsf_file_url(file, filename, :only_path => true)
+                        return ActionController::Base.helpers.image_tag(url, :style => "#{inlineStyle}")
+                    end
+
                     if RedmineDrawio::Macros.svg? diagramName
                         return RedmineDrawio::Macros.encapsulateSvg(RedmineDrawio::Macros.adaptSvg(diagram, size), inlineStyle, diagramName, title, saveName, true)
                     elsif RedmineDrawio::Macros.png? diagramName
@@ -447,6 +459,10 @@ EOF
 
             def svg_enabled?
                 RedmineDrawio::Helpers::DrawioSettingsHelper.svg_enabled?
+            end
+
+            def pdf?(controller)
+                controller.params[:format] == "pdf"
             end
 
         end
