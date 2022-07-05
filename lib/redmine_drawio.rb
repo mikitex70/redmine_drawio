@@ -4,6 +4,7 @@
 
 # Patches
 require File.expand_path('../redmine_drawio/patches/string_patch', __FILE__)
+require File.expand_path('../redmine_drawio/patches/rbpdf_patch', __FILE__)
 
 # Helpers
 require File.expand_path('../redmine_drawio/helpers/drawio_dmsf_helper', __FILE__)
