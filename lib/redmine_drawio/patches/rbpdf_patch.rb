@@ -2,7 +2,7 @@ require 'rbpdf'
 
 module RedmineDrawio
   module Patches
-    module RBPDFPatch
+    module RbpdfPatch
 
       def get_image_filename(attrname)
         filename = super(attrname)
@@ -27,4 +27,4 @@ module RedmineDrawio
   end
 end
 
-Redmine::Export::PDF::ITCPDF.prepend(RedmineDrawio::Patches::RBPDFPatch)
+Redmine::Export::PDF::ITCPDF.prepend(RedmineDrawio::Patches::RbpdfPatch)
