@@ -1,6 +1,15 @@
 # Changelog
 
 
+## development (unreleased)
+
+### Other
+
+* Fix #55 redmine attachments patch redmine/redmine@e551c0cb0092088510c66dea3e8bcaf87f93c08e. [krutin]
+
+* Fix #55 macro body for pdf format return src url. [krutin]
+
+
 ## v1.4.1 (2022-06-18)
 
 ### New

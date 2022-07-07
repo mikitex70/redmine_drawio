@@ -157,6 +157,13 @@ Like for the ``drawio_attach`` macro, in the toolbar editor there is a button wi
 As for the `drawio_attach` macro, the dialog can be used for updating a macro simply by positioning the editing cursor in the right place and clicking the button.
 
 
+## Diagrams in PDF export
+
+Starting from version `1.4.2`, diagrams are included in PDF exports.
+
+There is a limitation: if the diagram is saved in a document managed by the [DMSF] plugin you need at least the **'v3.0.3'** version of the plugin to make the export work. And this means that it only works starting with **Redmine 5**.
+
+
 ## Some note on the drawio editor
 
 Someone can be concerned about security in sending own diagrams to the [draw.io] site.
@@ -225,7 +232,7 @@ Once updated the settings, go to a wiki page with a mathematical SVG diagram and
   - embed diagram as macro body
   - ~~use GoogleDrive, Dropbox and OneDrive as possible diagram sources.~~ I don't have time, and I think is not so useful
   - implement tests
-  - make diagram images exportable in PDF
+  - ~~make diagram images exportable in PDF~~
   - CKEditor widgets: this is a bit complicated but it would be cool. Problems:
     + first image: how to setup the initial placeholder and let be replaced when saved?
     + how to save diagrams when the wiki/issue content is new and not already saved? A "document" is needed to attach an attachment

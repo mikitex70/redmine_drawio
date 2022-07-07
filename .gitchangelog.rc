@@ -95,6 +95,7 @@ section_regexps = [
         r'^[cC]orrett[aeio]\s+([^\n]*)$',
         r'^[fF]ixes\s.*$',
         r'^Load\s\'loading',
+        r'^[fF]ix\s+.*$',
      ]),
 
     ('Other', None ## Match all lines
