@@ -130,6 +130,7 @@ This macro handles diagrams saved in the [DMSF] repository as PNG+XML or SVG+XML
 Usage is very simple:
 
 - **enable the WebDAV functionality of the [DMSF] plugin in ``Read/Write`` mode**; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
+  **NOTE**: starting from the [DMSF] plugin version `v3.0.0` you need to modify the Redmine `config/additional_environment.rb` file; see [here](https://github.com/danmunn/redmine_dmsf#webdav) for more details.
 - in Wiki or issue pages use the `drawio_dmsf` macro to specify the path of the diagram, relative to the DMSF documents of the current project. For example:
 
   ``{{drawio_dmsf(diagrams/myDiagram)}}``
