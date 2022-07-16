@@ -1,9 +1,25 @@
 # Changelog
 
 
-## development (unreleased)
+## v1.4.2 (2022-07-16)
 
-### Other
+### Changes
+
+* Update README.md. [sstidl]
+
+  typo
+
+* Viewer.js: Use drawio_service_url if configured. [sstidl]
+
+  it would reduce the dependency to diagrams.net if we use the viewer from our own instance
+
+* Mathjax bumped to 2.7.7. [Michele Tessaro]
+
+* Added paragraph on dmsf webdav configuration. [Michele Tessaro]
+
+* Updated documentation with mention on pdf export. [Michele Tessaro]
+
+### Fix
 
 * Fix #55 redmine attachments patch redmine/redmine@e551c0cb0092088510c66dea3e8bcaf87f93c08e. [krutin]
 
@@ -595,6 +611,14 @@
 
 ### Fix
 
+* Fix #27: Javascript error match on undefined. [Alexander Menk]
+
+  Prevented saving in EasyRedmine issue note
+
+* Fix #27: Javascript error match on undefined. [Alexander Menk]
+
+  Prevented saving in EasyRedmine issue note
+
 * Fixed updating diagrams on private notes (fixes #28) [Michele Tessaro]
 
 * Fixed saving of SVGs (fixes #26, #26) [Michele Tessaro]
@@ -612,16 +636,6 @@
 * Fixed macros after refactor for easyredmine (refs #18) [Michele Tessaro]
 
 * Fixed macros after refactor for easyredmine (refs #18) [Michele Tessaro]
-
-### Other
-
-* Fix #27: Javascript error match on undefined. [Alexander Menk]
-
-  Prevented saving in EasyRedmine issue note
-
-* Fix #27: Javascript error match on undefined. [Alexander Menk]
-
-  Prevented saving in EasyRedmine issue note
 
 
 ## v0.6.0 (2017-04-11)
