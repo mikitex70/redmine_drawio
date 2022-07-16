@@ -21,13 +21,18 @@ module RedmineDrawio
             # fragment after the jstoolbar-textile is loaded, which pathes the jsToolBar
             # object.
             def view_layouts_base_html_head(context={})
+                if Setting.plugin_redmine_drawio['drawio_service_url'].to_s.strip.empty?
+                  viewer_url = 'https://viewer.diagrams.net'
+                else
+                  viewer_url = Setting.plugin_redmine_drawio['drawio_service_url']
+                end
                 # loading XML viewer library, only if necessary
                 header = <<-EOF
                     <script type="text/javascript">//<![CDATA[
                         $(function() {
                             if($(".mxgraph").length) {
                                 var script = document.createElement('script');
-                                script.src = 'https://viewer.diagrams.net/js/viewer-static.min.js';
+                                script.src = '#{viewer_url}/js/viewer-static.min.js';
                                 document.head.append(script);
                             }
                         });

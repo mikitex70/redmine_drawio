@@ -58,7 +58,7 @@ Another value added in the configuration above is the `data:` for the `image-src
 
 An additional important configuration that may be present is the `frame-src`: it configures the policy for the use of iframes. The diagram editor is run in a `iframe`, so the setting must be relaxed to allow loading contents from `embed.diagrams.net`. Example (to be added in the `Content-Security-Policy` header):
 ```
-frame-src: embed.diagrams.net 'self'; child-src: e,bed.diagrams.net 'self'
+frame-src: embed.diagrams.net 'self'; child-src: embed.diagrams.net 'self'
 ```
 
 
