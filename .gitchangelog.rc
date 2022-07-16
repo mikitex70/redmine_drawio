@@ -88,7 +88,8 @@ section_regexps = [
         r'^[aA]ggiornat[aeio]\s+([^\n]*)$',
         r'^[cC]ambiat[aeio]\s+([^\n]*)$',
         r'^[mM]odificat[aeio]\s+([^\n]*)$',
-        r'^[uU]pdates.*$',
+        r'^[uU]pdate.*$',
+        r'^viewer\.js.*$',
      ]),
     ('Fix', [
         r'^[fF]ix\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?([^\n]*)$',
