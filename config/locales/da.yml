@@ -7,7 +7,7 @@ da:
   drawio_mathjax: "SVG-matematik-understøttelse"
   drawio_mathjax_hint: "Aktivér support for matematiske symboler i SVG-diagrammer"
   drawio_mathjax_url: "MathJax library URL"
-  drawio_mathjax_url_hint: "Matematiske symboler support-bibliotek; standardværdien er //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+  drawio_mathjax_url_hint: "Matematiske symboler support-bibliotek; standardværdien er //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"
   drawio_dlg_title: "Diagram"
   drawio_dlg_diagName: "Diagram-titel"
   drawio_dlg_diagType: "Diagram-format"

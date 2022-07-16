@@ -7,7 +7,7 @@ ko:
   drawio_mathjax: "SVG 수식 지원"
   drawio_mathjax_hint: "SVG 다이어그램을 위한 수식 지원 활성화"
   drawio_mathjax_url: "MathJax 라이브러리 URL"
-  drawio_mathjax_url_hint: "수식 지원을 위한 라이브러리; 기본값은 '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js'"
+  drawio_mathjax_url_hint: "수식 지원을 위한 라이브러리; 기본값은 '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js'"
   drawio_dlg_title: "다이어그램 정의"
   drawio_dlg_diagName: "다이어그램 이름"
   drawio_dlg_diagType: "다이어그램 포맷"

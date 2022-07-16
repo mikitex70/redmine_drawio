@@ -7,7 +7,7 @@ ru:
   drawio_mathjax: "Поддержка математики для SVG"
   drawio_mathjax_hint: "Включить поддержку математических символов для SVG-диаграмм"
   drawio_mathjax_url: "MathJax library URL"
-  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"
   drawio_dlg_title: "Определить диаграмму"
   drawio_dlg_diagName: "Название диаграммы"
   drawio_dlg_diagType: "Формат диаграммы"
