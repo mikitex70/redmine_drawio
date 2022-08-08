@@ -17,7 +17,6 @@ module RedmineDrawio
     fixtures :users, :email_addresses, :roles
 
     def setup
-      @base_body_top_hook = RedmineDrawio::Hooks::ViewLayoutsBaseBodyTop.instance
       @view_hooks = RedmineDrawio::Hooks::ViewHooks.instance
     end
 
