@@ -3,7 +3,7 @@ de:
   drawio_url: "Draw.io Dienst URL"
   drawio_service_url_hint: "URL deiner lokalen Installation; Setze 'https://embed.diagrams.net' um den Web-Dienst zu nutzen."
   drawio_svg_enabled: "Aktiviere SVG Diagramme"
-  drawio_svg_enabled_hint: "WARUNUNG: Eingebettete SVG Diagramme ermöglichen XSS(Cross Site Scripting) Angriffe"
+  drawio_svg_enabled_hint: "WARNUNG: Eingebettete SVG Diagramme ermöglichen XSS(Cross Site Scripting) Angriffe"
   drawio_mathjax: "SVG mathemathics Unterstützung"
   drawio_mathjax_hint: "Aktiviere mathematische Symbolunterstützung für SVG Diagramme"
   drawio_mathjax_url: "MathJax Bibliothek URL"
