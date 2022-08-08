@@ -16,7 +16,8 @@ class ViewHooksTest < ActionDispatch::IntegrationTest
   fixtures :users, :email_addresses, :roles
 
   def setup
-    @hook = RedmineDrawio::ViewLayoutsBaseHtmlHeadHook.instance
+    @base_body_top_hook = RedmineDrawio::Hooks::ViewLayoutsBaseBodyTop.instance
+    @view_hooks = RedmineDrawio::Hooks::ViewHooks.instance
   end
 
   def teardown
@@ -40,12 +41,12 @@ class ViewHooksTest < ActionDispatch::IntegrationTest
 
   test 'do not render hash code when api is disabled' do
     render_view_hooks(user: 'admin', password: 'admin')
-    assert @hook.send(:hash_code).blank?
+    assert @view_hooks.send(:hash_code).blank?
   end
 
   test 'render hash code when api is enabled' do
     render_view_hooks(user: 'admin', password: 'admin', rest_api_enabled: '1')
-    assert @hook.send(:hash_code).present?
+    assert @view_hooks.send(:hash_code).present?
   end
 
   private

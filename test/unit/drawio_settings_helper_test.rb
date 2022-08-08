@@ -6,7 +6,6 @@ require File.expand_path('test_helper', File.dirname(__dir__))
 require File.expand_path('with_drawio_settings', File.dirname(__dir__))
 
 class DrawioSettingsHelperTest < ActiveSupport::TestCase
-  include DrawioSettingsHelper
   include RedmineDrawio::WithDrawioSettings
 
   def teardown
@@ -14,14 +13,20 @@ class DrawioSettingsHelperTest < ActiveSupport::TestCase
   end
 
   def test_svg_disabled
-    with_settings(redmine_drawio({ drawio_svg_enabled: false })) do 
+    with_settings(redmine_drawio({ drawio_svg_enabled: false })) do
       assert_not svg_enabled?
     end
   end
 
   def test_svg_enabled
-    with_settings(redmine_drawio({ drawio_svg_enabled: true })) do 
+    with_settings(redmine_drawio({ drawio_svg_enabled: true })) do
       assert svg_enabled?
     end
+  end
+
+  private
+
+  def svg_enabled?
+    RedmineDrawio::Helpers::DrawioSettingsHelper.svg_enabled?
   end
 end
