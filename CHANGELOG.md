@@ -1,9 +1,37 @@
 # Changelog
 
 
+## v1.4.3 (2022-09-07)
+
+### Changes
+
+* Updated the changelog for the new release. [Michele Tessaro]
+
+### Fix
+
+* Fixed toolbar buttons with the WYSIWYG plugin (refs #119) [Michele Tessaro]
+
+* Fixes broken tests. [Liane Hampe]
+
+  There were code changes causing tests to fail.
+
+* Fixes typo in de.yml. [Liane Hampe]
+
+### Other
+
+* Removes unused instance var from test. [Liane Hampe]
+
+* Adds namespaces to tests. [Liane Hampe]
+
+  In order to prevent class clashes all test are wrapped with
+  module 'RedmineDrawio'.
+
+
 ## v1.4.2 (2022-07-16)
 
 ### Changes
+
+* Updated the changelog for the new release. [Michele Tessaro]
 
 * Update README.md. [sstidl]
 
