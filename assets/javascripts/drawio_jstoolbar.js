@@ -79,7 +79,13 @@
                 if(insert || !endSel)
                     endSel = startSel
 
-                editor.selection.getRng().startContainer.nodeValue = text.substring(0, startSel)+newText+text.substring(endSel);
+                var newText = text.substring(0, startSel)+newText+text.substring(endSel);
+
+                if(editor.selection.getRng().startContainer.nodeValue) {
+                    editor.selection.getRng().startContainer.nodeValue = newText;
+                } else {
+                    editor.selection.getRng().startContainer.innerText = newText;
+                }
             }
         }
     }
@@ -169,7 +175,7 @@
                     title : Drawio.strings['drawio_attach_title'],
                     image : imgPath+'/jstb_drawio_attach.png',
                     onclick: function() {
-                        openMacroDialog(getTinymceEditorAdapter(editor), 'drawio_attach');
+                        openMacroDialog(dlg, getTinymceEditorAdapter(editor), 'drawio_attach');
                     }
                 });
                 bg.append(editor.buttons['drawio_attach']);
@@ -179,7 +185,7 @@
                         title: Drawio.strings['drawio_dmsf_title'  ],
                         image: imgPath+'/jstb_drawio_dmsf.png',
                         onclick: function() {
-                            openMacroDialog(getTinymceEditorAdapter(editor), 'drawio_dmsf');
+                            openMacroDialog(dlg, getTinymceEditorAdapter(editor), 'drawio_dmsf');
                         }
                     });
                     bg.append(editor.buttons['drawio_dmsf']);
@@ -191,7 +197,7 @@
     }
   
     // The dialogs for macro editing must be defined only when the document is ready
-    var dlg, dlgXml;
+    var dlg;
   
     $(function() {
         var dlgButtons = {};
@@ -328,16 +334,6 @@
     
     // Initialize the jsToolBar object; called explicitly after the jsToolBar has been created
     Drawio.initToolbar = function() {
-//         jsToolBar.prototype.elements.drawio = {
-//             type : 'button',
-//             after: 'img',
-//             title: Drawio.strings['drawio_title'],
-//             fn   : {
-//                 wiki: function() {
-//                     openMacroDialog(dlgXml, getRedmineEditorAdapter(this), 'drawio');
-//                 }
-//             }
-//         };
         jsToolBar.prototype.elements.drawio_attach = {
             type : 'button',
             after: 'img',
