@@ -193,7 +193,7 @@
             });
         }
         else
-            setTimeout(updateTinyMCEToolbar, 200);
+            setTimeout(updateTinyMCEToolbar, 100);
     }
   
     // The dialogs for macro editing must be defined only when the document is ready
