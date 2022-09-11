@@ -1,9 +1,23 @@
 # Changelog
 
 
+## v1.4.4 (2022-09-11)
+
+### Fix
+
+* Fixed patching of viewer-static.min.js (refs #120) [Michele Tessaro]
+
+  The code in `viewer-static.min.js` from `embed.diagrams.net` was
+  refactored, so the patch code had to be adapted.
+
+* Reduced polling timeout on tinymce initialization (refs #119) [Michele Tessaro]
+
+
 ## v1.4.3 (2022-09-07)
 
 ### Changes
+
+* Updated changelog. [Michele Tessaro]
 
 * Updated the changelog for the new release. [Michele Tessaro]
 
