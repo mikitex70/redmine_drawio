@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'redmine'
 
-if Rails::VERSION::STRING >= '5.0.0'
+if Redmine::VERSION::MAJOR >= 5
     # CommonMark is available only from Redmine 5
     module RedmineDrawio
         module Helpers
