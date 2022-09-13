@@ -1,9 +1,21 @@
 # Changelog
 
 
-## v1.4.4 (2022-09-11)
+## development (unreleased)
+
+### Changes
+
+* Changed version for the new release. [Michele Tessaro]
 
 ### Fix
+
+* Fixed working on Redmine < 5 (refs #121) [Michele Tessaro]
+
+* Fixed init of multiple tinymce editors (refs #119) [Michele Tessaro]
+
+  Refactored the TinyMCE editor inizialization detection for adding the
+  toolbar buttons; now it works also for issue notes.
+  Fixed also some trouble in inserting macro code after editing.
 
 * Fixed patching of viewer-static.min.js (refs #120) [Michele Tessaro]
 
