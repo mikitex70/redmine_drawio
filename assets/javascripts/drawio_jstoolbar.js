@@ -76,15 +76,17 @@
             replaceSelected: function(newText, insert) { 
                 var text = editor.selection.getRng().startContainer.textContent;
                 
-                if(insert || !endSel)
-                    endSel = startSel
+                if(insert || !endSel) {
+                    endSel = startSel;
+                }
 
                 var newText = text.substring(0, startSel)+newText+text.substring(endSel);
 
                 if(editor.selection.getRng().startContainer.nodeValue) {
-                    editor.selection.getRng().startContainer.nodeValue = newText;
+                    editor.selection.select(editor.selection.getNode());
+                    editor.execCommand('mceReplaceContent', false, newText);
                 } else {
-                    editor.selection.getRng().startContainer.innerText = newText;
+                    editor.execCommand('mceInsertContent', false, newText);
                 }
             }
         }
@@ -164,13 +166,12 @@
      */
     function updateTinyMCEToolbar() {
         // See https://stackoverflow.com/questions/36411839/proper-way-of-modifying-toolbar-after-init-in-tinymce
-        var editor = tinymce.activeEditor;
-        
-        if(editor) {
-            editor.on('init', function() {
+        tinyMCE.on('AddEditor', function(evt){
+            evt.editor.on('init', function() {
+                var editor = this;
                 var imgPath = Drawio.settings.redmineUrl+'plugin_assets/redmine_drawio/images';
                 var bg = editor.theme.panel.find('toolbar buttongroup')[2];  // group with links/images/code/...
-                
+
                 editor.addButton('drawio_attach', {
                     title : Drawio.strings['drawio_attach_title'],
                     image : imgPath+'/jstb_drawio_attach.png',
@@ -179,10 +180,10 @@
                     }
                 });
                 bg.append(editor.buttons['drawio_attach']);
-                
+
                 if(Drawio.settings.DMSF) {
                     editor.addButton('drawio_dmsf', {
-                        title: Drawio.strings['drawio_dmsf_title'  ],
+                        title: Drawio.strings['drawio_dmsf_title'],
                         image: imgPath+'/jstb_drawio_dmsf.png',
                         onclick: function() {
                             openMacroDialog(dlg, getTinymceEditorAdapter(editor), 'drawio_dmsf');
@@ -191,9 +192,7 @@
                     bg.append(editor.buttons['drawio_dmsf']);
                 }
             });
-        }
-        else
-            setTimeout(updateTinyMCEToolbar, 200);
+        });
     }
   
     // The dialogs for macro editing must be defined only when the document is ready

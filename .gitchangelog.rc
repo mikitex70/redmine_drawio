@@ -150,6 +150,7 @@ body_process = (ReSub(r'((^|\n)[A-Z]\w+(-\w+)*: .*(\n\s+.*)*)+$', r'') |
 subject_process = (strip |
     ReSub(r'^([cC]hg|[fF]ix|[nN]ew)\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?(.*)$', r'\4') |
     ReSub(r' @\d+(h|m|min)?', r'') |
+    ReSub(r'pkg changed', r'changed') |
     ucfirst | final_dot)
 
 

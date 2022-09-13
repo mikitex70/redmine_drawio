@@ -562,13 +562,20 @@ window.onDrawioViewerLoad = function() {
     // Maybe it will broke in the future, but for now is working.
     
     // Patch the code `mxEvent.addListener(g,"click",b)`
-    var code = GraphViewer.prototype.addToolbar.toString();
+    var funcName = 'createToolbarButton';
+    var code = GraphViewer.prototype.createToolbarButton.toString();
+    
+    if(typeof(GraphViewer.prototype[funcName]) === "undefined") {
+        funcName = 'addToolbar';
+    }
+    
+    var code = GraphViewer.prototype[funcName].toString();
     var searchRegex = /mxEvent\.addListener\(([a-zA-Z]+),"click",([a-zA-Z]+)\)/;
     var replaceRules = "mxEvent.addListener($1,\"click\",(typeof($2)==='string'?eval($2):$2))";
 
     code = code.replace(searchRegex, replaceRules);
     // Apply the patch
-    GraphViewer.prototype.addToolbar = eval("("+code+")");
+    GraphViewer.prototype[funcName] = eval("("+code+")");
     // Draw graphs
     GraphViewer.processElements();
 }
