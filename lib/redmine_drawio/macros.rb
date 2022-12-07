@@ -462,6 +462,7 @@ EOF
             end
 
             def pdf?(controller)
+                return false unless params[:format]
                 controller.params[:format] == "pdf"
             end
 
