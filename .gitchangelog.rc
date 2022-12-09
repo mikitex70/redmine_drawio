@@ -151,6 +151,7 @@ subject_process = (strip |
     ReSub(r'^([cC]hg|[fF]ix|[nN]ew)\s*:\s*((dev|use?r|pkg|test|doc)\s*:\s*)?(.*)$', r'\4') |
     ReSub(r' @\d+(h|m|min)?', r'') |
     ReSub(r'pkg changed', r'changed') |
+    ReSub(r'To fix mail sending error', r'fix mail sending error') |
     ucfirst | final_dot)
 
 
