@@ -464,14 +464,7 @@ EOF
             def pdf?(controller)
                 return false if controller.is_a?(Mailer)
 
-                para = controller.params[:format]
-
-                case para
-                when 'pdf'
-                  return true
-                else
-                  return false
-                end
+                controller.params[:format]
             end
 
         end
