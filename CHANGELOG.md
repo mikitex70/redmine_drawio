@@ -3,7 +3,16 @@
 
 ## development (unreleased)
 
+### v1.4.5 (2022-12-09)
+
+* Fix mail sending error. [Hunt Lin]
+
+
+## v1.4.4 (2022-09-13)
+
 ### Changes
+
+* Updated the changelog. [Michele Tessaro]
 
 * Changed version for the new release. [Michele Tessaro]
 
