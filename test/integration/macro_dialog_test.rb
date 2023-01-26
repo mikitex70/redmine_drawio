@@ -25,14 +25,14 @@ module RedmineDrawio
     end
 
     test 'render macro diaglog without svg' do
-      with_settings(redmine_drawio({ drawio_svg_enabled: false })) do
+      with_settings(redmine_drawio(**{ drawio_svg_enabled: false })) do
         render_marcro_dialog
         assert_select 'input[value=?]', 'svg', 0
       end
     end
 
     test 'render macro diaglog with svg' do
-      with_settings(redmine_drawio({ drawio_svg_enabled: true })) do
+      with_settings(redmine_drawio(**{ drawio_svg_enabled: true })) do
         render_marcro_dialog
         assert_select 'input[value=?]', 'svg'
       end
