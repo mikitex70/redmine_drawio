@@ -3,7 +3,30 @@
 
 ## development (unreleased)
 
-### v1.4.5 (2022-12-09)
+### Fix
+
+* Fixes some tests. [Liane Hampe]
+
+  Since Ruby 3 passing method argumentes changed. A Hash won't be
+  converted to a keyword argument anymore. Therefore, keyword argumentes
+  needs to be entered explicitly by default. To keep the behaviour double
+  splat needs to be added to hash arguments.
+
+  See https://www.ruby-lang.org/en/news/2019/12/12/separation-of-positional-and-keyword-arguments-in-ruby-3-0/
+
+* Fixes common mark support. [Liane Hampe]
+
+  The helper for supporting common mark was prepared but not loaded.
+  Therefore, the wikitool bar does not extend with the required
+  drawio buttons.
+
+  By requiring the helper file in lib/redmine_drawio.rb the code will
+  be executed now.
+
+
+## v1.4.5 (2022-12-09)
+
+### Other
 
 * Fix mail sending error. [Hunt Lin]
 
