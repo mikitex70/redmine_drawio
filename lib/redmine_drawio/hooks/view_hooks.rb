@@ -32,7 +32,7 @@ module RedmineDrawio
                         $(function() {
                             if($(".mxgraph").length) {
                                 var script = document.createElement('script');
-                                script.src = '#{viewer_url}/js/viewer-static.min.js';
+                                script.src = '#{viewer_url.split('?')[0]}/js/viewer-static.min.js';
                                 document.head.append(script);
                             }
                         });
