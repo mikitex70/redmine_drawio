@@ -570,7 +570,6 @@ window.onDrawioViewerLoad = function() {
 
     // Patch the code `mxEvent.addListener(g,"click",b)`
     var funcName = 'createToolbarButton';
-    var code = GraphViewer.prototype.createToolbarButton.toString();
 
     if(typeof(GraphViewer.prototype[funcName]) === "undefined") {
         funcName = 'addToolbar';
