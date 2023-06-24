@@ -1,7 +1,16 @@
 # Changelog
 
 
-## development (unreleased)
+## 1.4.7 (2023-06-24)
+
+### Fix
+
+* Fixed drawing math symbols with XML diagrams. [Michele Tessaro]
+
+* Fixed passing parameters in drawio url (fixes #128) [Michele Tessaro]
+
+
+## v1.4.6 (2023-01-28)
 
 ### Fix
 
