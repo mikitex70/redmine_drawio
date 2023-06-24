@@ -51,10 +51,10 @@ module RedmineDrawio
                         },*/
                         tex2jax: {
                         //inlineMath: [['$', '$'], ['\\(', '\\)']],
-                        ignoreClass: "no-mathjax|error|warning|notice"
+                          ignoreClass: "wiki-class-no-mathjax|no-mathjax|error|warning|notice"
                         },
                         asciimath2jax: {
-                        ignoreClass: "no-mathjax|error|warning|notice"
+                          ignoreClass: "wiki-class-no-mathjax|no-mathjax|error|warning|notice"
                         }
                     });
                     //]]</script>
