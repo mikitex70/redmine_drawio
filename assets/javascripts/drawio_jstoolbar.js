@@ -210,14 +210,14 @@
             
             if(diagName != '' && size.match(/^\d*$/)) {
                 // Add/replace file extension
-                diagName = diagName.replace(/^(.*?)(?:\.\w{3})?$/, '$1.'+diagType);
-                
+                diagName = diagName.replace(/^(.*?)(?:\.\w{3,6})?$/, '$1.'+diagType);
+
                 var options = [diagName];
                 
                 if(/^\d+$/.test(size))
                     options.push('size='+size);
                 
-                if(diagType === 'xml') {
+                if(diagType === 'xml' || diagType === 'drawio') {
                     var tbAutoHide = $("#drawio_tbautohide").is(":checked");
                     var lightbox   = $("#drawio_lightbox").is(":checked");
                     var zoom       = $("#drawio_zoom").is(":checked");
@@ -290,7 +290,9 @@
                         }
                     }
                     
-                    if($('input:radio[name=drawio_diagType]:checked').val() === 'xml')
+                    var selectedType = $('input:radio[name=drawio_diagType]:checked').val();
+
+                    if(selectedType === 'xml' || selectedType === 'drawio')
                         $("#drawio_xml_params").show();
                 }
             },
@@ -313,7 +315,7 @@
                 $("input[name=drawio__P1]").val(filename.replace(/\.[^/.]+$/, "")+"."+this.value);
             }
             
-            if(this.value === 'xml')
+            if(this.value === 'xml' || this.value === 'drawio')
                 $("#drawio_xml_params").show();
             else
                 $("#drawio_xml_params").hide();

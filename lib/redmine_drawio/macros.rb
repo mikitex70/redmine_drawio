@@ -30,6 +30,7 @@ Supported diagrams format are:
 * png: diagram exported as png+xml (embedded source diagram)
 * svg: diagram exported as svg+xml (embedded source diagram)
 * xml: classic diagram xml source
+* drawio: same ax xml
 
 Every time a diagram is saved, a new attachment will be created; for now you must 
 manually delete old attachments (missing Redmine API; version 3.3.0 seems to have included
@@ -55,7 +56,7 @@ EOF
                 diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first)
                 
                 return "«Please set a diagram name»".html_safe unless diagramName
-                return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml))?$/i
+                return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
                 return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
                 
                 # defalts
@@ -184,6 +185,7 @@ Supported diagrams format are:
 * png: diagram exported as png+xml (embedded source diagram)
 * svg: diagram exported as svg+xml (embedded source diagram)
 * xml: classic diagram xml source
+* drawio: same ax xml
 
 The diagram name can contain a path. For example:
 
@@ -212,7 +214,7 @@ EOF
                     diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first).force_encoding("UTF-8")
                     
                     return "«Please set a diagram name»".html_safe unless diagramName
-                    return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
+                    return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
                     return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
                     
                     # Add an extension, if missing
