@@ -316,7 +316,7 @@ EOF
                             'toolbar'        => toolbar,
                             'xml'            => diagram
                         }
-                        return RedmineDrawio::Macros.encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, false)
+                        return RedmineDrawio::Macros.encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, true)
                     end
                 end
             end
