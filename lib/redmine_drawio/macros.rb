@@ -23,7 +23,7 @@ Macro for embedding www.draw.io diagrams stored as attachments. Example usage:
 {{drawio_attach(myDiagram[, ...options...])}}
 
 The diagram is drawn from the attachment myDiagram.png (diagram esported as png+xml);
-if the attachment doesn't exists a default diagram wil be drawn. Double click it to start
+if the attachment does not exists a default diagram wil be drawn. Double click it to start
 editing.
 
 Supported diagrams format are:
@@ -178,7 +178,7 @@ Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage
 {{drawio_dmsf(myDiagram[, ...options...])}}
 
 The diagram is drawn from the DMSF document myDiagram.png(diagram esported as png+xml);
-if the attachment doesn't exists a default diagram wil be drawn. Double click it to start
+if the attachment does not exists a default diagram wil be drawn. Double click it to start
 editing.
 
 Supported diagrams format are:
@@ -207,6 +207,7 @@ lightbox=false  : enable lightbox usage
 EOF
         
                 macro :drawio_dmsf do |obj, args|
+                byebug
                     return "«Please save content first»" unless obj
                     return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
                     
