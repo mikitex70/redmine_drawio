@@ -268,7 +268,7 @@ EOF
                     
                     if file
                         # Document exists, get the file path
-                        filename = file.last_revision.disk_file project
+                        filename = file.last_revision.disk_file
                         canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
                     else
                         # Document does not exists: use a predefined diagram to start editing
