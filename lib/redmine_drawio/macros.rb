@@ -207,7 +207,6 @@ lightbox=false  : enable lightbox usage
 EOF
         
                 macro :drawio_dmsf do |obj, args|
-                byebug
                     return "«Please save content first»" unless obj
                     return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
                     
