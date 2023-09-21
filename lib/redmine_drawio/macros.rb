@@ -214,7 +214,7 @@ EOF
                     diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first).force_encoding("UTF-8")
                     
                     return "«Please set a diagram name»".html_safe unless diagramName
-                    return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
+                    return "«Only png, svg, xml, and drawio diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
                     return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
                     
                     # Add an extension, if missing
