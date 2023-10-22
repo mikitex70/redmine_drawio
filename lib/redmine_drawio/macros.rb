@@ -23,13 +23,14 @@ Macro for embedding www.draw.io diagrams stored as attachments. Example usage:
 {{drawio_attach(myDiagram[, ...options...])}}
 
 The diagram is drawn from the attachment myDiagram.png (diagram esported as png+xml);
-if the attachment doesn't exists a default diagram wil be drawn. Double click it to start
+if the attachment does not exists a default diagram wil be drawn. Double click it to start
 editing.
 
 Supported diagrams format are:
 * png: diagram exported as png+xml (embedded source diagram)
 * svg: diagram exported as svg+xml (embedded source diagram)
 * xml: classic diagram xml source
+* drawio: same ax xml
 
 Every time a diagram is saved, a new attachment will be created; for now you must 
 manually delete old attachments (missing Redmine API; version 3.3.0 seems to have included
@@ -55,7 +56,7 @@ EOF
                 diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first)
                 
                 return "«Please set a diagram name»".html_safe unless diagramName
-                return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml))?$/i
+                return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
                 return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
                 
                 # defalts
@@ -177,13 +178,14 @@ Macro for embedding www.draw.io diagrams stored as DMSF documents. Example usage
 {{drawio_dmsf(myDiagram[, ...options...])}}
 
 The diagram is drawn from the DMSF document myDiagram.png(diagram esported as png+xml);
-if the attachment doesn't exists a default diagram wil be drawn. Double click it to start
+if the attachment does not exists a default diagram wil be drawn. Double click it to start
 editing.
 
 Supported diagrams format are:
 * png: diagram exported as png+xml (embedded source diagram)
 * svg: diagram exported as svg+xml (embedded source diagram)
 * xml: classic diagram xml source
+* drawio: same ax xml
 
 The diagram name can contain a path. For example:
 
@@ -212,7 +214,7 @@ EOF
                     diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first).force_encoding("UTF-8")
                     
                     return "«Please set a diagram name»".html_safe unless diagramName
-                    return "«Only png and svg diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg))?$/i
+                    return "«Only png, svg, xml, and drawio diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
                     return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
                     
                     # Add an extension, if missing
@@ -266,7 +268,7 @@ EOF
                     
                     if file
                         # Document exists, get the file path
-                        filename = file.last_revision.disk_file project
+                        filename = file.last_revision.disk_file
                         canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
                     else
                         # Document does not exists: use a predefined diagram to start editing
@@ -314,7 +316,7 @@ EOF
                             'toolbar'        => toolbar,
                             'xml'            => diagram
                         }
-                        return RedmineDrawio::Macros.encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, false)
+                        return RedmineDrawio::Macros.encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, true)
                     end
                 end
             end
@@ -462,7 +464,7 @@ EOF
             end
 
             def pdf?(controller)
-                return false if controller.is_a?(Mailer)
+                return false if controller.is_a?(Mailer) || controller.nil?
 
                 controller.params[:format]
             end

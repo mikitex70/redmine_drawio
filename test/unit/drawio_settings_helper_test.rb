@@ -11,6 +11,7 @@ module RedmineDrawio
 
     def teardown
       Setting.plugin_redmine_drawio = { drawio_svg_enabled: nil }
+      Setting.clear_cache
     end
 
     def test_svg_disabled

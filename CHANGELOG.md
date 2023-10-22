@@ -1,7 +1,61 @@
 # Changelog
 
 
-## 1.4.7 (2023-06-24)
+## v1.4.8 (2023-10-22)
+
+### New
+
+* Added support for `drawio` diagram extension (#131) [Michele Tessaro]
+
+### Fix
+
+* Fixes wrong number of arguments exception. [Liane Hampe]
+
+  The macro drawio_dmsf will raise an exception when a user applies
+  the macro to a previously uploaded drawio file (file ending does not
+  matter).
+
+  The error occurs in DmsfFileRevision#disk_file which has changed four
+  month ago.
+
+* Fixes uncaught type error. [Liane Hampe]
+
+  Math support will only be provided if the user has checked the
+  corresponding box in plugin settings. When no math support is required
+  the javascript snippet should be ignored.
+
+  Since only MathJax will be ignored and not MathJax.Hub, javascript will
+  raise a type error. This is fixed with a further condition.
+
+### Other
+
+* Adds some unit tests. [Liane Hampe]
+
+  Will add some unit tests for drawio macros.
+
+* Extends error message. [Liane Hampe]
+
+  The extension drawio is missing in an error message listing supported
+  diagram formats.
+
+* Changes spelling in heredoc string. [Liane Hampe]
+
+  Will remove inverted comma (') from heredoc string since there are
+  interpreted as the beginning of a normal string
+  ('text between inverted comma') which won't be closed.
+
+  The results is an unreadable code in some IDE such that vscode.
+
+* Changes spelling in heredoc string. [Liane Hampe]
+
+  Will remove inverted comma (') from heredoc string since there are
+  interpreted as the beginning of a normal string
+  ('text between inverted comma') which won't be closed.
+
+  The results is an unreadable code in some IDE such that vscode.
+
+
+## v1.4.7 (2023-06-24)
 
 ### Fix
 

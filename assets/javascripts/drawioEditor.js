@@ -45,6 +45,13 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                            '<svg preserve_aspect_ratio="xMaxYMax meet" style="max-width:100%" width="$2px" height="$3px" viewBox="0 0 $2 $3" $1');
     }
 
+    function getLang() {
+        if(navigator.languages) {
+            return navigator.languages[0];
+        }
+        return navigator.language;
+    }
+
     var pngMime   = 'image/png';
     var svgMime   = 'image/svg+xml';
     var xmlMime   = 'application/xml';
@@ -350,6 +357,90 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                 }
 
                 /**
+                 * Updates the list of attachments without reloading the page.
+                 * Since some text is language dependente, we get the last attachment in the page
+                 * and replace the the infos with those from the new attachment.
+                 */
+                function updateAttachmentList() {
+                    // Re-read the page to retrieve the list of attachments
+                    $.ajax({
+                        url     : pageUrl+'.json',
+                        type    : 'GET',
+                        dataType: 'json',
+                        headers : { 'X-Redmine-API-Key': getHash() },
+                        data    : {include: 'attachments'},
+                        error   : showError,
+                        success : function(page) {
+                            page = page.wiki_page? page.wiki_page: page.issue;
+                            if(page && page.attachments) {
+                                var lastAttach    = page.attachments[page.attachments.length-1];
+                                var attachTable   = $(".attachments table tbody");
+
+                                if(attachTable.length == 0) {
+                                    $("#wiki_add_attachment").before('<div class="attachments"><table><tbody></tbody></table></div>');
+                                    attachTable   = $(".attachments table tbody");
+                                }
+
+                                var lastRow       = attachTable.find('tr').last();
+                                var hrefCount     = 0;
+                                var linkTextCount = 0;
+                                var lastRowHtml   = $(lastRow).html();
+
+                                if(!lastRowHtml) {
+                                    lastRowHtml = '<td>'
+                                                + '    <a class="icon icon-attachment" href="/redmine/attachments/00" data-bcup-haslogintext="no">NAME</a>    <span class="size">(SIZE KB)</span>'
+                                                + '    <a class="icon-only icon-download" title="Download" href="/redmine/attachments/download/00/NAME" data-bcup-haslogintext="no">NAME</a>  </td>'
+                                                + '  <td></td>'
+                                                + '  <td>'
+                                                + '      <span class="author">USER, TIMESTAMP</span>'
+                                                + '  </td>'
+                                                + '  <td>'
+                                                + '      <a data-confirm="Are you sure ?" class="delete icon-only icon-del" title="Delete" rel="nofollow" data-method="delete" href="/redmine/attachments/00" data-bcup-haslogintext="no">Delete</a>'
+                                                + '  </td>';
+                                }
+                                // replace icon link
+                                lastRowHtml = lastRowHtml.replace(/href="[^"]+"/g, function(match) {
+                                    var path = lastAttach.content_url.substring(0, lastAttach.content_url.indexOf('/attachments/download/')+'/attachments'.length);
+
+                                    //var path = lastAttach.content_url.substring(0, lastAttach.content_url.lastIndexOf('/'));
+
+                                    //path = path.substring(0, path.lastIndexOf('/'));
+
+                                    switch(hrefCount++) {
+                                        case  0:
+                                        case  2: return 'href="'+path+'/'+lastAttach.id+'"';
+                                        case  1: return 'href="'+lastAttach.content_url+'"';
+                                        default: return match;
+                                    }
+                                });
+                                // replace file size
+                                lastRowHtml = lastRowHtml.replace(/\((.*?) KB\)/, '('+(lastAttach.filesize/1024).toFixed(2)+' KB)');
+                                // replace file name
+                                lastRowHtml = lastRowHtml.replace(/>[^<]+<\/a>/g, function(match) {
+                                    if(linkTextCount++ < 2) {
+                                        return '>'+lastAttach.filename+'</a>';
+                                    } else {
+                                        return match;
+                                    }
+                                });
+                                // replace author and date
+                                var attachDate = new Date(lastAttach.created_on).toLocaleString();
+                                lastRowHtml = lastRowHtml.replace(/author">[^<]+/, 'author">'+lastAttach.author.name+', '+
+                                    attachDate.replaceAll('/', '-').substring(0, attachDate.lastIndexOf(':'))
+                                );
+                                // add the new attachment to the attachments list
+                                attachTable.append(lastRowHtml);
+                                // increment the number of attachments
+                                var numAttachs = $("fieldset legend");
+                                numAttachs.text(numAttachs.text().replace(/\d+/, function(match) {
+                                    return Number(match)+1;
+                                }));
+                            }
+                        }
+                    });
+                }
+
+                /**
                  * Fix for `{{fnlist}}` duplication with the `redmine_wiki_extensions` plugin.
                  */
                 function fixFnListDuplication(value) {
@@ -364,7 +455,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                 }
 
                 /**
-                 * Fix for Wiki Extensions header page.
+                 * Fix for Wiki Extensions footer page.
                  */
                 function fixWikiExtensionsFooter(value) {
                     return value.replace(/\n\n<div id="wiki_extentions_footer">[\S\s]+?\n<\/div>$/gi, '');
@@ -417,7 +508,8 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                     dataType: 'text',
                     headers : { 'X-Redmine-API-Key': getHash() },
                     data    : data,
-                    error   : showError
+                    error   : showError,
+                    success : updateAttachmentList
                 });
             }
 

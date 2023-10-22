@@ -78,6 +78,7 @@ This macro handles diagrams saved as attachments of issues or wiki pages.
 
 The supported diagrams format are:
 * `xml`: normal diagram source in XML format
+* `drawio`: an alias for `xml`, used to load exported diagrams from the [online ditor](https://app.diagrams.net/) without changing the file extension
 * `png`: PNG image with an embedded XML source of the diagram (PNG+XML)
 * `svg`: SVG image with an embedded XML source of the diagram (SVG+XML)
 
