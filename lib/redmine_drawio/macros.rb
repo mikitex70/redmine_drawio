@@ -130,15 +130,16 @@ EOF
                   return ActionController::Base.helpers.image_tag(url, :style => "#{inlineStyle}")
                 end
 
-                diagram = File.read(filename, mode: 'rb')
-                
                 if RedmineDrawio::Macros.svg? diagramName
+                    diagram = File.read(filename, mode: 'rb')
                     return RedmineDrawio::Macros.encapsulateSvg(RedmineDrawio::Macros.adaptSvg(diagram, size), inlineStyle, diagramName, title, saveName, false)
                 elsif RedmineDrawio::Macros.png? diagramName
+                    diagram = File.read(filename, mode: 'rb')
                     # if png, encode image and remove newlines (required by Internet Explorer)
                     diagram = Base64.encode64(diagram).gsub("\n", '')
                     return RedmineDrawio::Macros.encapsulatePng(diagram, inlineStyle, diagramName, title, saveName, false)
                 else
+                    diagram = File.read(filename, mode: 'r')
                     tb = []
                     tb << 'pages'    unless options[:page].blank?
                     tb << 'layers'   unless layers.blank?
