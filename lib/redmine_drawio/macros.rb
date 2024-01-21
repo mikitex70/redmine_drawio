@@ -52,7 +52,7 @@ EOF
                 return "«Please save content first»" unless obj
                 return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
                 
-                args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :page, :layers)
+                args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :initialzoom, :page, :layers)
                 diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first)
                 
                 return "«Please set a diagram name»".html_safe unless diagramName
@@ -60,24 +60,25 @@ EOF
                 return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
                 
                 # defalts
-                hilight    = "#0000ff"
-                tbautohide = true
-                lightbox   = false
-                size       = nil
-                page       = 0
-                layers     = ''
-                zoom       = false
+                hilight     = "#0000ff"
+                tbautohide  = true
+                lightbox    = false
+                size        = nil
+                page        = 0
+                layers      = ''
+                zoom        = false
+                initialZoom = 100
                 
-                size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
+                size        = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
                 # parameters checkings
-                hilight    = options[:hilight]            unless options[:hilight].blank?
-                tbautohide = options[:tbautohide].to_bool unless options[:tbautohide].blank?
-                lightbox   = options[:lightbox].to_bool   unless options[:lightbox].blank?
-                #size       = options[:fit].to_i           unless options[:fit].blank?
-                zoom       = options[:zoom].to_bool       unless options[:zoom].blank?
-                page       = options[:page].to_i          unless options[:page].blank?
-                layers     = options[:layers]             unless options[:layers].blank?
-                
+                hilight     = options[:hilight]            unless options[:hilight].blank?
+                tbautohide  = options[:tbautohide].to_bool unless options[:tbautohide].blank?
+                lightbox    = options[:lightbox].to_bool   unless options[:lightbox].blank?
+                zoom        = options[:zoom].to_bool       unless options[:zoom].blank?
+                initialZoom = options[:initialzoom].to_i   unless options[:initialzoom].blank?
+                page        = options[:page].to_i          unless options[:page].blank?
+                layers      = options[:layers]             unless options[:layers].blank?
+
                 inlineStyle = ""
                 inlineStyle = "width:#{size}px;" if size
                 
@@ -159,7 +160,8 @@ EOF
                         'resize'         => true,
                         'auto-fit'       => true,
                         'editable'       => false,
-                        ##'zoom'           => zoom,
+                        'tooltips'       => true,
+                        'zoom'           => initialZoom/100.0,
                         'page'           => page,
                         'layers'         => if layers == '*' then nil else layers end,
                         'toolbar-nohide' => (not tbautohide),
@@ -211,7 +213,7 @@ EOF
                     return "«Please save content first»" unless obj
                     return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
                     
-                    args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :page, :layers)
+                    args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :initialZoom, :page, :layers)
                     diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first).force_encoding("UTF-8")
                     
                     return "«Please set a diagram name»".html_safe unless diagramName
@@ -222,16 +224,26 @@ EOF
                     diagramName += ".png" if File.extname(diagramName.strip) == ""
                     diagramExt  = File.extname(diagramName.strip)
                     
-                    size = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
+                    # Defauls
+                    hilight     = "#0000ff"
+                    tbautohide  = true
+                    lightbox    = false
+                    size        = nil
+                    page        = 0
+                    layers      = ''
+                    zoom        = false
+                    initialZoom = 100
+
+                    size        = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
                     # parameters checkings
-                    hilight    = options[:hilight]            unless options[:hilight].blank?
-                    tbautohide = options[:tbautohide].to_bool unless options[:tbautohide].blank?
-                    lightbox   = options[:lightbox].to_bool   unless options[:lightbox].blank?
-                    #size       = options[:fit].to_i           unless options[:fit].blank?
-                    zoom       = options[:zoom].to_bool       unless options[:zoom].blank?
-                    page       = options[:page].to_i          unless options[:page].blank?
-                    layers     = options[:layers]             unless options[:layers].blank?
-                    
+                    hilight     = options[:hilight]            unless options[:hilight].blank?
+                    tbautohide  = options[:tbautohide].to_bool unless options[:tbautohide].blank?
+                    lightbox    = options[:lightbox].to_bool   unless options[:lightbox].blank?
+                    zoom        = options[:zoom].to_bool       unless options[:zoom].blank?
+                    initialZoom = options[:initialZoom].to_i   unless options[:initialZoom].blank?
+                    page        = options[:page].to_i          unless options[:page].blank?
+                    layers      = options[:layers]             unless options[:layers].blank?
+
                     inlineStyle = ""
                     inlineStyle = "width:#{size}px;" if size
                     
@@ -310,7 +322,8 @@ EOF
                             'resize'         => true,
                             'auto-fit'       => true,
                             'editable'       => false,
-                            ##'zoom'           => zoom,
+                            'tooltips'       => true,
+                            'zoom'           => initialZoom/100.0,
                             'page'           => page,
                             'layers'         => if layers == '*' then nil else layers end,
                             'toolbar-nohide' => (not tbautohide),

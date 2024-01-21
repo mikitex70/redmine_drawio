@@ -18,4 +18,5 @@ de:
   drawio_dlg_page: "Erste Seite"
   drawio_dlg_hiligh: "Hyperlink Farbe"
   drawio_dlg_zoom: "Zoom aktivieren"
+  drawio_dlg_initialZoom: "Initial zoom"
   drawio_warning_api_needs_to_be_enabled: Um drawio Diagramme speichern zu können, muss die REST API unter Administration -> Konfiguration -> API aktiviert werden.
