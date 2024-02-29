@@ -1,13 +1,13 @@
 # Danish strings go here for Rails i18n
 da:
   drawio_url: "Draw.io service URL"
-  drawio_service_url_hint: "URL til lokal installation; sæt til '//embed.diagrams.net' for at anvende onlnie-servicen"
+  drawio_service_url_hint: "URL til lokal installation; sæt til %{value} for at anvende onlnie-servicen"
   drawio_svg_enabled: "Enable SVG diagrams"
   drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "SVG-matematik-understøttelse"
   drawio_mathjax_hint: "Aktivér support for matematiske symboler i SVG-diagrammer"
   drawio_mathjax_url: "MathJax library URL"
-  drawio_mathjax_url_hint: "Matematiske symboler support-bibliotek; standardværdien er //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"
+  drawio_mathjax_url_hint: "Matematiske symboler support-bibliotek; standardværdien er %{value}"
   drawio_dlg_title: "Diagram"
   drawio_dlg_diagName: "Diagram-titel"
   drawio_dlg_diagType: "Diagram-format"

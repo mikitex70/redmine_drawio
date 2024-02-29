@@ -1,8 +1,9 @@
 <%= stylesheet_link_tag "drawioEditor.css", :plugin => "redmine_drawio" %>
+
 <p>
   <label><%= l(:drawio_url) %></label>
   <%= text_field_tag 'settings[drawio_service_url]', @settings['drawio_service_url'], size: 60 %><br/>
-  <em><%= l(:drawio_service_url_hint) %></em><br/>
+  <em><%= l(:drawio_service_url_hint, value: DrawioSettings.defaults['drawio_service_url']) %></em><br/>
 
   <label><%= l(:drawio_svg_enabled) %></label>
   <%= check_box_tag 'settings[drawio_svg_enabled]', true, @settings['drawio_svg_enabled'] %><br/>
@@ -14,6 +15,6 @@
   
   <label><%= l(:drawio_mathjax_url) %></label>
   <%= text_field_tag 'settings[drawio_mathjax_url]', @settings['drawio_mathjax_url'], size: 60, readonly: @settings['drawio_mathjax'] != 'true', class: 'drawio' %><br/>
-  <em><%= l(:drawio_mathjax_url_hint) %></em>
+  <em><%= l(:drawio_mathjax_url_hint, value: DrawioSettings.defaults['drawio_mathjax_url']) %></em>
   <%= javascript_include_tag "drawio_settings.js", :plugin => "redmine_drawio"%>
 </p>

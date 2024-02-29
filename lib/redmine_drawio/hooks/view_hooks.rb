@@ -13,7 +13,7 @@ module RedmineDrawio
         end
 
         class ViewHooks < Redmine::Hook::ViewListener
-            
+
             # This method will add the necessary CSS and JS scripts to the page header.
             # The scripts are loaded before the 'jstoolbar-textile.min.js' is loaded so
             # the toolbar cannot be patched.
@@ -21,25 +21,20 @@ module RedmineDrawio
             # fragment after the jstoolbar-textile is loaded, which pathes the jsToolBar
             # object.
             def view_layouts_base_html_head(context={})
-                if Setting.plugin_redmine_drawio['drawio_service_url'].to_s.strip.empty?
-                  viewer_url = 'https://viewer.diagrams.net'
-                else
-                  viewer_url = Setting.plugin_redmine_drawio['drawio_service_url']
-                end
                 # loading XML viewer library, only if necessary
                 header = <<-EOF
                     <script type="text/javascript">//<![CDATA[
                         $(function() {
                             if($(".mxgraph").length) {
                                 var script = document.createElement('script');
-                                script.src = '#{viewer_url.split('?')[0]}/js/viewer-static.min.js';
+                                script.src = '#{drawio_url.split('?')[0]}/js/viewer-static.min.js';
                                 document.head.append(script);
                             }
                         });
                     //]]</script>
                 EOF
-                
-                if Setting.plugin_redmine_drawio['drawio_mathjax']
+
+                if DrawioSettings['drawio_mathjax']
                     # Some MathJax tuning:
                     # * set regexp for classes to ignore, for to no apply MathJax to wrong elements
                     # * MathJax context menu (enabled, maybe is better to disable it?)
@@ -62,15 +57,9 @@ module RedmineDrawio
                     header << inline
                     header << javascript_include_tag("#{mathjax_url}?config=TeX-MML-AM_HTMLorMML")
                 end
-                
+
                 return header unless editable?(context)
-                
-                if Setting.plugin_redmine_drawio['drawio_service_url'].to_s.strip.empty?
-                    drawio_url = '//embed.diagrams.net'
-                else
-                    drawio_url = Setting.plugin_redmine_drawio['drawio_service_url']
-                end
-                
+
                 inline = <<-EOF
                     <script type=\"text/javascript\">//<![CDATA[
                         var Drawio = {
@@ -84,7 +73,7 @@ module RedmineDrawio
                         };
                     //]]></script>
                 EOF
-                
+
                 header << inline
                 header << stylesheet_link_tag("drawioEditor.css"  , :plugin => "redmine_drawio", :media => "screen")
                 header << javascript_include_tag("encoding-indexes.js", :plugin => "redmine_drawio")
@@ -95,9 +84,9 @@ module RedmineDrawio
                 header << javascript_include_tag("drawio_jstoolbar.js", :plugin => "redmine_drawio") unless ckeditor_enabled?
                 header
             end
-            
+
             private
-            
+
             def editable?(context)
                 return false unless context[:controller]
                 return true  if context[:controller].is_a?(WikiController) && User.current.allowed_to?(:edit_wiki_pages, context[:project])
@@ -110,7 +99,7 @@ module RedmineDrawio
                     context[:issue].editable?(User.current)
                 end
             end
-            
+
             # Returns the context path of Redmine installation (usually '/' or '/redmine/').
             def redmine_url
                 rootUrl = ActionController::Base.relative_url_root
@@ -119,30 +108,32 @@ module RedmineDrawio
 
                 return '/'
             end
-            
+
+            def drawio_url
+                DrawioSettings.drawio_url
+            end
+
+            def mathjax_url
+                DrawioSettings.mathjax_url
+            end
+
             def dmsf_enabled?(context)
                 return false unless Redmine::Plugin.installed? :redmine_dmsf
                 return false unless context[:project] && context[:project].module_enabled?('dmsf')
                 true
             end
-            
+
             def ckeditor_enabled?
                 Setting.text_formatting == "CKEditor"
             end
-            
+
             def easyredmine?
                 Redmine::Plugin.installed?(:easy_redmine)
             end
-            
+
             def lang_supported? lang
                 return false if lang == 'en' # English is always loaded, avoid double load
                 File.exist? "#{File.expand_path('../../../../assets/javascripts/lang', __FILE__)}/drawio_jstoolbar-#{lang}.js"
-            end
-            
-            def mathjax_url
-                url = Setting.plugin_redmine_drawio['drawio_mathjax_url']
-                url = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js' unless url.present?
-                url
             end
 
             def hash_code

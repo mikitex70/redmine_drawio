@@ -1,13 +1,13 @@
 # Simplified Chinese strings go here for Rails i18n
 zh:
   drawio_url: "Draw.io 图形服务URL"
-  drawio_service_url_hint: "您的本地图形服务URL，设置 '//embed.diagrams.net' 以使用在线服务。"
+  drawio_service_url_hint: "您的本地图形服务URL，设置 %{value} 以使用在线服务。"
   drawio_svg_enabled: "Enable SVG diagrams"
   drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "SVG MathJax support"
   drawio_mathjax_hint: "Enable mathematical symbol support for SVG diagrams"
   drawio_mathjax_url: "MathJax library URL"
-  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"
+  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is %{value}"
   drawio_dlg_title: "图形定义"
   drawio_dlg_diagName: "图形名称"
   drawio_dlg_diagType: "图形格式"
