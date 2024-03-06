@@ -10,7 +10,7 @@ module RedmineDrawio
             desc <<EOF
 This macro is deprecated. Use the drawio_attach macro instead.
 EOF
-    
+
             macro :drawio do |obj, args|
                 return "«The drawio macro is deprecated, use the drawio_attach macro instead»"
             end
@@ -32,7 +32,7 @@ Supported diagrams format are:
 * xml: classic diagram xml source
 * drawio: same ax xml
 
-Every time a diagram is saved, a new attachment will be created; for now you must 
+Every time a diagram is saved, a new attachment will be created; for now you must
 manually delete old attachments (missing Redmine API; version 3.3.0 seems to have included
 an API to delete attachments but need investigation).
 
@@ -47,18 +47,18 @@ page=false      : enable page control (only for multi-page diagrams)
 zoom=false      : enable zoom controls
 lightbox=false  : enable lightbox usage
 EOF
-    
+
             macro :drawio_attach do |obj, args|
                 return "«Please save content first»" unless obj
                 return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
-                
+
                 args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :initialzoom, :page, :layers)
                 diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first)
-                
+
                 return "«Please set a diagram name»".html_safe unless diagramName
                 return "«Only png, svg and xml diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
-                return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
-                
+                return "svg diagrams are disabled by the administrator" unless DrawioSettings.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
+
                 # defalts
                 hilight     = "#0000ff"
                 tbautohide  = true
@@ -68,7 +68,7 @@ EOF
                 layers      = ''
                 zoom        = false
                 initialZoom = 100
-                
+
                 size        = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
                 # parameters checkings
                 hilight     = options[:hilight]            unless options[:hilight].blank?
@@ -81,7 +81,7 @@ EOF
 
                 inlineStyle = ""
                 inlineStyle = "width:#{size}px;" if size
-                
+
                 if obj.is_a?(WikiContent)
                     container = obj.page
                     title     = container.title
@@ -99,10 +99,10 @@ EOF
                 # Add an extension, if missing
                 diagramName += ".png" if File.extname(diagramName.strip) == ""
                 diagramExt  = File.extname(diagramName.strip)
-                
+
                 # Search attachment position
                 attach = container.attachments.select { |attachment| attachment.filename == diagramName } .last
-                
+
                 if canEdit
                     # Diagram and document are editable
                     if Redmine::Plugin.installed?(:easy_redmine)
@@ -119,7 +119,7 @@ EOF
                     # Diagram cannot be saved, it will become not editable
                     saveName = nil
                 end
-                
+
                 if attach
                     filename = attach.diskfile
                 else
@@ -146,7 +146,7 @@ EOF
                     tb << 'layers'   unless layers.blank?
                     tb << 'zoom'     if zoom
                     tb << 'lightbox' if lightbox
-                    
+
                     toolbar = if tb.empty? then nil else tb.join(' ') end
                     #style   = if size then 'style="max-width:'+size+'px;"' else "" end
 
@@ -208,22 +208,22 @@ page=false      : enable page control (only for multi-page diagrams)
 zoom=false      : enable zoom controls
 lightbox=false  : enable lightbox usage
 EOF
-        
+
                 macro :drawio_dmsf do |obj, args|
                     return "«Please save content first»" unless obj
                     return "«Drawio diagrams are available only in issues and wiki pages»" unless obj.is_a?(WikiContent) or obj.is_a?(Issue) or obj.is_a?(Journal)
-                    
+
                     args, options = extract_macro_options(args, :size, :hilight, :tbautohide, :lightbox, :zoom, :initialZoom, :page, :layers)
                     diagramName   = RedmineDrawio::Macros.strip_non_filename_chars(args.first).force_encoding("UTF-8")
-                    
+
                     return "«Please set a diagram name»".html_safe unless diagramName
                     return "«Only png, svg, xml, and drawio diagram formats are supported»".html_safe unless diagramName =~ /.*(\.(png|svg|xml|drawio))?$/i
-                    return "svg diagrams are disabled by the administrator" unless RedmineDrawio::Macros.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
-                    
+                    return "svg diagrams are disabled by the administrator" unless DrawioSettings.svg_enabled? || not(diagramName =~ /.*\.svg$/i)
+
                     # Add an extension, if missing
                     diagramName += ".png" if File.extname(diagramName.strip) == ""
                     diagramExt  = File.extname(diagramName.strip)
-                    
+
                     # Defauls
                     hilight     = "#0000ff"
                     tbautohide  = true
@@ -246,7 +246,7 @@ EOF
 
                     inlineStyle = ""
                     inlineStyle = "width:#{size}px;" if size
-                    
+
                     if obj.is_a?(WikiContent)
                         container = obj.page
                         title     = container.title
@@ -263,11 +263,11 @@ EOF
                         project   = container.project
                         canEdit   = container.editable?(User.current)
                     end
-                    
+
                     # Search the DMSF folder containing the diagram
                     folderName = File.dirname(diagramName)
                     folder     = RedmineDrawio::Helpers::DrawioDmsfHelper.deep_folder_search(project, folderName)
-                    
+
                     # Search the document in DMSF
                     file = DmsfFile.find_file_by_name project, folder, File.basename(diagramName)
 
@@ -278,7 +278,7 @@ EOF
                         # Diagram cannot be saved, it will become not editable
                         saveName = nil
                     end
-                    
+
                     if file
                         # Document exists, get the file path
                         filename = file.last_revision.disk_file
@@ -288,7 +288,7 @@ EOF
                         filename = RedmineDrawio::Macros.imagePath('defaultImage'+diagramExt)
                         canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, project)
                     end
-                    
+
                     diagram = File.read(filename, mode: 'rb')
 
                     if file && RedmineDrawio::Macros.pdf?(self.controller)
@@ -310,7 +310,7 @@ EOF
                         tb << 'layers'   unless layers.blank?
                         tb << 'zoom'     if zoom
                         tb << 'lightbox' if lightbox
-                        
+
                         toolbar = if tb.empty? then nil else tb.join(' ') end
                         #style   = if size then 'style="max-width:'+size+'px;"' else "" end
 
@@ -337,19 +337,14 @@ EOF
         end
 
         class << self
-            def drawio_url
-                return '//embed.diagrams.net' if Setting.plugin_redmine_drawio['drawio_service_url'].to_s.strip.empty?
-                Setting.plugin_redmine_drawio['drawio_service_url']
-            end
-
             def dmsf_version
                 Redmine::Plugin.find(:redmine_dmsf).version
             end
 
             def dmsf_save_name(project, diagramName)
-                if Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+                if DrawioSettings['dmsf_webdav_use_project_names']
                     Rails.logger.error "dmsf_version=#{RedmineDrawio::Macros.dmsf_version}"
-                    
+
                     if RedmineDrawio::Macros.dmsf_version <= '1.5.8'
                         # Prior to DMSF 1.5.9 project names cannot be used for folder names
                         "#{project.id}/#{diagramName}"
@@ -376,9 +371,9 @@ EOF
                 localSvg = localSvg.sub(/<svg /, '<svg preserve_aspect_ratio="xMaxYMax meet" ') unless svg =~ /.* preserve_aspect_ratio=.*/
                 localSvg = localSvg.sub(/<svg /, '<svg style="max-width:100%" ')
                 # Add a viewBox, if missing
-                localSvg = localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px"/, 
+                localSvg = localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px"/,
                                             '<svg viewBox="0 0 \2 \3" \1') unless localSvg=~ /.* viewBox="(.*)"/
-                # Fix size, if forced 
+                # Fix size, if forced
                 if localSvg =~ /<svg (.*) width="(?:[0-9]+)px"/
                     # width attribute presente, replace it with fized size, if present
                     localSvg = localSvg.sub(/<svg (.*) width="(?:[0-9]+)px"/, "<svg \1 width=\"#{size}\"") unless size.nil?
@@ -390,7 +385,7 @@ EOF
                     # no width attribute, but the height attribute may be present: replace it with the fixed size, if present
                     localSvg = localSvg.sub(/<svg ([^>]+?)(?: height="([0-9]+)px")?/, "<svg \1 width=\"#{size}\"")
                 end
-                
+
                 localSvg
             end
 
@@ -399,15 +394,15 @@ EOF
                 tooltip  = ""
                 style    = ""
                 style    = inlineStyle unless inlineStyle.blank?
-                
+
                 unless saveName.nil?
-                    tagType  = if Setting.plugin_redmine_drawio['drawio_svg_enabled'] then 'svg' else 'img' end
-                    dblClick = " ondblclick=\"editDiagram($(this).find('#{tagType}')[0],'#{saveName}',#{isDmsf}, '#{RedmineDrawio::Macros.js_safe(title)}', '#{diagramName}');\"" 
+                    tagType  = if DrawioSettings.svg_enabled? then 'svg' else 'img' end
+                    dblClick = " ondblclick=\"editDiagram($(this).find('#{tagType}')[0],'#{saveName}',#{isDmsf}, '#{RedmineDrawio::Macros.js_safe(title)}', '#{diagramName}');\""
                     tooltip  = " title='Double click to edit diagram'"
                     style    = " style='#{inlineStyle}cursor:pointer'"
                 end
-                
-                if Setting.plugin_redmine_drawio['drawio_svg_enabled']
+
+                if DrawioSettings.svg_enabled?
                     "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}>#{svg.force_encoding("UTF-8")}</span>".html_safe
                 else
                     "<span class='drawioDiagram'#{style}#{tooltip}#{dblClick}><img src='data:image/svg+xml;base64,#{Base64.strict_encode64(svg.force_encoding("UTF-8"))}'></span>".html_safe
@@ -416,13 +411,13 @@ EOF
 
             def encapsulatePng(png, inlineStyle, diagramName, title, saveName, isDmsf)
                 if saveName.nil?
-                    return ActionController::Base.helpers.image_tag("data:image/png;charset=utf-8;base64,#{png}", 
-                                    :alt   => "Diagram #{diagramName}", 
+                    return ActionController::Base.helpers.image_tag("data:image/png;charset=utf-8;base64,#{png}",
+                                    :alt   => "Diagram #{diagramName}",
                                     :class => "drawioDiagram",
                                     :style => "#{inlineStyle}")
                 else
-                    return ActionController::Base.helpers.image_tag("data:image/png;charset=utf-8;base64,#{png}", 
-                                    :alt        => "Diagram #{diagramName}", 
+                    return ActionController::Base.helpers.image_tag("data:image/png;charset=utf-8;base64,#{png}",
+                                    :alt        => "Diagram #{diagramName}",
                                     :title      => "Double click to edit diagram",
                                     :class      => "drawioDiagram",
                                     :style      => "#{inlineStyle}cursor:pointer;",
@@ -432,7 +427,7 @@ EOF
 
             def encapsulateXml(graphOpts, inlineStyle, diagramName, title, saveName, isDmsf)
                 randomId = 'dg_'+('a'..'z').to_a.shuffle[0,8].join
-                
+
                 unless saveName.nil?
                     # Diagram is editable, add toolbar declarations for editing
                     graphOpts['toolbar'] = "#{graphOpts['toolbar']} edit"
@@ -444,11 +439,11 @@ EOF
                         }
                     }
                 end
-                
+
                 tag = "<div id=\"#{randomId}\" class=\"mxgraph\" data-mxgraph=\"#{CGI::escapeHTML(JSON.generate(graphOpts))}\"></div>".html_safe
-                
+
                 return tag if inlineStyle.empty?
-                
+
                 return "<div style=\"#{inlineStyle}\">#{tag}</div>".html_safe
             end
 
@@ -471,10 +466,6 @@ EOF
             def js_safe(string)
                 string.gsub(/'/){ %q(\') } if string
                 ''
-            end
-
-            def svg_enabled?
-                RedmineDrawio::Helpers::DrawioSettingsHelper.svg_enabled?
             end
 
             def pdf?(controller)

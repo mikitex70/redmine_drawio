@@ -1,13 +1,13 @@
 # Japanese strings go here for Rails i18n
 ja:
   drawio_url: "Draw.ioサービスのURL"
-  drawio_service_url_hint: "インストール済みローカルサービスのURL、またはオンラインサービスを使用する場合は '//embed.diagrams.net' を指定してください。"
+  drawio_service_url_hint: "インストール済みローカルサービスのURL、またはオンラインサービスを使用する場合は %{value} を指定してください。"
   drawio_svg_enabled: "Enable SVG diagrams"
   drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "SVG形式の数式をサポート"
   drawio_mathjax_hint: "SVG形式のダイアグラムで数学記号のサポートを有効にします"
   drawio_mathjax_url: "MathJaxライブラリのURL"
-  drawio_mathjax_url_hint: "数学記号をサポートするためのライブラリ; 規定値: //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"
+  drawio_mathjax_url_hint: "数学記号をサポートするためのライブラリ; 規定値: %{value}"
   drawio_dlg_title: "ダイアグラムの挿入"
   drawio_dlg_diagName: "ダイアグラム名"
   drawio_dlg_diagType: "ファイル形式"
