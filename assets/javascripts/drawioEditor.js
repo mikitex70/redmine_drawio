@@ -680,6 +680,8 @@ window.onDrawioViewerLoad = function() {
     if(typeof(MathJax) !== 'undefined') {
       if (typeof(MathJax.Hub) !== 'undefined') {
         MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+      } else if(typeof(MathJax.typeset) !== 'undefined') {
+        MathJax.typeset();
       }
     }
 }
