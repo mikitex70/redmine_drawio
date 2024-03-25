@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.9-xmr (2024-03-25)
+
+### Changes
+
+* Default Mathjax version to 3.2.2
+* plugin settings handling
 
 ## v1.4.8 (2023-10-22)
 
