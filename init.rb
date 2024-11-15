@@ -12,7 +12,6 @@ Redmine::Plugin.register :redmine_drawio do
 
   settings(partial: 'settings/drawio_settings',
            default: { 'drawio_service_url' => '//embed.diagrams.net',
-                      'drawio_mathjax'     => false,
                       'drawio_svg_enabled' => false })
 
   should_be_disabled false if Redmine::Plugin.installed?(:easy_extensions)
