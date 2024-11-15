@@ -11,8 +11,7 @@ module RedmineDrawio
 
     def teardown
       Setting.plugin_redmine_drawio = { drawio_svg_enabled: nil,
-                                        drawio_service_url: nil,
-                                        drawio_mathjax_url: nil }
+                                        drawio_service_url: nil }
       Setting.clear_cache
     end
 
@@ -32,19 +31,9 @@ module RedmineDrawio
       assert_equal '//embed.diagrams.net', DrawioSettings.drawio_url
     end
 
-    def test_default_drawio_mathjax_url
-      assert_equal '//cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js', DrawioSettings.mathjax_url
-    end
-
     def test_custom_drawio_service_url
       with_settings(redmine_drawio(**{ drawio_service_url: '//custom' })) do
         assert_equal '//custom', DrawioSettings.drawio_url
-      end
-    end
-
-    def test_custom_drawio_mathjax_url
-      with_settings(redmine_drawio(**{ drawio_mathjax_url: '//custom' })) do
-        assert_equal '//custom', DrawioSettings.mathjax_url
       end
     end
   end
