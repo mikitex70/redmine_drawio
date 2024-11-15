@@ -12,9 +12,4 @@
   <label><%= l(:drawio_mathjax) %></label>
   <%= check_box_tag 'settings[drawio_mathjax]', true, @settings['drawio_mathjax'] %><br/>
   <em><%= l(:drawio_mathjax_hint) %></em><br/>
-  
-  <label><%= l(:drawio_mathjax_url) %></label>
-  <%= text_field_tag 'settings[drawio_mathjax_url]', @settings['drawio_mathjax_url'], size: 60, readonly: @settings['drawio_mathjax'] != 'true', class: 'drawio' %><br/>
-  <em><%= l(:drawio_mathjax_url_hint, value: DrawioSettings.defaults['drawio_mathjax_url']) %></em>
-  <%= javascript_include_tag "drawio_settings.js", :plugin => "redmine_drawio"%>
 </p>

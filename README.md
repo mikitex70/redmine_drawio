@@ -198,25 +198,6 @@ If the build ends without errors, in the ``build`` directory you should find a w
 
 Then enter your *Redmine* installation, go to ``Administration`` -> ``Plugins`` -> ``Redmine Drawio plugin``, click on the ``Configure`` link and then specify your address for the ``draw.io`` site.
 
-
-## Local MathJax installation
-
-The [MathJax] library is used to render mathematical symbols in SVG diagrams.
-
-Once enabled from the ``Redmine Drawio plugin`` settings it is loaded from internet every time a wiki page is rendered.
-
-This can be slow (it's a big library) and maybe not doable behind a proxy or without an internet connection.
-
-However it is possible to use a local installation of the library following these steps:
-
-1. install the [MathJax] library locally (through zip, svn, git, npm, ecc.) in a web server; for detailed instructions see [here](http://docs.mathjax.org/en/latest/installation.html)
-2. go to ``Administration`` -> ``Plugins`` -> ``Redmine Drawio plugin``, click on the ``Configure`` link and:
-   1. select the ``SVG mathemathics support``
-   2. fill the ``MathJax library URL`` with the URL of the installation, for example ``//my.server/mathjax/MathJax.js``
-
-Once updated the settings, go to a wiki page with a mathematical SVG diagram and you should see the diagram exactly as before. You can check from where the library is downloaded using the browser developer tools.
-
-
 ## Known issues
 
 - Diagrams in ``xml`` format are rendered on the browser so they aren't visible inside a PDF export. As workaround you can print the web page as PDF document (easy with Linux, a bit more problematic in Windows), or export the diagram in PNG format and include it as image.

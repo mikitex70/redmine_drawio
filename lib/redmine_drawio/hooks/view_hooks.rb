@@ -55,7 +55,7 @@ module RedmineDrawio
                     //]]</script>
                     EOF
                     header << inline
-                    header << javascript_include_tag("#{mathjax_url}?config=TeX-MML-AM_HTMLorMML")
+                    header << javascript_include_tag('mathjax_3.2.2', plugin: :redmine_drawio)
                 end
 
                 return header unless editable?(context)
@@ -111,10 +111,6 @@ module RedmineDrawio
 
             def drawio_url
                 DrawioSettings.drawio_url
-            end
-
-            def mathjax_url
-                DrawioSettings.mathjax_url
             end
 
             def dmsf_enabled?(context)

@@ -9,12 +9,6 @@ class DrawioSettings
       url
     end
 
-    def mathjax_url
-      url = self['drawio_mathjax_url']
-      url = defaults['drawio_mathjax_url'] unless url.present?
-      url
-    end
-
     def svg_enabled?
       [true, 1, 'true', '1'].include?(self['drawio_svg_enabled'])
     end
