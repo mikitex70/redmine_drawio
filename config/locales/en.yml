@@ -1,13 +1,13 @@
 # English strings go here for Rails i18n
 en:
   drawio_url: "Draw.io service URL"
-  drawio_service_url_hint: "URL of your local service installation; set to '//embed.diagrams.net' to use the online service"
+  drawio_service_url_hint: "URL of your local service installation; set to %{value} to use the online service"
   drawio_svg_enabled: "Enable SVG diagrams"
   drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "SVG mathemathics support"
   drawio_mathjax_hint: "Enable mathematical symbol support for SVG diagrams"
   drawio_mathjax_url: "MathJax library URL"
-  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"
+  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is %{value}"
   drawio_dlg_title: "Define diagram"
   drawio_dlg_diagName: "Diagram name"
   drawio_dlg_diagType: "Diagram format"
@@ -18,4 +18,5 @@ en:
   drawio_dlg_page: "Initial page"
   drawio_dlg_hiligh: "Hyperlinks color"
   drawio_dlg_zoom: "Zoom controls"
+  drawio_dlg_initialZoom: "Initial zoom"
   drawio_warning_api_needs_to_be_enabled: For saving drawio diagrams you need to enable the REST API in Administration -> Configuration -> API.

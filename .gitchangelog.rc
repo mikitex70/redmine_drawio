@@ -89,6 +89,7 @@ section_regexps = [
         r'^[cC]ambiat[aeio]\s+([^\n]*)$',
         r'^[mM]odificat[aeio]\s+([^\n]*)$',
         r'^[uU]pdate.*$',
+        r'^Changed .*$',
         r'^viewer\.js.*$',
      ]),
     ('Fix', [
@@ -137,6 +138,7 @@ section_regexps = [
 #body_process = Wrap(regexp=r'\n(?=\w+\s*:)')
 #body_process = noop
 body_process = (ReSub(r'((^|\n)[A-Z]\w+(-\w+)*: .*(\n\s+.*)*)+$', r'') |
+    ReSub(r'viwer', 'viewer') |
     ReSub(r' @\d+(h|m|min)?', r'') |
     strip)
 

@@ -1,13 +1,13 @@
 # Russian strings go here for Rails i18n
 ru:
   drawio_url: "URL сервиса Draw.io"
-  drawio_service_url_hint: "URL для вашей локальной установки сервиса; задайте как '//embed.diagrams.net' для использования онлайн-сервиса"
+  drawio_service_url_hint: "URL для вашей локальной установки сервиса; задайте как %{value} для использования онлайн-сервиса"
   drawio_svg_enabled: "Enable SVG diagrams"
   drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "Поддержка математики для SVG"
   drawio_mathjax_hint: "Включить поддержку математических символов для SVG-диаграмм"
   drawio_mathjax_url: "MathJax library URL"
-  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is //cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js"
+  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is %{value}"
   drawio_dlg_title: "Определить диаграмму"
   drawio_dlg_diagName: "Название диаграммы"
   drawio_dlg_diagType: "Формат диаграммы"
@@ -18,4 +18,5 @@ ru:
   drawio_dlg_page: "Initial page"
   drawio_dlg_hiligh: "Hyperlinks color"
   drawio_dlg_zoom: "Zoom controls"
+  drawio_dlg_initialZoom: "Initial zoom"
   drawio_warning_api_needs_to_be_enabled: For saving drawio diagrams you need to enable the REST API in Administration -> Configuration -> API.

@@ -208,7 +208,7 @@
             var diagType  = $('input[name=drawio_diagType]:checked').val();
             var size      = $('#drawio_size').val();
             
-            if(diagName != '' && size.match(/^\d*$/)) {
+            if(diagName != '' && size.match(/^\d*$/) && $("#drawio_form")[0].reportValidity()) {
                 // Add/replace file extension
                 diagName = diagName.replace(/^(.*?)(?:\.\w{3,6})?$/, '$1.'+diagType);
 
@@ -218,18 +218,22 @@
                     options.push('size='+size);
                 
                 if(diagType === 'xml' || diagType === 'drawio') {
-                    var tbAutoHide = $("#drawio_tbautohide").is(":checked");
-                    var lightbox   = $("#drawio_lightbox").is(":checked");
-                    var zoom       = $("#drawio_zoom").is(":checked");
-                    var layers     = $("#drawio_layers").val();
-                    var page       = $("#drawio_page").val();
-                    var hilight    = $("#drawio_hilight").val();
+                    var tbAutoHide  = $("#drawio_tbautohide").is(":checked");
+                    var lightbox    = $("#drawio_lightbox").is(":checked");
+                    var zoom        = $("#drawio_zoom").is(":checked");
+                    var initialZoom = $("#drawio_initialzoom").val();
+                    var layers      = $("#drawio_layers").val();
+                    var page        = $("#drawio_page").val();
+                    var hilight     = $("#drawio_hilight").val();
                     
                     if(!tbAutoHide)
                         options.push('tbautohide='+tbAutoHide);
                     
                     if(zoom)
                         options.push('zoom='+zoom);
+
+                    if(initialZoom && initialZoom !== $("#drawio_initialzoom").data('default'))
+                        options.push('initialzoom='+initialZoom);
                     
                     if(lightbox)
                         options.push('lightbox='+lightbox);
@@ -264,12 +268,46 @@
             dlg.dialog('close');
         };
         
+        function showXmlParams() {
+            $("#drawio_xml_params").show().find("input,select").prop("disabled", false);
+        }
+        
+        function hideXmlParams() {
+            $("#drawio_xml_params").hide().find("input,select").prop("disabled", true);
+        }
+        
+        function setFieldValue(fieldName, value) {
+            var field = $('#'+fieldName)
+            
+            if(field.attr('type') === 'checkbox')
+                field.prop('checked', value);
+            else if(field.length) // field found
+                field.val(value);
+            else {
+                // field not found, maybe a radio, try by name
+                $("input[name="+fieldName+"][value="+value+"]").prop('checked', true);
+            }
+        }
+        
         dlg = $('#dlg_redmine_drawio').dialog({
             autoOpen: false,
             width   : "auto",
             height  : "auto",
             modal   : true,
             open    : function(event, ui) {
+                // Reset fields
+                $('#dlg_redmine_drawio input[type=checkbox]').prop('checked', false);
+                $('#dlg_redmine_drawio input[type=radio]').prop('checked', false);
+                $('#dlg_redmine_drawio input[type=text]').val('');
+                $('#dlg_redmine_drawio input[type=number]').val('')
+                // Set fields default valiue
+                $('#dlg_redmine_drawio input[data-default]').each(function(idx, elem) { 
+                    var field = $(elem);
+                    
+                    setFieldValue(field.attr('name'), field.data('default'));
+                });
+                hideXmlParams();
+                // Set fields values from macro parameters
                 var params = dlg.data("params");
               
                 if(params) {
@@ -278,22 +316,11 @@
                     params['diagType'] = filename.slice((filename.lastIndexOf('.') - 1 >>> 0) + 2).toLowerCase();
                     
                     for(key in params) {
-                        var field = $("#drawio_"+key);
-                        
-                        if(field.attr('type') === 'checkbox')
-                            field.prop('checked', params[key]);
-                        else if(field.length) // field found
-                            field.val(params[key]);
-                        else {
-                            // field not found, maybe a radio, try by name
-                            $("input[name=drawio_"+key+"][value="+params[key]+"]").prop('checked', true);
-                        }
+                        setFieldValue("drawio_"+key, params[key]);
                     }
                     
-                    var selectedType = $('input:radio[name=drawio_diagType]:checked').val();
-
-                    if(selectedType === 'xml' || selectedType === 'drawio')
-                        $("#drawio_xml_params").show();
+                    if(params['diagType'] === 'xml' || params['diagType'] === 'drawio')
+                        showXmlParams();
                 }
             },
             buttons : dlgButtons
@@ -303,7 +330,7 @@
         $("input[name=drawio__P1]").on("keyup", function() {
             var ext =  /(?:\.([^.]+))?$/.exec(this.value.toLowerCase())[1];
             
-            $("input[name=drawio_diagType][value="+ext+"]").click(); //prop("checked", true);
+            $("input[name=drawio_diagType][value="+ext+"]").click();
         });
         
         // Hide/show options specific for diiagrams in XML format
@@ -316,15 +343,16 @@
             }
             
             if(this.value === 'xml' || this.value === 'drawio')
-                $("#drawio_xml_params").show();
+                showXmlParams();
             else
-                $("#drawio_xml_params").hide();
+                hideXmlParams();
         });
         
         // Make digits input accepting only digits
         $('#drawio_form input.digits').keyup(function(e) {
             if(/\D/g.test(this.value)) {
                 this.value = this.value.replace(/\D/g, '');
+                console.log("Input filtered!");
             }
         });
         

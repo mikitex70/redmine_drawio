@@ -28,6 +28,18 @@ input[readonly].drawio {
     background-color: #EAEAEA;
 }
 
+/* Hide the spinner in numeric inputs */
+#drawio_form input.digits::-webkit-outer-spin-button,
+#drawio_form input.digits::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+/* Same as before, for Firefox */
+#drawio_form input.digits[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
 /* Fix for tinymce buttongroup hidden after adding buttons */
 .mce-btn-group {
     left: auto !important;

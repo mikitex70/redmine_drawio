@@ -9,17 +9,18 @@
         </p>
         <p>
           <label for="drawio_diagType"><%= l(:drawio_dlg_diagType) %></label>
-          <input type="radio" name="drawio_diagType" value="png" checked="checked"/>PNG
+          <input type="radio" name="drawio_diagType" value="png" data-default="png"/>PNG
 
           <% if svg_enabled %>
           <input type="radio" name="drawio_diagType" value="svg" style="margin-left:1em"/>SVG
           <% end %>
           <input type="radio" name="drawio_diagType" value="xml" style="margin-left:1em" id="drawio_diagTypeXml"/>XML
-          <input type="radio" name="drawio_diagType" value="drawio" style="margin-left:1em" id="drawio_diagTypeXml"/>DRAWIO
+          <input type="radio" name="drawio_diagType" value="drawio" style="margin-left:1em" id="drawio_diagTypeDrawio"/>DRAWIO
         </p>
         <p>
           <label for="drawio_size"><%= l(:drawio_dlg_size) %></label>
-          <input type="text" name="drawio_size" id="drawio_size" class="digits" size="4" maxlength="4"/> pixel
+          <input type="number" name="drawio_size" id="drawio_size" class="digits" 
+                 min="1" size="4" maxlength="4"/> pixel
         </p>
       </div>
     </fieldset>
@@ -27,15 +28,20 @@
       <div class="tabular">
         <p>
           <label for="drawio_tbautohide"><%= l(:drawio_dlg_toolbar_autohide) %></label>
-          <input type="checkbox" name="drawio_tbautohide" id="drawio_tbautohide" checked="checked"/>
+          <input type="checkbox" name="drawio_tbautohide" id="drawio_tbautohide" data-default="true"/>
         </p>
         <p>
           <label for="drawio_lightbox"><%= l(:drawio_dlg_lightbox) %></label>
-          <input type="checkbox" name="drawio_lightbox" id="drawio_lightbox"/>
+          <input type="checkbox" name="drawio_lightbox" id="drawio_lightbox" data-default="false"/>
         </p>
         <p>
           <label for="drawio_zoom"><%= l(:drawio_dlg_zoom) %></label>
-          <input type="checkbox" name="drawio_zoom" id="drawio_zoom"/>
+          <input type="checkbox" name="drawio_zoom" id="drawio_zoom" data-default="false"/>
+        </p>
+        <p>
+          <label for="drawio_initialzoom"><%= l(:drawio_dlg_initialZoom) %></label>
+          <input type="number" name="drawio_initialzoom" id="drawio_initialzoom" class="digits"
+                 size="5" maxLength="3" min="1" data-default="100"/> %
         </p>
         <p>
           <label for="drawio_page"><%= l(:drawio_dlg_page) %></label>
@@ -47,7 +53,7 @@
         </p>
         <p>
           <label for="drawio_hilight"><%= l(:drawio_dlg_hiligh) %></label>
-          <input type="text" name="drawio_hilight" id="drawio_hilight" value="#0000ff"/>
+          <input type="text" name="drawio_hilight" id="drawio_hilight" data-default="#0000ff"/>
         </p>
       </div>
     </fieldset>

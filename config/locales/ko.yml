@@ -1,13 +1,13 @@
 # Korean strings go here for Rails i18n
 ko:
   drawio_url: "Draw.io 서비스 URL"
-  drawio_service_url_hint: "로컬 서비스의 URL; '//embed.diagrams.net'로 설정하면 온라인 서비스를 사용합니다."
+  drawio_service_url_hint: "로컬 서비스의 URL; %{value} 로 설정하면 온라인 서비스를 사용합니다."
   drawio_svg_enabled: "Enable SVG diagrams"
   drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
   drawio_mathjax: "SVG 수식 지원"
   drawio_mathjax_hint: "SVG 다이어그램을 위한 수식 지원 활성화"
   drawio_mathjax_url: "MathJax 라이브러리 URL"
-  drawio_mathjax_url_hint: "수식 지원을 위한 라이브러리; 기본값은 '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js'"
+  drawio_mathjax_url_hint: "수식 지원을 위한 라이브러리; 기본값은 %{value}"
   drawio_dlg_title: "다이어그램 정의"
   drawio_dlg_diagName: "다이어그램 이름"
   drawio_dlg_diagType: "다이어그램 포맷"
@@ -18,4 +18,5 @@ ko:
   drawio_dlg_page: "Initial page"
   drawio_dlg_hiligh: "Hyperlinks color"
   drawio_dlg_zoom: "Zoom controls"
+  drawio_dlg_initialZoom: "Initial zoom"
   drawio_warning_api_needs_to_be_enabled: For saving drawio diagrams you need to enable the REST API in Administration -> Configuration -> API.
