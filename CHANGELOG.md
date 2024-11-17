@@ -1,6 +1,34 @@
 # Changelog
 
 
+## development (unreleased)
+
+### Changes
+
+* Changed drawio settings. [Liane Hampe]
+
+  All drawio settings will be accessable via
+  DrawioSettings class making them more dry.
+
+  The default URL for Mathjax is set to the latest
+  stable version.
+
+  Info text in plugin settings where
+  default values are displayed to the user are
+  directly linked to plugins default values.
+
+### Fix
+
+* Fixed zoom for diagrams in XML format (fixes #135) [Michele Tessaro]
+
+  Diagrams in the XML format are rendered by the drawio viewer plugin which
+  ignores the container size.
+  This commit adds a `initialzoom` parameter to show the diagram with a
+  zoom different from 100%.
+
+* Fixed editing of XML diagrams (fixes #135) [Michele Tessaro]
+
+
 ## v1.4.8 (2023-10-22)
 
 ### New
