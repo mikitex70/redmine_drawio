@@ -49,6 +49,14 @@ module RedmineDrawio
       assert @view_hooks.send(:hash_code).present?
     end
 
+    test 'render user preference for drawio ui' do
+      render_view_hooks(user: 'jsmith', password: 'jsmith', rest_api_enabled: '1')
+      get '/my/account'
+      assert_response :success
+
+      assert_select 'label[for=pref_drawio_ui]'
+    end
+
     private
 
     def render_view_hooks(user:, password:, rest_api_enabled: '0')

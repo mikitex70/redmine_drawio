@@ -183,6 +183,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
         document.body.style.position = 'static';
         document.body.style.width = 'auto';        
         window.removeEventListener('message', receive);
+        window.removeEventListener('resize', adjustIframeSize);
     };
 
     function receive(evt) {
@@ -246,7 +247,28 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
     } else {
         iframeUrl += '?'+options;
     }
+
     window.addEventListener('message', receive);
+
+    // Set initial size
+    adjustIframeSize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', adjustIframeSize);
+
+
+    // Function to adjust iframe size
+    function adjustIframeSize() {
+        var topMenuHeight = document.getElementById('top-menu').offsetHeight;
+        var iframe = document.querySelector('iframe'); // Make sure this selector matches your iframe
+
+        if (iframe) {
+            iframe.style.top = topMenuHeight + 'px';
+            var mainHeight = window.innerHeight - topMenuHeight;
+            iframe.style.height = mainHeight + 'px';
+        }
+    }
+
     // Get the height of the top menu
     var topMenuHeight = document.getElementById('top-menu').offsetHeight;
     // Set the top position of the iframe

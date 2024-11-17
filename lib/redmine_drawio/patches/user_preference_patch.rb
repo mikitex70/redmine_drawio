@@ -7,11 +7,11 @@ module RedmineDrawio
       UserPreference.safe_attributes 'drawio_ui'
 
       def drawio_ui
-        self[:drawio_ui] || 'default'
+        self[:drawio_ui] || 'kennedy'
       end
 
       def drawio_ui=(value)
-        self[:drawio_ui] = drawio_ui_valid?(value) ? value : 'default'
+        self[:drawio_ui] = drawio_ui_valid?(value) ? value : 'kennedy'
       end
 
       def drawio_ui_valid?(value)
