@@ -1,6 +1,5 @@
 # Changelog
 
-
 ## v1.4.9 (2024-11-17)
 
 ### Changes

@@ -34,30 +34,6 @@ module RedmineDrawio
                     //]]</script>
                 EOF
 
-                if DrawioSettings['drawio_mathjax']
-                    # Some MathJax tuning:
-                    # * set regexp for classes to ignore, for to no apply MathJax to wrong elements
-                    # * MathJax context menu (enabled, maybe is better to disable it?)
-                    inline = <<-EOF
-                    <script type="text/x-mathjax-config">//<![CDATA[
-                    MathJax.Hub.Config({
-                        /*menuSettings: {
-                        context: "Browser"
-                        },*/
-                        tex2jax: {
-                        //inlineMath: [['$', '$'], ['\\(', '\\)']],
-                          ignoreClass: "wiki-class-no-mathjax|no-mathjax|error|warning|notice"
-                        },
-                        asciimath2jax: {
-                          ignoreClass: "wiki-class-no-mathjax|no-mathjax|error|warning|notice"
-                        }
-                    });
-                    //]]</script>
-                    EOF
-                    header << inline
-                    header << javascript_include_tag("#{mathjax_url}?config=TeX-MML-AM_HTMLorMML")
-                end
-
                 return header unless editable?(context)
 
                 inline = <<-EOF
