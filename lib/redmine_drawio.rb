@@ -10,7 +10,7 @@ require File.expand_path('../redmine_drawio/patches/rbpdf_patch', __FILE__)
 require File.expand_path('../redmine_drawio/helpers/common_mark_helper', __FILE__)
 require File.expand_path('../redmine_drawio/helpers/drawio_dmsf_helper', __FILE__)
 require File.expand_path('../redmine_drawio/helpers/textile_helper', __FILE__)
-require File.expand_path('../redmine_drawio/helpers/markdown_helper', __FILE__)
+require File.expand_path('../redmine_drawio/helpers/markdown_helper', __FILE__) if Redmine::VERSION::MAJOR < 6
 
 # Hooks
 require File.expand_path('../redmine_drawio/hooks/view_hooks', __FILE__)

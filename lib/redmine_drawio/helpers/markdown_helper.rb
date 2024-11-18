@@ -18,7 +18,7 @@ if Rails::VERSION::STRING < '5.0.0'
                 @heads_for_wiki_formatter_with_drawio_included = true
             end
         end
-        
+
         # alias_method_chain is deprecated in Rails 5: replaced with two alias_method
         # as a quick workaround. Using the 'prepend' method can generate an
         # 'stack level too deep' error in conjunction with other (non ported) plugins.
@@ -26,7 +26,7 @@ if Rails::VERSION::STRING < '5.0.0'
         alias_method :heads_for_wiki_formatter_without_drawio, :heads_for_wiki_formatter
         alias_method :heads_for_wiki_formatter, :heads_for_wiki_formatter_with_drawio
     end
-else
+elsif Redmine::VERSION::MAJOR < 6
     # Rails 5, use new `prepend` method
     module RedmineDrawio
         module Helpers
@@ -46,7 +46,7 @@ else
             end
         end
     end
-    
+
     module Redmine::WikiFormatting::Markdown::Helper
         prepend RedmineDrawio::Helpers::MarkdownHelper
     end
