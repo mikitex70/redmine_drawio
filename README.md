@@ -4,13 +4,20 @@
 
 This plugin will allow embedding *draw.io diagrams* into [Redmine](http://www.redmine.org/) wiki pages, issues descriptions and issue notes.
 
+
+<div style="text-align: center;">
+    <img src="./screenshots/redmine_drawio-ui-default.png" alt="Redmine Drawio UI Default" width="475">
+    <img src="./screenshots/redmine_drawio.png" alt="Redmine Drawio UI Default" width="475">
+</div>
+
+
 ## A note
 
 Before submit an issue please read carefully the `README.md` file (this page): many of those that seem defects are instead the expected behavior for the macros, so read it before you start using this plugin and whenever you find unusual behaviors.
 
 ## Requirements
 
-- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4, v3.3.3, v3.4.0, v4.0.4, v5.0.1 as well as Easy Redmine 2016.05.07.
+- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4, v3.3.3, v3.4.0, v4.0.4, v5.0.1, v5.1.4 as well as Easy Redmine 2016.05.07.
 
 ## Installation
 
@@ -27,6 +34,8 @@ Before submit an issue please read carefully the `README.md` file (this page): m
 
 ## Configuration
 
+### Administration
+
 The plugin can be configured by the *Redmine* administrator via the Redmine interface, ``Administration`` -> ``Plugins`` -> ``Redmine Drawio Plugin`` -> ``Configure``.
 
 In the configuration form you can set the Drawio server url; the default is `//embed.diagrams.net`, to use the default internet installation regardless of the protocol. The value can be changed to use a private drawio editor installation (see more later).
@@ -37,7 +46,44 @@ An important configuration is `Enable SVG diagrams`: diagrams in SVG format can 
 
 So the *Redmine administrator* is responsible to choose a security level adequate to the installation (Internet vs Intranet, for example), and the usage (how much important are hyperlinks?).
 
-In this form you can also enable the mathematical symbol support for SVG diagrams. The default is disabled because enabling this adds about 170k of Javascript to download, so enable only if you really need it.
+
+### User Preferences
+
+Each user can select a custom drawio UI. To do so, navigate to *My account* and scroll down the preferences box to choose the UI.
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="./screenshots/redmine_drawio-ui-default.png" width="175px" />
+        <br>
+        <sub><b>Drawio UI - Default</b></sub>
+      </td>
+      <td align="center">
+        <img src="./screenshots/redmine_drawio-ui-atlas.png" width="175px" />
+        <br>
+        <sub><b>Drawio UI - Atlas</b></sub>
+      </td>
+      <td align="center">
+        <img src="./screenshots/redmine_drawio-ui-minimal.png" width="175px" />
+        <br>
+        <sub><b>Drawio UI - Minimal</b></sub>
+      </td>
+      <td align="center">
+        <img src="./screenshots/redmine_drawio-ui-simple.png" width="175px" />
+        <br>
+        <sub><b>Drawio UI - Simple</b></sub>
+      </td>
+      <td align="center">
+        <img src="./screenshots/redmine_drawio-ui-sketch.png" width="175px" />
+        <br>
+        <sub><b>Drawio UI - Sketch</b></sub>
+      </td>
+    </tr>
+  </table>
+</div>
+
+For a detailed descriptions see https://www.drawio.com/blog/diagram-editor-theme.
 
 
 ## Security

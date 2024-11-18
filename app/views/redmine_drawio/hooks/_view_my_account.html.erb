@@ -1,0 +1,9 @@
+<%= labelled_fields_for :pref, @user.pref do |pref_fields| %>
+  <%=tag.p do %>
+    <%= pref_fields.select :drawio_ui,
+          options_for_select(RedmineDrawio.drawio_ui_options_for_select, selected: @user.pref.drawio_ui) %>
+  <% end %>
+  <%=tag.em class: 'info' do %>
+    <%=tag.p t('note_drawio_ui_demo_html', link: 'https://www.drawio.com/blog/diagram-editor-theme') %>
+  <% end %>
+<% end %>

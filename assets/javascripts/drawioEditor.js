@@ -180,13 +180,15 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
     function close() {
         imgDescriptor.hideLoader(imgDescriptor.initial);
         document.body.removeChild(iframe);
+        document.body.style.position = 'static';
+        document.body.style.width = 'auto';        
         window.removeEventListener('message', receive);
+        window.removeEventListener('resize', adjustIframeSize);
     };
 
     function receive(evt) {
-        if (evt.data.length > 0) {
-            // https://desk.draw.io/support/solutions/articles/16000042544-how-does-embed-mode-work-
-            // https://desk.draw.io/support/solutions/articles/16000042546-what-url-parameters-are-supported-
+        if (evt.data.length > 0 && evt.source == iframe.contentWindow) {
+            // https://www.drawio.com/doc/faq/embed-mode
             var msg = JSON.parse(evt.data);
 
             switch(msg.event) {
@@ -219,19 +221,67 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
         }
     };
 
+    // Define the configuration options in an object
+    var config = {
+        embed: '1',
+        ui: Drawio.settings.drawioUi,
+        spin: '1',
+        modified: 'unsavedChanges',
+        libraries: '1',
+        proto: 'json',
+        lang: Drawio.settings.lang
+    };
+
     var iframeUrl = Drawio.settings.drawioUrl;
+    
     // Disables SSL if the protocol isn't HTTPS; simplifies use of local drawio installations
     var useHttps  = (iframeUrl.match(/^(https:)?\/\//i)? 1: 0);
-    var options   = 'embed=1&ui=atlas&spin=1&modified=unsavedChanges&libraries=1&proto=json&https='+useHttps;
+
+    // Convert the config object into a query string
+    var options = Object.keys(config)
+        .map(key => `${key}=${config[key]}`)
+        .join('&') + '&https=' + useHttps;
 
     if(iframeUrl.indexOf('?') > 0) {
         iframeUrl += '&'+options;
     } else {
         iframeUrl += '?'+options;
     }
+
     window.addEventListener('message', receive);
+
+    // Set initial size
+    adjustIframeSize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', adjustIframeSize);
+
+
+    // Function to adjust iframe size
+    function adjustIframeSize() {
+        var topMenuHeight = document.getElementById('top-menu').offsetHeight;
+        var iframe = document.querySelector('iframe'); // Make sure this selector matches your iframe
+
+        if (iframe) {
+            iframe.style.top = topMenuHeight + 'px';
+            var mainHeight = window.innerHeight - topMenuHeight;
+            iframe.style.height = mainHeight + 'px';
+        }
+    }
+
+    // Get the height of the top menu
+    var topMenuHeight = document.getElementById('top-menu').offsetHeight;
+    // Set the top position of the iframe
+    iframe.style.top = topMenuHeight + 'px';
+    // Set the height of the iframe to fill remaining space
+    var mainHeight = window.innerHeight - topMenuHeight;
+    iframe.style.height = mainHeight + 'px';
     iframe.setAttribute('src', iframeUrl);
     document.body.appendChild(iframe);
+
+    // Fix the body to prevent scrolling
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
 
     /**
      * Show an alert if case of error saving the diagram.
