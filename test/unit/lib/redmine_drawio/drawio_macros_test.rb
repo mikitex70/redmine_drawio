@@ -27,7 +27,7 @@ module RedmineDrawio
              :custom_fields, :custom_fields_projects, :custom_fields_trackers, :custom_values,
              :time_entries
 
-    def setup 
+    def setup
       @jsmith = User.find 2
       @manager_role = Role.find_by(name: 'Manager')
       @manager_role.add_permission! :view_dmsf_files
@@ -38,9 +38,9 @@ module RedmineDrawio
       default_url_options[:host] = 'http://example.com'
     end
 
-    def test_macro_drawio_deprecated 
+    def test_macro_drawio_deprecated
       text = textilizable("{{drawio(new-drawing.xml, hilight=#0000ff)}}")
-      assert_equal "<p>«The drawio macro is deprecated, use the drawio_attach macro instead»</p>", text 
+      assert_equal "<p>«The drawio macro is deprecated, use the drawio_attach macro instead»</p>", text
     end
 
     def test_macro_drawio_attach_unsaved
@@ -49,16 +49,18 @@ module RedmineDrawio
     end
 
     def test_macro_drawio_dmsf_unsaved
+      skip unless Redmine::Plugin.installed?(:redmine_dmsf)
+
       text = textilizable("{{drawio_dmsf(new-drawing.xml, hilight=#0000ff)}}")
       assert_equal "<p>«Please save content first»</p>", text
     end
 
     def test_macro_drawio_dmsf_with_existing_document
-      return unless Redmine::Plugin.installed?(:redmine_dmsf)
+      skip unless Redmine::Plugin.installed?(:redmine_dmsf)
 
       file_name = 'test.xml'
       prepare_dmsf_module(file_name)
-      
+
       assert_nothing_raised do
         result = exec_macro('drawio_dmsf', @obj, file_name, nil, hilight: '#0000ff')
         assert result.match(file_name), "Macro result does not match #{file_name}!"
@@ -67,13 +69,13 @@ module RedmineDrawio
       FileUtils.rm_rf DmsfFile.storage_path
       rescue StandardError => e
         puts e.message
-      ensure 
+      ensure
         Setting.clear_cache
     end
 
     private
 
-    def prepare_dmsf_module(file_name)      
+    def prepare_dmsf_module(file_name)
       @project1.enable_module! :dmsf
       Setting.plugin_redmine_dmsf['dmsf_storage_directory'] = File.join('files', ['dmsf'])
       FileUtils.cp_r File.join(File.expand_path('../../../../fixtures/files', __FILE__), '.'), DmsfFile.storage_path

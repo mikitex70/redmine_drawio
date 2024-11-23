@@ -9,6 +9,10 @@ module RedmineDrawio
   class DrawioSettingsTest < ActiveSupport::TestCase
     include RedmineDrawio::WithDrawioSettings
 
+    def setup
+      Setting.clear_cache
+    end
+
     def teardown
       Setting.plugin_redmine_drawio = { drawio_svg_enabled: nil,
                                         drawio_service_url: nil }
