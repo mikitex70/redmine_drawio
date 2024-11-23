@@ -50,4 +50,11 @@ elsif Redmine::VERSION::MAJOR < 6
     module Redmine::WikiFormatting::Markdown::Helper
         prepend RedmineDrawio::Helpers::MarkdownHelper
     end
+else
+    module RedmineDrawio
+        module Helpers
+            module MarkdownHelper
+            end
+        end
+    end
 end
