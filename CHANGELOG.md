@@ -1,8 +1,46 @@
 # Changelog
 
+
+## v1.5.0 (2024-11-23)
+
+### Fix
+
+* Fixed start on redmine 6. [Michele Tessaro]
+
+### Other
+
+* Skips dmsf related tests when plugin is not installed. [Liane Hampe]
+
+  Some tests require the Redmine DMSF plugin to be installed. In case
+  it is missing the tests will be skipped.
+
+* Excludes markdown_helper from loading in RM 6.0. [Liane Hampe]
+
+  Markdown is not supported anymore in Redmine 6 or later.
+  The Markdown Helper Patch in Redmine Drawio will to be excluded.
+  The plugin remains downward compatible.
+
+* Adds screenshots to README.md. [Liane Hampe]
+
+  The README.md will be updated with some nice screenshots showing the
+  different Drawio UI available in users preferences for selection.
+
+* Adds user preference tests. [Liane Hampe]
+
+* Adds custom drawio ui support. [Liane Hampe]
+
+  Drawio supports five different themes. The user will be able to set
+  a custom theme on 'My account' page.
+
+  Futhermore, the drawio iframe will be positioned right below the top
+  menu giving the user the context of still using Redmine.
+
+
 ## v1.4.9 (2024-11-17)
 
 ### Changes
+
+* Updated CHANGELOG.md for the new release. [Michele Tessaro]
 
 * Changed drawio settings. [Liane Hampe]
 
@@ -26,6 +64,17 @@
   zoom different from 100%.
 
 * Fixed editing of XML diagrams (fixes #135) [Michele Tessaro]
+
+### Other
+
+* Removes mathjax related tests. [Liane Hampe]
+
+* Removed mathjax. [Liane Hampe]
+
+  Since drawio version 10.7.4 (03-JUN-2019) mathjax codebase is included in
+  drawio/src/main/webapp/math directory.
+
+  There is no need to double include it via this plugin anymore.
 
 
 ## v1.4.8 (2023-10-22)
