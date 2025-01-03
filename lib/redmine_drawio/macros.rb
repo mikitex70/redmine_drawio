@@ -342,7 +342,7 @@ EOF
             end
 
             def dmsf_save_name(project, diagramName)
-                if DrawioSettings['dmsf_webdav_use_project_names']
+                if dmsf_use_project_names?
                     Rails.logger.error "dmsf_version=#{RedmineDrawio::Macros.dmsf_version}"
 
                     if RedmineDrawio::Macros.dmsf_version <= '1.5.8'
@@ -351,13 +351,23 @@ EOF
                     elsif RedmineDrawio::Macros.dmsf_version <= '1.6.0'
                         # DMSF 1.5.9+ can use project name as folder
                         "#{project.name} -#{project.id}-/#{diagramName}"
-                    else
+                    elsif RedmineDrawio::Macros.dmsf_version <= '2.4.4'
                         # With DMSF 1.6.1+ the path is changed
                         "#{project.name} #{project.id}/#{diagramName}"
+                    else
+                        # DMSF path is changed again
+                        "[#{DmsfFolder.get_valid_title(project.name)} #{project.id}]/#{diagramName}"
                     end
                 else
-                    "#{project.identifier}/#{diagramName}"
+                    return "#{project.identifier}/#{diagramName}" if RedmineDrawio::Macros.dmsf_version <= '2.4.4'
+
+                    "[#{project.identifier}]/#{diagramName}"
                 end
+            end
+
+            def dmsf_use_project_names?
+                value = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+                value.to_i.positive? || value == 'true'
             end
 
             def imagePath(defaultImage)
