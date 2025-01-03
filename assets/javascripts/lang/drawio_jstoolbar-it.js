@@ -11,13 +11,20 @@ Drawio.strings['drawio_http_422'     ] = 'Diagramma troppo grande: aumentare la 
 Drawio.strings['drawio_http_502'     ] = 'Assicurarsi che le funzionalità WebDAV del modulo DMSF siano abilitate in modalità di lettura/scrittura';
 Drawio.strings['drawiosave_error'    ] = 'Errore durante il salvataggio dell\'allegato';
 // CKEditor plugin messages
-Drawio.strings['drawio_cke_diagName'       ] = 'Nome diagramma';
-Drawio.strings['drawio_cke_diagType'       ] = 'Formato';
-Drawio.strings['drawio_cke_size'           ] = 'Larghezza (pixels)';
-Drawio.strings['drawio_cke_attach_dlgtitle'] = 'Diagramma come allegato';
-Drawio.strings['drawio_cke_attach_btnlabel'] = 'Allega diagramma Drawio';
-Drawio.strings['drawio_cke_dmsf_dlgtitle'  ] = 'Diagramma da gestore documentale';
-Drawio.strings['drawio_cke_dmsf_btnlabel'  ] = 'Usa diagramma Drawio da gestore documentale';
+Drawio.strings['drawio_cke_diagName'        ] = 'Nome diagramma';
+Drawio.strings['drawio_cke_diagType'        ] = 'Formato';
+Drawio.strings['drawio_cke_size'            ] = 'Larghezza (pixels)';
+Drawio.strings['drawio_cke_toolbar_autohide'] = 'Hide Toolbar';
+Drawio.strings['drawio_cke_lightbox'        ] = 'Usa Lightbox';
+Drawio.strings['drawio_cke_zoom'            ] = 'Controlli zoom';
+Drawio.strings['drawio_cke_initialZoom'     ] = 'Zoom iniziale (%)';
+Drawio.strings['drawio_cke_page'            ] = 'Pagina iniziale';
+Drawio.strings['drawio_cke_layers'          ] = 'Livello iniziale';
+Drawio.strings['drawio_cke_hiligh'          ] = 'Colore dei collegamenti';
+Drawio.strings['drawio_cke_attach_dlgtitle' ] = 'Diagramma come allegato';
+Drawio.strings['drawio_cke_attach_btnlabel' ] = 'Allega diagramma Drawio';
+Drawio.strings['drawio_cke_dmsf_dlgtitle'   ] = 'Diagramma da gestore documentale';
+Drawio.strings['drawio_cke_dmsf_btnlabel'   ] = 'Usa diagramma Drawio da gestore documentale';
 
 // Standard jstoolbar editor messages
 Drawio.strings['drawio_btn_ok'      ] = 'Inserisci macro';
