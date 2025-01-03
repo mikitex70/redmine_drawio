@@ -28,11 +28,11 @@ CKEDITOR.plugins.add('drawio', {
                                 items: [['png'], ['svg'], ['xml'], ['drawio']],
                                 'default': 'png',
                                 onChange: function () {
-                                    // 获取当前对话框实例
+                                    // Get the instance of the current dialog box
                                     var dialog = this.getDialog();
                                     var selectedType = this.getValue();
                                     
-                                    // 调用更新附加选项显示逻辑
+                                    // Show the additional options, if it is the case
                                     updateExtraOptionsVisibility(dialog, selectedType);
                                 }
                             },
@@ -54,18 +54,18 @@ CKEDITOR.plugins.add('drawio', {
                                 widths: ['80%', '20%'],
                                 children: [
                                     {
-                                        type: 'hbox', // 使用 hbox 水平排列子控件
-                                        widths: ['50%', '50%'], // 分别为标签和复选框设置宽度比率
+                                        type: 'hbox',           // Horizontal alignment of child controls with hbox
+                                        widths: ['50%', '50%'], // Set width ratios for labels and checkboxes respectively
                                         children: [
                                             {
                                                 type: 'html',
                                                 html: '<span>' + Drawio.strings['drawio_cke_toolbar_autohide'] + '</span>',
-                                                style: 'text-align: left; width: 100%;' // 自定义标签样式
+                                                style: 'text-align: left; width: 100%;'  // Custom label styles
                                             },
                                             {
                                                 type: 'checkbox',
                                                 id: 'drawio_tbautohide',
-                                                label: '', // 不在这里使用标签
+                                                label: '',  // Do not show the label here
                                                 default: true
                                             }
                                         ]
@@ -146,7 +146,7 @@ CKEDITOR.plugins.add('drawio', {
                                         }
                                     }
                                 ],
-                                style: 'display:none;' // 初始隐藏附加选项
+                                style: 'display:none;' // Initially hide additional options
                             }
                         ]
                     }],
@@ -154,75 +154,66 @@ CKEDITOR.plugins.add('drawio', {
                         var dialog = this;
                         var selectedType = dialog.getValueOf('defaultTab', 'drawio_diagType');
                         
-                        // 初始化附加选项显示状态
+                        // Show the additional options, if it is the case
                         updateExtraOptionsVisibility(dialog, selectedType);
                     },
                     onOk: function() {
                         var diagName = this.getValueOf('defaultTab', 'drawio_diagName');
                         var diagType = this.getValueOf('defaultTab', 'drawio_diagType');
-                        var size = this.getValueOf('defaultTab', 'drawio_diagSize');
-
-                        // 获取扩展属性值
-                        var tbAutoHide = this.getValueOf('defaultTab', 'drawio_tbautohide');
-                        var zoom = this.getValueOf('defaultTab', 'drawio_zoom');
+                        var size     = this.getValueOf('defaultTab', 'drawio_diagSize');
+                        // Retrieve the extended attribute values
+                        var tbAutoHide  = this.getValueOf('defaultTab', 'drawio_tbautohide');
+                        var zoom        = this.getValueOf('defaultTab', 'drawio_zoom');
                         var initialZoom = this.getValueOf('defaultTab', 'drawio_initialzoom');
-                        var lightbox = this.getValueOf('defaultTab', 'drawio_lightbox');
-                        var layers = this.getValueOf('defaultTab', 'drawio_layers');
-                        var page = this.getValueOf('defaultTab', 'drawio_page');
-                        var hilight = this.getValueOf('defaultTab', 'drawio_hilight');
-                        // 打印所有获取的值
-                        /*
-                        console.log("diagName:", diagName);
-                        console.log("diagType:", diagType);
-                        console.log("size:", size);
-                        console.log("zoom:", zoom);
-                        console.log("initialZoom:", initialZoom);
-                        console.log("lightbox:", lightbox);
-                        console.log("layers:", layers);
-                        console.log("page:", page);
-                        console.log("hilight:", hilight);
-                        */
+                        var lightbox    = this.getValueOf('defaultTab', 'drawio_lightbox');
+                        var layers      = this.getValueOf('defaultTab', 'drawio_layers');
+                        var page        = this.getValueOf('defaultTab', 'drawio_page');
+                        var hilight     = this.getValueOf('defaultTab', 'drawio_hilight');
 
-                        // 构造宏内容
+                        // Construction of the content of the macro
                         diagName = diagName.replace(/^(.*?)(?:\.\w{3})?$/, "$1." + diagType);
 
                         var macroOptions = [];
-                        if (size) macroOptions.push("size=" + size);
-                        if (tbAutoHide) macroOptions.push("tbautohide=true"); // 仅当 tbAutoHide 为 true 时附加
-                        if (zoom) macroOptions.push("zoom=true"); // 仅当 zoom 为 true 时附加
-                        if (initialZoom) macroOptions.push("initialzoom=" + initialZoom);
-                        if (lightbox) macroOptions.push("lightbox=true"); // 仅当 lightbox 为 true 时附加
-                        if (layers) macroOptions.push("layers=" + layers);
-                        if (page) macroOptions.push("page=" + page);
-                        if (hilight) macroOptions.push("hilight=" + hilight);
 
-                        // 拼接最终宏内容
-                        var macroContent;
-                        if (diagType === "xml" || diagType === "drawio") {
+                        if (size)        macroOptions.push("size=" + size);
+                        if (tbAutoHide)  macroOptions.push("tbautohide=true"); // Add only if tbAutoHide is true
+                        if (zoom)        macroOptions.push("zoom=true");       // Add only if zoom is true
+                        if (initialZoom) macroOptions.push("initialzoom=" + initialZoom);
+                        if (lightbox)    macroOptions.push("lightbox=true");   // Add only if lightbox is true
+                        if (layers)      macroOptions.push("layers=" + layers);
+                        if (page)        macroOptions.push("page=" + page);
+                        if (hilight)     macroOptions.push("hilight=" + hilight);
+
+                        // Build the macro text
+                        //var macroContent;
+
+                        //if (diagType === "xml" || diagType === "drawio") {
+                        var macroContent = "{{" + macroName + "(" + diagName;
+
+                        if (macroOptions.length > 0) {
+                            macroContent += ", " + macroOptions.join(", ");
+                        }
+                        macroContent += ")}}";
+                        /*} else {
+                            // Splicing with diagName and size parameters
                             macroContent = "{{" + macroName + "(" + diagName;
-                            if (macroOptions.length > 0) {
-                                macroContent += ", " + macroOptions.join(", ");
-                            }
-                            macroContent += ")}}";
-                        } else {
-                            // 采用 diagName 和 size 参数拼接
-                            macroContent = "{{" + macroName + "(" + diagName;
+
                             if (size) {
                                 macroContent += ", size=" + size;
                             }
                             macroContent += ")}}";
-                        }
+                        }*/
 
                         // debug info
                         //console.log("Generated Macro Content:", macroContent);
 
-                        // 插入宏到编辑器
+                        // Insert the macro in the editor
                         editor.insertText(macroContent);
                     }
                 };
             });
 
-            // 添加按钮命令
+            // Define the button command
             editor.addCommand('cmd_' + macroName, new CKEDITOR.dialogCommand('dlg_' + macroName));
             editor.ui.addButton('btn_' + macroName, {
                 label: options.buttonLabel,
@@ -231,14 +222,14 @@ CKEDITOR.plugins.add('drawio', {
             });
         }
 
-        // 定义 drawio_attach 对话框
+        // Define the drawio_attach dialog box
         defineDialog('drawio_attach', {
             dialogTitle: Drawio.strings['drawio_cke_attach_dlgtitle'],
             buttonLabel: Drawio.strings['drawio_cke_attach_btnlabel'],
             buttonIcon: this.path + '/../../images/jstb_drawio_attach.png'
         });
 
-        // 如果启用了 DMSF，定义 drawio_dmsf 对话框
+        // If DMSF is enabled, define the drawio_dmsf dialog box.
         if (Drawio.settings.DMSF) {
             defineDialog('drawio_dmsf', {
                 dialogTitle: Drawio.strings['drawio_cke_dmsf_dlgtitle'],
@@ -247,9 +238,15 @@ CKEDITOR.plugins.add('drawio', {
             });
         }
 
-        // 更新附加选项的显示逻辑
+        /**
+         * Hides/show extra options if the diagram type is an XML format.
+         *
+         * @param dialog       Dialog to update
+         * @param selectedType Type of diagram selected in the dialog
+         */
         function updateExtraOptionsVisibility(dialog, selectedType) {
             var extraOptions = dialog.getContentElement('defaultTab', 'extraOptions');
+
             if (extraOptions) {
                 if (selectedType === 'xml' || selectedType === 'drawio') {
                     extraOptions.getElement().setStyle('display', '');
