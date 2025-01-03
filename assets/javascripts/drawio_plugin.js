@@ -17,7 +17,13 @@ CKEDITOR.plugins.add('drawio', {
                                 size: 32,
                                 required: true,
                                 validate: function () {
-                                    return !!this.getValue().match(/^[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9]+)?$/);
+                                    // Validate the diagram name:
+                                    // * must start with a letter, a digit or an underscore
+                                    // * may contain one or more dots (but not at start of the name
+                                    // * may contain a '/' for path separator, for saving in a DMSF folder
+                                    // * cannot end with a '/'
+                                    // The regex can be checked with https://regex101.com
+                                    return !!this.getValue().match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*(\/[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)*$/);
                                 }
                             },
                             {
