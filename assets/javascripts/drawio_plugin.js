@@ -17,7 +17,7 @@ CKEDITOR.plugins.add('drawio', {
                                 size: 32,
                                 required: true,
                                 validate: function () {
-                                    return this.getValue() !== "";
+                                    return !!this.getValue().match(/^[a-zA-Z0-9_\-]+(\.[a-zA-Z0-9]+)?$/);
                                 }
                             },
                             {
@@ -43,6 +43,7 @@ CKEDITOR.plugins.add('drawio', {
                                 labelLayout: 'horizontal',
                                 size: 4,
                                 maxLength: 4,
+                                default: '',
                                 validate: function () {
                                     return !!this.getValue().match(/^(\d+)?$/);
                                 }
@@ -109,27 +110,40 @@ CKEDITOR.plugins.add('drawio', {
                                         label: Drawio.strings['drawio_cke_initialZoom'],
                                         labelLayout: 'horizontal',
                                         maxLength: 3,
-                                        default: '100'
+                                        default: '100',
+                                        validate: function () {
+                                            return !!this.getValue().match(/^(100|[1-9]?[0-9])$/);
+                                        }
                                     },
                                     {
                                         type: 'text',
                                         id: 'drawio_page',
                                         label: Drawio.strings['drawio_cke_page'],
-                                        labelLayout: 'horizontal'
+                                        labelLayout: 'horizontal',
+                                        default: '',
+                                        validate: function () {
+                                            return !!this.getValue().match(/^(\d+)?$/);
+                                        }
                                     },
                                     {
                                         type: 'text',
                                         id: 'drawio_layers',
                                         label: Drawio.strings['drawio_cke_layers'],
                                         labelLayout: 'horizontal',
-                                        default: ''
+                                        default: '',
+                                        validate: function () {
+                                            return !!this.getValue().match(/^(\d+)?$/);
+                                        }
                                     },
                                     {
                                         type: 'text',
                                         id: 'drawio_hilight',
                                         label: Drawio.strings['drawio_cke_hiligh'],
                                         labelLayout: 'horizontal',
-                                        default: '#0000ff'
+                                        default: '#0000ff',
+                                        validate: function () {
+                                            return !!this.getValue().match(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
+                                        }
                                     }
                                 ],
                                 style: 'display:none;' // 初始隐藏附加选项
@@ -183,11 +197,21 @@ CKEDITOR.plugins.add('drawio', {
                         if (hilight) macroOptions.push("hilight=" + hilight);
 
                         // 拼接最终宏内容
-                        var macroContent = "{{" + macroName + "(" + diagName;
-                        if (macroOptions.length > 0) {
-                            macroContent += ", " + macroOptions.join(", ");
+                        var macroContent;
+                        if (diagType === "xml" || diagType === "drawio") {
+                            macroContent = "{{" + macroName + "(" + diagName;
+                            if (macroOptions.length > 0) {
+                                macroContent += ", " + macroOptions.join(", ");
+                            }
+                            macroContent += ")}}";
+                        } else {
+                            // 采用 diagName 和 size 参数拼接
+                            macroContent = "{{" + macroName + "(" + diagName;
+                            if (size) {
+                                macroContent += ", size=" + size;
+                            }
+                            macroContent += ")}}";
                         }
-                        macroContent += ")}}";
 
                         // debug info
                         //console.log("Generated Macro Content:", macroContent);
