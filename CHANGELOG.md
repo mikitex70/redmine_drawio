@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v1.5.1 (2025-02-08)
+
+### Fix
+
+* Fixed SVG diagrams scaling (fixes #151) [Michele Tessaro]
+
+* Fixed save wiith DMSF project names as folders (fixes #146) [Michele Tessaro]
+
+### Other
+
+* Added spanish translations. [Javier Pastor]
+
+* Add regular expressions to validate the legality of input data; modify the issue of concatenation errors when the file types are png and svg. [zhengyin]
+
+* Add XML and Drawio file type selection and additional parameter configuration in the popup window of the CKEditor plugin. [zhengyin]
+
+
 ## v1.5.0 (2024-11-23)
 
 ### Fix
