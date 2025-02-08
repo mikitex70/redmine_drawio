@@ -342,7 +342,7 @@ EOF
             end
 
             def dmsf_save_name(project, diagramName)
-                if DrawioSettings['dmsf_webdav_use_project_names']
+                if dmsf_use_project_names?
                     Rails.logger.error "dmsf_version=#{RedmineDrawio::Macros.dmsf_version}"
 
                     if RedmineDrawio::Macros.dmsf_version <= '1.5.8'
@@ -351,13 +351,23 @@ EOF
                     elsif RedmineDrawio::Macros.dmsf_version <= '1.6.0'
                         # DMSF 1.5.9+ can use project name as folder
                         "#{project.name} -#{project.id}-/#{diagramName}"
-                    else
+                    elsif RedmineDrawio::Macros.dmsf_version <= '2.4.4'
                         # With DMSF 1.6.1+ the path is changed
                         "#{project.name} #{project.id}/#{diagramName}"
+                    else
+                        # DMSF path is changed again
+                        "[#{DmsfFolder.get_valid_title(project.name)} #{project.id}]/#{diagramName}"
                     end
                 else
-                    "#{project.identifier}/#{diagramName}"
+                    return "#{project.identifier}/#{diagramName}" if RedmineDrawio::Macros.dmsf_version <= '2.4.4'
+
+                    "[#{project.identifier}]/#{diagramName}"
                 end
+            end
+
+            def dmsf_use_project_names?
+                value = Setting.plugin_redmine_dmsf['dmsf_webdav_use_project_names']
+                value.to_i.positive? || value == 'true'
             end
 
             def imagePath(defaultImage)
@@ -365,6 +375,7 @@ EOF
             end
 
             def adaptSvg(svg, size)
+                size = "#{size}px" if not size.nil? and size.to_s =~ /\d+/
                 # Remove some scripts from the SVG (prevent some XSS issues)
                 localSvg = svg.sub(/(?:<script\b[^>]*>(?:.*?)<\/script>)|(?:\\s*javascript:.*\))|(?:\\bon\w+.*?=[^>]+)|(?:src=.?(&#x?[0-9a-f]+)+)/i, '')
                 # Adapt SVG to make it resizable
@@ -375,15 +386,17 @@ EOF
                                             '<svg viewBox="0 0 \2 \3" \1') unless localSvg=~ /.* viewBox="(.*)"/
                 # Fix size, if forced
                 if localSvg =~ /<svg (.*) width="(?:[0-9]+)px"/
-                    # width attribute presente, replace it with fized size, if present
-                    localSvg = localSvg.sub(/<svg (.*) width="(?:[0-9]+)px"/, "<svg \1 width=\"#{size}\"") unless size.nil?
+                    # width attribute present, replace it with fized size, if present
+                    localSvg = localSvg.sub(/<svg (.*) width="(?:[0-9]+)px"/, "<svg \\1 width=\"#{size}\"") unless size.nil?
+                    # removes the height, if any, so that the space at the top and bottom is eliminated
+                    localSvg = localSvg.sub(/<svg (.*) height="[0-9]+px"/, "<svg \\1") unless size.nil?
                 elsif size.nil?
                     # no forced size and no width attribute: in no height, try to extract size from viewbox
                     localSvg = localSvg.sub(/<svg (.*) viewBox="([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)"/,
                                             '<svg \1 viewBox="\2 \3 \4 \5" width="\4px"') if localSvg =~ /.* viewBox=".*"/
                 else
                     # no width attribute, but the height attribute may be present: replace it with the fixed size, if present
-                    localSvg = localSvg.sub(/<svg ([^>]+?)(?: height="([0-9]+)px")?/, "<svg \1 width=\"#{size}\"")
+                    localSvg = localSvg.sub(/<svg ([^>]+?)(?: height="([0-9]+)px")?/, "<svg \\1 width=\"#{size}\"")
                 end
 
                 localSvg
