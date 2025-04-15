@@ -2,28 +2,28 @@
 zh:
   drawio_url: "Draw.io 图形服务URL"
   drawio_service_url_hint: "您的本地图形服务URL，设置 %{value} 以使用在线服务。"
-  drawio_svg_enabled: "Enable SVG diagrams"
-  drawio_svg_enabled_hint: "WARNING: embedded SVG diagrams can lead to XSS(Cross Site Scripting) security issues"
-  drawio_mathjax: "SVG MathJax support"
-  drawio_mathjax_hint: "Enable mathematical symbol support for SVG diagrams"
-  drawio_mathjax_url: "MathJax library URL"
-  drawio_mathjax_url_hint: "Mathemathical symbols support library; default value is %{value}"
+  drawio_svg_enabled: "启用 SVG 图形"
+  drawio_svg_enabled_hint: "警告：内嵌SVG图表可能导致XSS（跨站脚本）安全漏洞"
+  drawio_mathjax: "SVG MathJax 支持"
+  drawio_mathjax_hint: "启用SVG数学符号功能"
+  drawio_mathjax_url: "MathJax库URL"
+  drawio_mathjax_url_hint: "数学符号支持库(默认值：%{value})"
   drawio_dlg_title: "图形定义"
   drawio_dlg_diagName: "图形名称"
   drawio_dlg_diagType: "图形格式"
   drawio_dlg_size: "宽度"
-  drawio_dlg_toolbar_autohide: "Hide toolbar"
-  drawio_dlg_lightbox: "Use LightBox"
-  drawio_dlg_layers: "Inizial layers"
-  drawio_dlg_page: "Initial page"
-  drawio_dlg_hiligh: "Hyperlinks color"
-  drawio_dlg_zoom: "Zoom controls"
-  drawio_dlg_initialZoom: "Initial zoom"
-  drawio_warning_api_needs_to_be_enabled: For saving drawio diagrams you need to enable the REST API in Administration -> Configuration -> API.
-  field_drawio_ui: Drawio UI
+  drawio_dlg_toolbar_autohide: "隐藏工具栏"
+  drawio_dlg_lightbox: "使用Lightbox"
+  drawio_dlg_layers: "初始图层"
+  drawio_dlg_page: "初始页面"
+  drawio_dlg_hiligh: "超链接颜色"
+  drawio_dlg_zoom: "缩放控制"
+  drawio_dlg_initialZoom: "初始缩放比例"
+  drawio_warning_api_needs_to_be_enabled: 如需保存 drawio 图表，需在管理后台启用 REST API：路径为 管理 -> 配置 -> API。
+  field_drawio_ui: Drawio 界面主题
   label_drawio_ui_default: Default
   label_drawio_ui_atlas:   Atlas
   label_drawio_ui_simple:  Simple
   label_drawio_ui_minimal: Minimal
   label_drawio_ui_sketch:  Sketch
-  note_drawio_ui_demo_html: Overview of themes <a href="%{link}">%{link}</a>.
+  note_drawio_ui_demo_html: 预览主题 <a href="%{link}">%{link}</a>.
