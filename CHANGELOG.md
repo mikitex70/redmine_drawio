@@ -1,6 +1,26 @@
 # Changelog
 
 
+## 1.5.3 (2025-12-23)
+
+### Fix
+
+* Fixed SVG diagrams in Redmine 6.1 when not logged (see #155) [Michele Tessaro]
+
+
+## v1.5.2 (2025-12-20)
+
+### Changes
+
+* Update zh.yml. [Zhengyin]
+
+  update chinese translation
+
+### Fix
+
+* Fixed lists inside SVG on Redmine 6.1+ (fixes #155) [Michele Tessaro]
+
+
 ## v1.5.1 (2025-02-08)
 
 ### Fix
@@ -52,6 +72,15 @@
   Futhermore, the drawio iframe will be positioned right below the top
   menu giving the user the context of still using Redmine.
 
+* Removes mathjax related tests. [Liane Hampe]
+
+* Removed mathjax. [Liane Hampe]
+
+  Since drawio version 10.7.4 (03-JUN-2019) mathjax codebase is included in
+  drawio/src/main/webapp/math directory.
+
+  There is no need to double include it via this plugin anymore.
+
 
 ## v1.4.9 (2024-11-17)
 
@@ -81,17 +110,6 @@
   zoom different from 100%.
 
 * Fixed editing of XML diagrams (fixes #135) [Michele Tessaro]
-
-### Other
-
-* Removes mathjax related tests. [Liane Hampe]
-
-* Removed mathjax. [Liane Hampe]
-
-  Since drawio version 10.7.4 (03-JUN-2019) mathjax codebase is included in
-  drawio/src/main/webapp/math directory.
-
-  There is no need to double include it via this plugin anymore.
 
 
 ## v1.4.8 (2023-10-22)
