@@ -41,12 +41,14 @@ input[readonly].drawio {
 }
 
 /* Fix SVG diagrams in Redmine 6.1 */
-div.mxgraph svg ul, div.mxgraph svg ol {
-    margin-bottom: 12px;
-    margin-top: 12px;
+div.mxgraph svg ul, div.mxgraph svg ol, 
+span.drawioDiagram svg ul, span.drawioDiagram svg ol {
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 
-div.mxgraph svg li {
+div.mxgraph svg li,
+span.drawioDiagram svg li {
     margin-bottom: 0px;
     line-height: inherit;
 }

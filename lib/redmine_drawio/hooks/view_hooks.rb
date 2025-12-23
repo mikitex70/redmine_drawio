@@ -38,27 +38,28 @@ module RedmineDrawio
             //]]</script>
         EOF
 
+        header << stylesheet_link_tag("drawioEditor.css"  , :plugin => "redmine_drawio", :media => "screen")
+        
         return header unless editable?(context)
 
         # Change drawioUi to any other UI as needed (https://www.drawio.com/blog/diagram-editor-theme)
         inline = <<-EOF
             <script type=\"text/javascript\">//<![CDATA[
                 var Drawio = {
-                settings: {
-                    redmineUrl: '#{redmine_url}',
-                    hashCode  : '#{hash_code}',
-                    drawioUrl : '#{drawio_url}',
-                    DMSF      : #{dmsf_enabled? context},
-                    isEasyRedmine: #{easyredmine?},
-                    drawioUi  : '#{User.current.pref.drawio_ui}',
-                    lang      : '#{User.current.language}'
-                }
+                  settings: {
+                      redmineUrl: '#{redmine_url}',
+                      hashCode  : '#{hash_code}',
+                      drawioUrl : '#{drawio_url}',
+                      DMSF      : #{dmsf_enabled? context},
+                      isEasyRedmine: #{easyredmine?},
+                      drawioUi  : '#{User.current.pref.drawio_ui}',
+                      lang      : '#{User.current.language}'
+                  }
                 };
             //]]></script>
         EOF
 
         header << inline
-        header << stylesheet_link_tag("drawioEditor.css"  , :plugin => "redmine_drawio", :media => "screen")
         header << javascript_include_tag("encoding-indexes.js", :plugin => "redmine_drawio")
         header << javascript_include_tag("encoding.min.js", :plugin => "redmine_drawio")
         header << javascript_include_tag("drawioEditor.js", :plugin => "redmine_drawio")
