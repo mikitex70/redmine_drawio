@@ -376,8 +376,10 @@ EOF
 
             def adaptSvg(svg, size)
                 size = "#{size}px" if not size.nil? and size.to_s =~ /\d+/
-                # Remove some scripts from the SVG (prevent some XSS issues)
-                localSvg = svg.sub(/(?:<script\b[^>]*>(?:.*?)<\/script>)|(?:\\s*javascript:.*\))|(?:\\bon\w+.*?=[^>]+)|(?:src=.?(&#x?[0-9a-f]+)+)/i, '')
+                # Remove scripts and dangerous attributes from SVG to prevent XSS issues
+                localSvg = svg.gsub(/<script\b[^>]*>.*?<\/script>/im, '')
+                localSvg = localSvg.gsub(/[ \t]+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/i, '')
+                localSvg = localSvg.gsub(/\b(href|src|xlink:href)\s*=\s*(?:"javascript:[^"]*"|'javascript:[^']*')/i, '\1="#"')
                 # Adapt SVG to make it resizable
                 localSvg = localSvg.sub(/<svg /, '<svg preserve_aspect_ratio="xMaxYMax meet" ') unless svg =~ /.* preserve_aspect_ratio=.*/
                 localSvg = localSvg.sub(/<svg /, '<svg style="max-width:100%" ')
