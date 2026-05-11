@@ -376,10 +376,19 @@ EOF
 
             def adaptSvg(svg, size)
                 size = "#{size}px" if not size.nil? and size.to_s =~ /\d+/
-                # Remove scripts and dangerous attributes from SVG to prevent XSS issues
-                localSvg = svg.gsub(/<script\b[^>]*>.*?<\/script>/im, '')
-                localSvg = localSvg.gsub(/[ \t]+on\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/i, '')
-                localSvg = localSvg.gsub(/\b(href|src|xlink:href)\s*=\s*(?:"javascript:[^"]*"|'javascript:[^']*')/i, '\1="#"')
+                # Parse SVG as XML to sanitize XSS vectors
+                doc = Nokogiri::XML::DocumentFragment.parse(svg)
+                doc.xpath('.//*').select { |n| n.name.casecmp('script').zero? }.each(&:remove)
+                doc.xpath('.//*').each do |node|
+                    node.attribute_nodes.each do |attr|
+                        if attr.name =~ /\Aon/i
+                            attr.remove
+                        elsif attr.value.strip =~ /\Ajavascript:/i
+                            attr.value = '#'
+                        end
+                    end
+                end
+                localSvg = doc.to_s
                 # Adapt SVG to make it resizable
                 localSvg = localSvg.sub(/<svg /, '<svg preserve_aspect_ratio="xMaxYMax meet" ') unless svg =~ /.* preserve_aspect_ratio=.*/
                 localSvg = localSvg.sub(/<svg /, '<svg style="max-width:100%" ')

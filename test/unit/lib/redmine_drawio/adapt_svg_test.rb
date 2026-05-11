@@ -27,6 +27,13 @@ module RedmineDrawio
       assert_not_includes result, 'alert(1)'
     end
 
+    # Case-mixed tag name
+    def test_removes_mixed_case_script_tag
+      svg = '<svg><sCriPt>alert(1)</sCriPt><circle/></svg>'
+      result = Macros.adaptSvg(svg, nil)
+      assert_not_includes result, 'alert(1)'
+    end
+
     # Event handler on root element
     def test_removes_onload_handler
       svg = '<svg onload="alert(1)"><circle/></svg>'
