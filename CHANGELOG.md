@@ -1,7 +1,18 @@
 # Changelog
 
 
-## 1.5.3 (2025-12-23)
+## development (unreleased)
+
+### Fix
+
+* Fix XSS vulnerabilities in SVG sanitization. [Vincent]
+
+* Fixed working with DMSF 5 (see #156) [Michele Tessaro]
+
+* Mentioned Redmine 6 compatibility in the README.md. [Michele Tessaro]
+
+
+## v1.5.3 (2025-12-23)
 
 ### Fix
 
