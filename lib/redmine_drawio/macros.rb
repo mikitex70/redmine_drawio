@@ -280,16 +280,19 @@ EOF
                     end
 
                     if file
-                        # Document exists, get the file path
-                        filename = file.last_revision.disk_file
-                        canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
+                        # Document exists, read content
+                        if file.last_revision.respond_to?(:disk_file)
+                            diagram = File.read(file.last_revision.disk_file, mode: 'rb')
+                        else
+                            diagram = file.last_revision.file.download
+                        end
+                        canEdit = canEdit && User.current && User.current.allowed_to?(:file_manipulation, file.project)
                     else
                         # Document does not exists: use a predefined diagram to start editing
                         filename = RedmineDrawio::Macros.imagePath('defaultImage'+diagramExt)
+                        diagram  = File.read(filename, mode: 'rb')
                         canEdit  = canEdit && User.current && User.current.allowed_to?(:file_manipulation, project)
                     end
-
-                    diagram = File.read(filename, mode: 'rb')
 
                     if file && RedmineDrawio::Macros.pdf?(self.controller)
                         member = Member.find_by(user_id: User.current.id, project_id: file.project.id)
