@@ -54,6 +54,11 @@ span.drawioDiagram svg li {
 }
 /* End fix for Redmine 6.1 */
 
+/* Fix for the drawio viewer, see issue #158 */
+span[title="Edit"] {
+    display: none;
+}
+
 /* Fix for tinymce buttongroup hidden after adding buttons */
 .mce-btn-group {
     left: auto !important;

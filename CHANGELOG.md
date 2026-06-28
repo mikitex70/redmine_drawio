@@ -5,6 +5,13 @@
 
 ### Fix
 
+* Edit button in the drawio viewer has been hidden (fixes #158) [Michele Tessaro]
+
+
+## v1.5.4 (2026-05-13)
+
+### Fix
+
 * Fix XSS vulnerabilities in SVG sanitization. [Vincent]
 
 * Fixed working with DMSF 5 (see #156) [Michele Tessaro]
