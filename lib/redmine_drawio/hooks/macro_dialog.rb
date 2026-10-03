@@ -6,6 +6,7 @@ module RedmineDrawio
             def view_layouts_base_body_bottom(context = {})
                 html = context[:controller].send(:render_to_string,
                                                 { partial: 'redmine_drawio/macro_dialog',
+                                                  formats: [:html],
                                                   locals: { svg_enabled: DrawioSettings.svg_enabled? } })
                 html.html_safe
             end
