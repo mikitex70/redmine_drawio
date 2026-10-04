@@ -309,8 +309,13 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
             alert(Drawio.strings['drawio_error_saving' ]+msg);
     }
 
-    function getHash() {
-        return Base64Binary.arrayBufferToString(Base64Binary.decodeArrayBuffer(Drawio.settings.hashCode.split('').reverse().join(''))).replace(/\u0000/g,'');
+    /**
+     * Returns the authentication headers of the AJAX requests saving a diagram.
+     * The value is a short lived token identifying the current user, generated
+     * server side: the REST API key is never sent to the browser.
+     */
+    function authHeaders() {
+        return {'X-Redmine-Drawio-Token': Drawio.settings.hashCode};
     }
 
     /**
@@ -348,6 +353,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                 type       : 'PUT',
                 dataType   : 'text',
                 mimeType   : 'text/plain', // Fixes a "non well-formed" message in the Firefox console
+                headers    : authHeaders(),
                 processData: false,
                 contentType: type,
                 data       : imageData,
@@ -417,7 +423,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                         url     : pageUrl+'.json',
                         type    : 'GET',
                         dataType: 'json',
-                        headers : { 'X-Redmine-API-Key': getHash() },
+                        headers : authHeaders(),
                         data    : {include: 'attachments'},
                         error   : showError,
                         success : function(page) {
@@ -556,7 +562,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                     url     : pageUrl+'.json',
                     type    : 'PUT',
                     dataType: 'text',
-                    headers : { 'X-Redmine-API-Key': getHash() },
+                    headers : authHeaders(),
                     data    : data,
                     error   : showError,
                     success : updateAttachmentList
@@ -571,7 +577,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                 url     : pageUrl+'.json',
                 type    : 'GET',
                 dataType: 'json',
-                headers : { 'X-Redmine-API-Key': getHash() },
+                headers : authHeaders(),
                 data    : {include: 'journals'},
                 success : savePage,
                 error   : showError
@@ -584,7 +590,7 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                 url        : Drawio.settings.redmineUrl+'uploads.json?filename='+resource,
                 type       : 'POST',
                 contentType: 'application/octet-stream',
-                headers    : { 'X-Redmine-API-Key': getHash() },
+                headers    : authHeaders(),
                 processData: false,
                 data       : imageData,
                 dataType   : 'json',

@@ -17,7 +17,7 @@ Before submit an issue please read carefully the `README.md` file (this page): m
 
 ## Requirements
 
-- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4, v3.3.3, v3.4.0, v4.0.4, v5.0.1, v5.1.4, v6.0.7, v6.1.0 as well as Easy Redmine 2016.05.07.
+- Requires Redmine v2.6+. Tested with Redmine v3.1.4, v3.2.4, v3.3.3, v3.4.0, v4.0.4, v5.0.1, v5.1.4, v6.0.7, v6.1.0, v7.1 as well as Easy Redmine 2016.05.07.
 
 ## Installation
 
@@ -178,6 +178,7 @@ Usage is very simple:
 
 - **enable the WebDAV functionality of the [DMSF] plugin in ``Read/Write`` mode**; this is necessary to be able to save the diagram from the embedded editor. If you prefer you can disable WebDAV after all editings are done.
   **NOTE**: starting from the [DMSF] plugin version `v3.0.0` you need to modify the Redmine `config/additional_environment.rb` file; see [here](https://github.com/danmunn/redmine_dmsf#webdav) for more details.
+- **make sure the Redmine REST API is enabled** (`Administration` -> `Settings` -> `API`, check the `Enable REST web service` flag), exactly as for `drawio_attach`: the editor authenticates the save with a short-lived token which is only issued when the REST API is active. No password is needed on the WebDAV endpoint: the token is accepted by DMSF 3.2.4+, 4.x and 5.x.
 - in Wiki or issue pages use the `drawio_dmsf` macro to specify the path of the diagram, relative to the DMSF documents of the current project. For example:
 
   ``{{drawio_dmsf(diagrams/myDiagram)}}``

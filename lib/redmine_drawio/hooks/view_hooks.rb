@@ -1,6 +1,5 @@
 # encoding: UTF-8
 require 'redmine'
-require 'base64'
 
 module RedmineDrawio
   module Hooks
@@ -121,11 +120,9 @@ module RedmineDrawio
       def hash_code
         return '' unless Setting.rest_api_enabled?
 
-        # Use authenticated encryption keyed with the server-only secret so the
-        # API key can't be recovered by simply reversing/decoding the client-side
-        # value, and bind it to a short validity window to limit exposure if leaked.
-        crypt = ActiveSupport::MessageEncryptor.new(Digest::SHA256.digest(Rails.application.secret_key_base))
-        crypt.encrypt_and_sign(User.current.api_key, expires_in: 15.minutes)
+        # A short lived, signed token identifying the current user: the REST API
+        # key is never sent to the browser. See RedmineDrawio::ApiToken.
+        RedmineDrawio::ApiToken.issue(User.current)
       end
     end
   end

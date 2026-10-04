@@ -2,7 +2,12 @@
 
 # Drawio libraries
 
+# Short lived credential used by the browser to save a diagram
+require File.expand_path('../redmine_drawio/api_token', __FILE__)
+
 # Patches
+require File.expand_path('../redmine_drawio/patches/application_controller_patch', __FILE__)
+require File.expand_path('../redmine_drawio/patches/dmsf_webdav_controller_patch', __FILE__)
 require File.expand_path('../redmine_drawio/patches/string_patch', __FILE__)
 require File.expand_path('../redmine_drawio/patches/rbpdf_patch', __FILE__)
 require File.expand_path('../redmine_drawio/patches/user_preference_patch', __FILE__)
