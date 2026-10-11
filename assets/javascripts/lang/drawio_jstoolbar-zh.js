@@ -10,7 +10,7 @@ Drawio.strings['drawiosave_error'    ] = '保存附件时出错';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = '图形名称';
 Drawio.strings['drawio_cke_diagType'       ] = '图形格式';
-Drawio.strings['drawio_cke_size'           ] = '宽度（像素）';
+Drawio.strings['drawio_cke_size'           ] = '宽度';
 Drawio.strings['drawio_cke_toolbar_autohide'] = '隐藏工具条';
 Drawio.strings['drawio_cke_lightbox'       ] = '使用Lightbox';
 Drawio.strings['drawio_cke_zoom'           ] = '缩放控制';

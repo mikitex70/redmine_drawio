@@ -53,6 +53,51 @@ gitchangelog > CHANGELOG.md
   `Setting.plugin_redmine_dmsf['dmsf_webdav']`, which `test/with_webdav_settings.rb`
   enables only inside each test (calling `Setting.clear_cache` after would drop it).
 
+### Running the tests in the dev container (Docker)
+
+The Redmine 6.1 dev environment is the running container `coder-mikitex70-redmine61`
+(companion DB container `coder-mikitex70-redmine61-mysql`, MariaDB client is `mariadb`).
+The plugin lives at `/home/redmine/redmine/plugins/redmine_drawio` (git checkout, same
+branch as the host). It is **not** mounted from the host — sync the checkout (push/pull,
+or `docker cp`) before testing.
+
+One-time bootstrap (already done on that container; re-run only on a fresh one):
+
+```bash
+# 1. Test DB + grants (the redmine user only owns the `redmine` database otherwise)
+docker exec -i coder-mikitex70-redmine61-mysql sh -c 'mariadb -uroot -p"$MYSQL_ROOT_PASSWORD"' <<'SQL'
+CREATE DATABASE IF NOT EXISTS redmine_test CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+GRANT ALL PRIVILEGES ON redmine_test.* TO 'redmine'@'%';
+SQL
+
+# 2. /home/redmine/redmine/config/database.yml only has a `production` block;
+#    append a `test` block pointing at redmine_test (host = coder-mikitex70-redmine61-mysql)
+
+# 3. The bundle is installed with without=development:test (mocha missing); include test group
+docker exec -w /home/redmine/redmine coder-mikitex70-redmine61 \
+  sh -lc 'bundle config set without development && bundle install'
+
+# 4. Load schema/migrations into the test DB
+docker exec -w /home/redmine/redmine coder-mikitex70-redmine61 \
+  sh -lc 'bundle exec rake db:test:prepare RAILS_ENV=test'
+```
+
+Then run the suites from the Redmine root inside the container — same commands as above,
+wrapped in `docker exec`:
+
+```bash
+docker exec -w /home/redmine/redmine coder-mikitex70-redmine61 sh -lc \
+  'bundle exec rake redmine:plugins:test:units NAME=redmine_drawio RAILS_ENV=test'
+docker exec -w /home/redmine/redmine coder-mikitex70-redmine61 sh -lc \
+  'bundle exec rake redmine:plugins:test:integration NAME=redmine_drawio RAILS_ENV=test'
+# single file:
+docker exec -w /home/redmine/redmine coder-mikitex70-redmine61 sh -lc \
+  'bundle exec ruby -Itest plugins/redmine_drawio/test/unit/lib/redmine_drawio/adapt_svg_test.rb RAILS_ENV=test'
+```
+
+The RSpec system spec (`spec/system`) needs `rspec` + a real browser (Capybara) and is
+**not** runnable in this container.
+
 ## Conventions that differ from the Ruby/Rails default
 
 - **Branches**: work on `develop`; `master` is releases only (README *Contributing*).

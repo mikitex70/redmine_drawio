@@ -12,6 +12,7 @@ en:
   drawio_dlg_diagName: "Diagram name"
   drawio_dlg_diagType: "Diagram format"
   drawio_dlg_size: "Width"
+  drawio_dlg_dimension_hint: "e.g. 300 or 50%"
   drawio_dlg_toolbar_autohide: "Hide toolbar"
   drawio_dlg_lightbox: "Use LightBox"
   drawio_dlg_layers: "Inizial layers"

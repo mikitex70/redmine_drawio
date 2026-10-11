@@ -72,5 +72,25 @@ module RedmineDrawio
       assert_includes result, 'fill="red"'
     end
 
+    # A pixel size is applied to the root svg tag and the height is removed
+    def test_applies_pixel_size
+      svg = '<svg xmlns="x" width="203px" height="74px"><rect width="200"/></svg>'
+      result = Macros.adaptSvg(svg, '300px')
+      assert_includes result, 'viewBox="0 0 203 74"'
+      assert_includes result, 'width="300px"'
+      assert_not_includes result, 'width="203px"'
+      assert_not_includes result, 'height="74px"'
+    end
+
+    # A percentage size is applied to the root svg tag and the height is removed
+    def test_applies_percentage_size
+      svg = '<svg xmlns="x" width="203px" height="74px"><rect width="200"/></svg>'
+      result = Macros.adaptSvg(svg, '50%')
+      assert_includes result, 'viewBox="0 0 203 74"'
+      assert_includes result, 'width="50%"'
+      assert_not_includes result, 'width="203px"'
+      assert_not_includes result, 'height="74px"'
+    end
+
   end
 end

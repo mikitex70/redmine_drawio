@@ -93,6 +93,16 @@
     }
   
     /**
+     * Check that a size value is valid: empty, or a number optionally
+     * followed by 'px' or '%' (e.g. '', '300', '300px', '50%').
+     * @param value The value to check
+     * @return {boolean} true if the value is a valid dimension
+     */
+    function isValidDimension(value) {
+        return value == null || /^\s*(?:\d+(?:\.\d+)?\s*(?:px|%)?)?\s*$/i.test(value);
+    }
+  
+    /**
      * Find where starts the expectedMacro and returs its parameters.<br/>
      * It expects that the cursor is positioned inside the macro.<br/>
      * The macro header (the opening brackets, the macro name and the
@@ -208,14 +218,14 @@
             var diagType  = $('input[name=drawio_diagType]:checked').val();
             var size      = $('#drawio_size').val();
             
-            if(diagName != '' && size.match(/^\d*$/) && $("#drawio_form")[0].reportValidity()) {
+            if(diagName != '' && isValidDimension(size) && $("#drawio_form")[0].reportValidity()) {
                 // Add/replace file extension
                 diagName = diagName.replace(/^(.*?)(?:\.\w{3,6})?$/, '$1.'+diagType);
 
                 var options = [diagName];
                 
-                if(/^\d+$/.test(size))
-                    options.push('size='+size);
+                if(size.trim() != '')
+                    options.push('size='+size.trim());
                 
                 if(diagType === 'xml' || diagType === 'drawio') {
                     var tbAutoHide  = $("#drawio_tbautohide").is(":checked");

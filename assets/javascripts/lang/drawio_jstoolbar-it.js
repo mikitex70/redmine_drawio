@@ -13,7 +13,7 @@ Drawio.strings['drawiosave_error'    ] = 'Errore durante il salvataggio dell\'al
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'        ] = 'Nome diagramma';
 Drawio.strings['drawio_cke_diagType'        ] = 'Formato';
-Drawio.strings['drawio_cke_size'            ] = 'Larghezza (pixels)';
+Drawio.strings['drawio_cke_size'            ] = 'Larghezza';
 Drawio.strings['drawio_cke_toolbar_autohide'] = 'Hide Toolbar';
 Drawio.strings['drawio_cke_lightbox'        ] = 'Usa Lightbox';
 Drawio.strings['drawio_cke_zoom'            ] = 'Controlli zoom';

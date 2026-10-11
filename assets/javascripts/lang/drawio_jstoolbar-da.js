@@ -10,7 +10,7 @@ Drawio.strings['drawiosave_error'    ] = 'Error while saving the attachment';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = 'Diagram-navn';
 Drawio.strings['drawio_cke_diagType'       ] = 'Diagram-format';
-Drawio.strings['drawio_cke_size'           ] = 'Bredde (pixels)';
+Drawio.strings['drawio_cke_size'           ] = 'Bredde';
 Drawio.strings['drawio_cke_attach_dlgtitle'] = 'Definér vedhæftet diagram';
 Drawio.strings['drawio_cke_attach_btnlabel'] = 'Drawio vedhæftet diagram';
 Drawio.strings['drawio_cke_dmsf_dlgtitle'  ] = 'Definér DMSF diagram';

@@ -10,7 +10,7 @@ Drawio.strings['drawiosave_error'    ] = 'Error while saving the attachment';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = 'Название диаграммы';
 Drawio.strings['drawio_cke_diagType'       ] = 'Формат диаграммы';
-Drawio.strings['drawio_cke_size'           ] = 'Ширина (в пикселах)';
+Drawio.strings['drawio_cke_size'           ] = 'Ширина';
 Drawio.strings['drawio_cke_attach_dlgtitle'] = 'Определить прикрепленную диаграмму';
 Drawio.strings['drawio_cke_attach_btnlabel'] = 'Прикрепленная Drawio-диаграмма';
 Drawio.strings['drawio_cke_dmsf_dlgtitle'  ] = 'Определить DMSF-диаграмму';

@@ -10,7 +10,7 @@ Drawio.strings['drawiosave_error'    ] = 'Error while saving the attachment';
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'       ] = '流程圖名稱';
 Drawio.strings['drawio_cke_diagType'       ] = '流程圖格式';
-Drawio.strings['drawio_cke_size'           ] = '寬度 (pixels)';
+Drawio.strings['drawio_cke_size'           ] = '寬度';
 Drawio.strings['drawio_cke_attach_dlgtitle'] = '附加流程圖設定';
 Drawio.strings['drawio_cke_attach_btnlabel'] = '附加 Drawio 流程圖';
 Drawio.strings['drawio_cke_dmsf_dlgtitle'  ] = '文件總管流程圖設定';

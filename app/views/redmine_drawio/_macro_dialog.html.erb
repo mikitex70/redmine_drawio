@@ -19,8 +19,8 @@
         </p>
         <p>
           <label for="drawio_size"><%= l(:drawio_dlg_size) %></label>
-          <input type="number" name="drawio_size" id="drawio_size" class="digits" 
-                 min="1" size="4" maxlength="4"/> pixel
+          <input type="text" name="drawio_size" id="drawio_size" size="6" maxlength="8"
+                 placeholder="<%= l(:drawio_dlg_dimension_hint) %>"/>
         </p>
       </div>
     </fieldset>

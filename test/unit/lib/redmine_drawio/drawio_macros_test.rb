@@ -55,6 +55,15 @@ module RedmineDrawio
       assert_equal "<p>«Please save content first»</p>", text
     end
 
+    def test_normalize_dimension
+      assert_equal '300px', Macros.normalize_dimension('300')
+      assert_equal '300px', Macros.normalize_dimension('300px')
+      assert_equal '50%',   Macros.normalize_dimension('50%')
+      assert_nil Macros.normalize_dimension('')
+      assert_nil Macros.normalize_dimension(nil)
+      assert_nil Macros.normalize_dimension('abc')
+    end
+
     def test_macro_drawio_dmsf_with_existing_document
       skip unless Redmine::Plugin.installed?(:redmine_dmsf)
 

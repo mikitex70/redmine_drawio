@@ -37,7 +37,8 @@ manually delete old attachments (missing Redmine API; version 3.3.0 seems to hav
 an API to delete attachments but need investigation).
 
 options:
-size=number     : forced width of the diagram image, in pixels
+size=number     : forced width of the diagram image; a bare number is in pixels,
+                  append 'px' for pixels or '%' for a percentage (e.g. 300, 300px, 50%)
 
 options specific for diagrams in XML format:
 tbautohide=true : show the toolbar only when the mouse is over the diagram
@@ -69,7 +70,7 @@ EOF
                 zoom        = false
                 initialZoom = 100
 
-                size        = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
+                size        = RedmineDrawio::Macros.normalize_dimension(options[:size]) unless options[:size].blank?
                 # parameters checkings
                 hilight     = options[:hilight]            unless options[:hilight].blank?
                 tbautohide  = options[:tbautohide].to_bool unless options[:tbautohide].blank?
@@ -80,7 +81,7 @@ EOF
                 layers      = options[:layers]             unless options[:layers].blank?
 
                 inlineStyle = ""
-                inlineStyle = "width:#{size}px;" if size
+                inlineStyle = "width:#{size};" if size
 
                 if obj.is_a?(WikiContent)
                     container = obj.page
@@ -198,7 +199,8 @@ will create/edit the document myDiagram.svg in the DMSF folder path/to/folder of
 the current project (the folder must exists).
 
 options:
-size=number     : forced width of the diagram image, in pixels
+size=number     : forced width of the diagram image; a bare number is in pixels,
+                  append 'px' for pixels or '%' for a percentage (e.g. 300, 300px, 50%)
 
 options specific for diagrams in XML format:
 tbautohide=true : show the toolbar only when the mouse is over the diagram
@@ -234,7 +236,7 @@ EOF
                     zoom        = false
                     initialZoom = 100
 
-                    size        = options[:size].to_i unless options[:size].blank? or not options[:size][/^\d+$/]
+                    size        = RedmineDrawio::Macros.normalize_dimension(options[:size]) unless options[:size].blank?
                     # parameters checkings
                     hilight     = options[:hilight]            unless options[:hilight].blank?
                     tbautohide  = options[:tbautohide].to_bool unless options[:tbautohide].blank?
@@ -245,7 +247,7 @@ EOF
                     layers      = options[:layers]             unless options[:layers].blank?
 
                     inlineStyle = ""
-                    inlineStyle = "width:#{size}px;" if size
+                    inlineStyle = "width:#{size};" if size
 
                     if obj.is_a?(WikiContent)
                         container = obj.page
@@ -377,8 +379,20 @@ EOF
                 File.expand_path(File.join(File.dirname(__FILE__), '../../spec', defaultImage))
             end
 
-            def adaptSvg(svg, size)
-                size = "#{size}px" if not size.nil? and size.to_s =~ /\d+/
+            # Normalize the size macro option into a CSS dimension.
+            # A bare number is interpreted as pixels (backward compatibility),
+            # an explicit 'px' or '%' suffix is preserved.
+            # Returns nil for blank or invalid values.
+            def normalize_dimension(value)
+                return nil if value.nil?
+
+                value = value.to_s.strip
+                return nil unless value =~ /\A\d+(?:\.\d+)?(?:px|%)?\z/i
+
+                value =~ /(?:px|%)\z/i ? value : "#{value}px"
+            end
+
+            def adaptSvg(svg, size = nil)
                 # Parse SVG as XML to sanitize XSS vectors
                 doc = Nokogiri::XML::DocumentFragment.parse(svg)
                 doc.xpath('.//*').select { |n| n.name.casecmp('script').zero? }.each(&:remove)
@@ -392,25 +406,37 @@ EOF
                     end
                 end
                 localSvg = doc.to_s
-                # Adapt SVG to make it resizable
-                localSvg = localSvg.sub(/<svg /, '<svg preserve_aspect_ratio="xMaxYMax meet" ') unless svg =~ /.* preserve_aspect_ratio=.*/
-                localSvg = localSvg.sub(/<svg /, '<svg style="max-width:100%" ')
-                # Add a viewBox, if missing
-                localSvg = localSvg.sub(/<svg (.*) width="([0-9]+)px" height="([0-9]+)px"/,
-                                            '<svg viewBox="0 0 \2 \3" \1') unless localSvg=~ /.* viewBox="(.*)"/
-                # Fix size, if forced
-                if localSvg =~ /<svg (.*) width="(?:[0-9]+)px"/
-                    # width attribute present, replace it with fized size, if present
-                    localSvg = localSvg.sub(/<svg (.*) width="(?:[0-9]+)px"/, "<svg \\1 width=\"#{size}\"") unless size.nil?
-                    # removes the height, if any, so that the space at the top and bottom is eliminated
-                    localSvg = localSvg.sub(/<svg (.*) height="[0-9]+px"/, "<svg \\1") unless size.nil?
-                elsif size.nil?
-                    # no forced size and no width attribute: in no height, try to extract size from viewbox
-                    localSvg = localSvg.sub(/<svg (.*) viewBox="([0-9]+) ([0-9]+) ([0-9]+) ([0-9]+)"/,
-                                            '<svg \1 viewBox="\2 \3 \4 \5" width="\4px"') if localSvg =~ /.* viewBox=".*"/
-                else
-                    # no width attribute, but the height attribute may be present: replace it with the fixed size, if present
-                    localSvg = localSvg.sub(/<svg ([^>]+?)(?: height="([0-9]+)px")?/, "<svg \\1 width=\"#{size}\"")
+                # Work only on the root <svg ...> tag, so that the attributes of
+                # the inner elements (e.g. <rect width="...">) are never touched.
+                localSvg = localSvg.sub(/<svg\b[^>]*>/) do |tag|
+                    # Adapt SVG to make it resizable
+                    tag = tag.sub(/\A<svg\b/, '<svg preserve_aspect_ratio="xMaxYMax meet"') unless svg =~ /.* preserve_aspect_ratio=.*/
+                    tag = tag.sub(/\A<svg\b/, '<svg style="max-width:100%"')
+                    # Add a viewBox, if missing
+                    unless tag =~ /\bviewBox="/
+                        w = tag[/(?<![-\w])width="([0-9]+)(?:px)?"/, 1]
+                        h = tag[/(?<![-\w])height="([0-9]+)(?:px)?"/, 1]
+                        tag = tag.sub(/\A<svg\b/, "<svg viewBox=\"0 0 #{w} #{h}\"") if w && h
+                    end
+
+                    # Fix width, if forced
+                    if size
+                        if tag =~ /(?<![-\w])width="[^"]*"/
+                            tag = tag.sub(/(?<![-\w])width="[^"]*"/, "width=\"#{size}\"")
+                        else
+                            tag = tag.sub(/\A<svg\b/, "<svg width=\"#{size}\"")
+                        end
+                    elsif tag !~ /(?<![-\w])width="[^"]*"/
+                        # no forced size and no width attribute: try to extract it from the viewBox
+                        w = tag[/\bviewBox="[0-9.+-]+ [0-9.+-]+ ([0-9.+-]+) /, 1]
+                        tag = tag.sub(/\A<svg\b/, "<svg width=\"#{w}px\"") if w
+                    end
+
+                    # Remove the height, so that the space at the top and bottom is
+                    # eliminated and the aspect ratio is preserved when the size is forced
+                    tag = tag.sub(/\s+(?<![-\w])height="[^"]*"/, '') if size
+
+                    tag
                 end
 
                 localSvg
@@ -420,7 +446,7 @@ EOF
                 dblClick = ""
                 tooltip  = ""
                 style    = ""
-                style    = inlineStyle unless inlineStyle.blank?
+                style    = " style='#{inlineStyle}'" unless inlineStyle.blank?
 
                 unless saveName.nil?
                     tagType  = if DrawioSettings.svg_enabled? then 'svg' else 'img' end

@@ -15,7 +15,7 @@ Drawio.strings['drawiosave_error'      ] = 'Error al guardar el archivo adjunto'
 // CKEditor plugin messages
 Drawio.strings['drawio_cke_diagName'        ] = 'Nombre del diagrama';
 Drawio.strings['drawio_cke_diagType'        ] = 'Formato del diagrama';
-Drawio.strings['drawio_cke_size'            ] = 'Ancho (píxeles)';
+Drawio.strings['drawio_cke_size'            ] = 'Ancho';
 Drawio.strings['drawio_cke_toolbar_autohide'] = 'Ocultar barra de herramientas';
 Drawio.strings['drawio_cke_lightbox'        ] = 'Usar Lightbox';
 Drawio.strings['drawio_cke_zoom'            ] = 'Controles de zoom';

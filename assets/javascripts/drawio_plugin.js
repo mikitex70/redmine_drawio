@@ -47,11 +47,12 @@ CKEDITOR.plugins.add('drawio', {
                                 type: "text",
                                 label: Drawio.strings['drawio_cke_size'],
                                 labelLayout: 'horizontal',
-                                size: 4,
-                                maxLength: 4,
+                                size: 6,
+                                maxLength: 8,
                                 default: '',
                                 validate: function () {
-                                    return !!this.getValue().match(/^(\d+)?$/);
+                                    // A bare number is in pixels; append 'px' or '%' (e.g. 300, 300px, 50%)
+                                    return !!this.getValue().match(/^\s*(\d+(?:\.\d+)?(?:px|%)?)?\s*$/i);
                                 }
                             },
                             {

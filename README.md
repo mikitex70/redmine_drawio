@@ -157,7 +157,7 @@ Usage is very simple:
   The **diagram attachments are versioned** by suffixing the name with a counter. This is necessary because is not possible to update an existing attachment. Moreover, is not possible to delete attachments throught rest API (seems to be possible from Redmine 3.3.0, but I need to experiment), so the old versions of an attachment must be explicitly (manually) deleted from the Redmine web interface.
 
 - the following macro options are available (default values are shown):
-  - ``size=number`` : force image width, in pixels (default, show in original size)
+  - ``size=number`` : force the image width; a bare number is in pixels, append ``px`` for pixels or ``%`` for a percentage (e.g. ``300``, ``300px``, ``50%``; default, show in original size)
   - only for XML diagrams:
     - ``hilight=#0000ff``: color to highlight diagram hyperlinks
     - ``tbautohide=true``: if `false` the toolbar is always visibile (if there are buttons), else it will be shown only when the mouse enters the diagram area
@@ -192,7 +192,7 @@ Usage is very simple:
   For XML diagrams, a toolbar will appear when the mouse enters the diagram area; in the toolbar there is a button for start editing the diagram.
 
 - the following macro options are available (default values are shown):
-  - ``size=number`` : force image width, in pixels (default, show in original size)
+  - ``size=number`` : force the image width; a bare number is in pixels, append ``px`` for pixels or ``%`` for a percentage (e.g. ``300``, ``300px``, ``50%``; default, show in original size)
   - only for XML diagrams:
     - ``hilight=#0000ff``: color to highlight diagram hyperlinks
     - ``tbautohide=true``: if `false` the toolbar is always visibile (if there are buttons), else it will be shown only when the mouse enters the diagram area
