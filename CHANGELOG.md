@@ -1,7 +1,27 @@
 # Changelog
 
 
-## development (unreleased)
+## v1.5.6 (2026-10-23)
+
+### New
+
+* Diagram sizes now accepts percentage (implements #164) [Michele Tessaro]
+
+### Fix
+
+* Fixed CWE-798 (fixes #161) [Michele Tessaro]
+
+  Fixed an hardcoded password badly obfuscated, needed to save diagrams.
+
+* Remove hardcoded secret in view_hooks.rb. [anupamme]
+
+  The user's Redmine API key is encoded using Base64 with a trivial string reversal and embedded directly in client-side JavaScript rendered on every wiki and issue page
+  Addresses CWE-798
+
+* Diff in Redmine repositories throws 404. [Jan Catrysse]
+
+
+## v1.5.5 (2026-06-28)
 
 ### Fix
 
