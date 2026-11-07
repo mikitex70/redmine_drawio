@@ -486,8 +486,13 @@ function editDiagram(image, resource, isDmsf, pageName, originalName) {
                                 );
                                 // add the new attachment to the attachments list
                                 attachTable.append(lastRowHtml);
-                                // increment the number of attachments
-                                var numAttachs = $("fieldset legend");
+                                // increment the number of attachments, find te exact legend tag
+                                var numAttachs = $(".attachments table tbody")
+                                        .parent()  // table
+                                        .parent()  // div.attachments
+                                        .parent()  // div
+                                        .parent()  // fieldset
+                                        .find('legend');
                                 numAttachs.text(numAttachs.text().replace(/\d+/, function(match) {
                                     return Number(match)+1;
                                 }));
