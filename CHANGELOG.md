@@ -1,6 +1,15 @@
 # Changelog
 
 
+## 1.5.7 (2026-11-07)
+
+### Fix
+
+* Fixed fieldset corruption (fixes #162) [Michele Tessaro]
+
+  While updating an attachment, the code that incremented the number of attachments on a page encountered an excessive number of `fieldset` tags on the page.
+
+
 ## v1.5.6 (2026-10-23)
 
 ### New
