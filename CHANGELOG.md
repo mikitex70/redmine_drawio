@@ -1,7 +1,14 @@
 # Changelog
 
 
-## 1.5.7 (2026-11-07)
+## v1.5.8 (2026-11-10)
+
+### Fix
+
+* Fixed fieldset overwrite in issues (fixes #162) [Michele Tessaro]
+
+
+## v1.5.7 (2026-11-07)
 
 ### Fix
 
