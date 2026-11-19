@@ -172,7 +172,19 @@
     }
   
     /**
-     * Add buttons to tinymce toolbar when editor is running.
+     * Get the URL of the background image of a CSS class, as resolved by the
+     * browser from drawioEditor.css (asset paths differ between Redmine versions).
+     */
+    function cssBackgroundUrl(className) {
+        var el = $('<span>').addClass(className).hide().appendTo('body');
+        var m = /url\(["']?(.*?)["']?\)/.exec(el.css('background-image'));
+
+        el.remove();
+        return m ? m[1] : null;
+    }
+
+    /**
+     * Add buttons to the TinyMCE 4 toolbar when editor is running.
      */
     function updateTinyMCEToolbar() {
         // See https://stackoverflow.com/questions/36411839/proper-way-of-modifying-toolbar-after-init-in-tinymce
@@ -184,7 +196,7 @@
 
                 editor.addButton('drawio_attach', {
                     title : Drawio.strings['drawio_attach_title'],
-                    image : imgPath+'/jstb_drawio_attach.png',
+                    image : cssBackgroundUrl('jstb_drawio_attach') || imgPath+'/jstb_drawio_attach.png',
                     onclick: function() {
                         openMacroDialog(dlg, getTinymceEditorAdapter(editor), 'drawio_attach');
                     }
@@ -194,7 +206,7 @@
                 if(Drawio.settings.DMSF) {
                     editor.addButton('drawio_dmsf', {
                         title: Drawio.strings['drawio_dmsf_title'],
-                        image: imgPath+'/jstb_drawio_dmsf.png',
+                        image: cssBackgroundUrl('jstb_drawio_dmsf') || imgPath+'/jstb_drawio_dmsf.png',
                         onclick: function() {
                             openMacroDialog(dlg, getTinymceEditorAdapter(editor), 'drawio_dmsf');
                         }
@@ -366,8 +378,8 @@
             }
         });
         
-        // Support for the redmine_wysiwyg_editor plugin
-        if(typeof tinymce !== 'undefined') 
+        // Support for the redmine_wysiwyg_editor plugin up to 0.34 (TinyMCE 4)
+        if(typeof tinymce !== 'undefined' && tinymce.majorVersion === '4')
             updateTinyMCEToolbar();
     });
     
