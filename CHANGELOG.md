@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.5.9 (2026-11-21)
+
+### Fix
+
+* Visual editor toolbar broken with redmine_wysiwyg_editor 0.100+ (TinyMCE 5+) [Vincent]
+
+
 ## v1.5.8 (2026-11-10)
 
 ### Fix
